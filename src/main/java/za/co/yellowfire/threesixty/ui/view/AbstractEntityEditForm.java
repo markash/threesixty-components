@@ -1,25 +1,23 @@
 package za.co.yellowfire.threesixty.ui.view;
 
-import java.io.Serializable;
-import java.util.LinkedHashSet;
-
-import org.springframework.data.domain.Persistable;
-
-import com.vaadin.data.Property;
-import com.vaadin.data.Property.ValueChangeEvent;
-import com.vaadin.data.fieldgroup.BeanFieldGroup;
-import com.vaadin.data.fieldgroup.FieldGroup.CommitException;
-import com.vaadin.data.fieldgroup.FieldGroup.CommitHandler;
-import com.vaadin.data.fieldgroup.PropertyId;
-import com.vaadin.event.FieldEvents.TextChangeEvent;
+import com.vaadin.annotations.PropertyId;
+import com.vaadin.data.HasValue;
 import com.vaadin.server.Responsive;
-import com.vaadin.ui.Field;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.TextField;
-
+import com.vaadin.v7.data.Property;
+import com.vaadin.v7.data.Property.ValueChangeEvent;
+import com.vaadin.v7.data.fieldgroup.BeanFieldGroup;
+import com.vaadin.v7.data.fieldgroup.FieldGroup.CommitException;
+import com.vaadin.v7.data.fieldgroup.FieldGroup.CommitHandler;
+import com.vaadin.v7.ui.Field;
+import org.springframework.data.domain.Persistable;
 import za.co.yellowfire.threesixty.ui.component.BeanBinder;
 import za.co.yellowfire.threesixty.ui.component.panel.PanelBuilder;
+
+import java.io.Serializable;
+import java.util.LinkedHashSet;
 
 @SuppressWarnings("serial")
 public abstract class AbstractEntityEditForm<T extends Persistable<Long>> extends HorizontalLayout {
@@ -40,13 +38,13 @@ public abstract class AbstractEntityEditForm<T extends Persistable<Long>> extend
 		Responsive.makeResponsive(this);
 		
         idField.setWidth(100.0f, Unit.PERCENTAGE);
-        idField.setNullRepresentation("");
+        //idField.setNullRepresentation("");
 	}
 
 	/**
 	 * Returns the list of nested properties that the form group should bind to. The default
 	 * is an empty array.
-	 * @returns An array of nested properties in Java object notation
+	 * @return An array of nested properties in Java object notation
 	 */
 	protected String[] getNestedProperties() { return DEFAULT_NESTED_PROPERTIES; }
 	
@@ -107,7 +105,7 @@ public abstract class AbstractEntityEditForm<T extends Persistable<Long>> extend
 		 * for the user to know that a tab is required to enable the Save button
 		 */
 		if (!idField.isReadOnly()) {
-			idField.addTextChangeListener(this::onTextChange);
+			idField.addValueChangeListener(this::onTextChange);
 		}
 		
 		/*
@@ -167,7 +165,7 @@ public abstract class AbstractEntityEditForm<T extends Persistable<Long>> extend
 		}
 	}
 	
-	protected void onTextChange(final TextChangeEvent event) {
+	protected void onTextChange(final HasValue.ValueChangeEvent event) {
 		fireFormDirty(new FormDirtyEvent());
 	}
 		

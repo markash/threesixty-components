@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.List;
 
 import org.vaadin.viritin.LazyList.CountProvider;
-import org.vaadin.viritin.SortableLazyList.SortablePagingProvider;
+import org.vaadin.viritin.v7.SortableLazyList.SortablePagingProvider;
 
 @SuppressWarnings("serial")
 public class EntitiesSupplierPagingProvider<T extends Serializable> implements SortablePagingProvider<T>, CountProvider {

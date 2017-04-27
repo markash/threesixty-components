@@ -1,16 +1,14 @@
 package za.co.yellowfire.threesixty.ui.component.field;
 
-import org.apache.commons.lang3.StringUtils;
-import org.vaadin.viritin.fields.MTable;
-
-import com.vaadin.data.Container;
-import com.vaadin.data.Container.Filterable;
-import com.vaadin.data.Item;
-import com.vaadin.event.FieldEvents.TextChangeEvent;
 import com.vaadin.event.ShortcutListener;
-import com.vaadin.server.FontAwesome;
+import com.vaadin.icons.VaadinIcons;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.themes.ValoTheme;
+import com.vaadin.v7.data.Container;
+import com.vaadin.v7.data.Container.Filterable;
+import com.vaadin.v7.data.Item;
+import org.apache.commons.lang3.StringUtils;
+import org.vaadin.viritin.v7.fields.MTable;
 
 public class FilterTextField<T> extends TextField {
 	private static final long serialVersionUID = 1L;
@@ -24,16 +22,16 @@ public class FilterTextField<T> extends TextField {
 		this.table = table;
 		filter = new PropertyTextFilter(propertiesToFilterOn);
 		
-        addTextChangeListener(this::onFilter);
-        
-        setInputPrompt("Filter");
-        setIcon(FontAwesome.SEARCH);
+        addValueChangeListener(this::onFilter);
+
+        setCaption("Filter");
+        setIcon(VaadinIcons.SEARCH);
         addStyleName(ValoTheme.TEXTFIELD_INLINE_ICON);
         addShortcutListener(new FilterShortcutListener<>(this));
 	}
 	
-	public void onFilter(final TextChangeEvent event) {
-		filter.setFilter(event.getText());
+	private void onFilter(final ValueChangeEvent event) {
+		filter.setFilter((String) event.getValue());
 		
 		Filterable data = (Filterable) table.getContainerDataSource();
         data.removeContainerFilter(filter);
@@ -46,11 +44,11 @@ public class FilterTextField<T> extends TextField {
 		private String filter = null;
 		private String[] properties;
 		
-		public PropertyTextFilter(final String[] properties) {
+		PropertyTextFilter(final String[] properties) {
 			this.properties = properties;
 		}
 		
-		public void setFilter(final String filter) { this.filter = filter; }
+		void setFilter(final String filter) { this.filter = filter; }
 		
     	public boolean passesFilter(
     			final Object itemId,
@@ -84,10 +82,7 @@ public class FilterTextField<T> extends TextField {
             }
             String val = item.getItemProperty(prop).getValue().toString().trim()
                     .toLowerCase();
-            if (val.contains(text.toLowerCase().trim())) {
-                return true;
-            }
-            return false;
+            return val.contains(text.toLowerCase().trim());
         }
     }
 	
@@ -95,7 +90,7 @@ public class FilterTextField<T> extends TextField {
 	private static class FilterShortcutListener<T> extends ShortcutListener {
 		private final FilterTextField<T> textField;
 		
-		public FilterShortcutListener(final FilterTextField<T> textField) {
+		FilterShortcutListener(final FilterTextField<T> textField) {
 			super("Clear", KeyCode.ESCAPE, null);
 			this.textField = textField;
 		}

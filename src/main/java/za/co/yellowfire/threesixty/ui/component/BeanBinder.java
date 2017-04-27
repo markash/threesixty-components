@@ -1,6 +1,6 @@
 package za.co.yellowfire.threesixty.ui.component;
 
-import org.vaadin.viritin.MBeanFieldGroup;
+import org.vaadin.viritin.v7.MBeanFieldGroup;
 
 /**
  * This BeanBinder is taken from the Viritin version but allows for the buffering to be on / off

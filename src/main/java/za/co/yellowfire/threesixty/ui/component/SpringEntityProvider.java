@@ -5,7 +5,7 @@ import java.util.List;
 
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.vaadin.viritin.LazyList.CountProvider;
-import org.vaadin.viritin.SortableLazyList.SortablePagingProvider;
+import org.vaadin.viritin.v7.SortableLazyList.SortablePagingProvider;
 
 public class SpringEntityProvider<T, I extends Serializable> implements SortablePagingProvider<T>, CountProvider {
 	private static final long serialVersionUID = 1L;

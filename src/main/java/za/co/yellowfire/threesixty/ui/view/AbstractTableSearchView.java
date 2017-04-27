@@ -8,19 +8,19 @@ import java.util.Locale;
 import java.util.Optional;
 
 import org.apache.commons.lang3.StringUtils;
-import org.vaadin.viritin.SortableLazyList;
-import org.vaadin.viritin.fields.FilterableTable;
-import org.vaadin.viritin.fields.MTable;
+import org.vaadin.viritin.v7.SortableLazyList;
+import org.vaadin.viritin.v7.fields.FilterableTable;
+import org.vaadin.viritin.v7.fields.MTable;
 
-import com.vaadin.data.Container.Filter;
-import com.vaadin.data.Item;
-import com.vaadin.data.Property;
-import com.vaadin.data.util.converter.Converter;
+import com.vaadin.v7.data.Container.Filter;
+import com.vaadin.v7.data.Item;
+import com.vaadin.v7.data.Property;
+import com.vaadin.v7.data.util.converter.Converter;
 import com.vaadin.server.Responsive;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Component;
-import com.vaadin.ui.Table;
+import com.vaadin.v7.ui.Table;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 
@@ -59,9 +59,11 @@ public abstract class AbstractTableSearchView<T extends Serializable, I extends 
 	 * can be filtered on by an array of properties.
 	 * 
 	 * @param beanType The class of the entity class bean
+	 * @param viewCaption The caption of the view
+     * @param entityViewName The name of the entity view that should be navigated to on id click
 	 * @param entityProvider The entity provider for the class
-	 * @param entityViewName The name of the entity view that should be navigated to on id click
-	 * @param propertiesToFilterOn The array of properties to fiter on
+	 * @param definition Table definition (Not used as yet)
+     * @param headerComponents The header components like buttons, search filters, etc
 	 */
 	protected AbstractTableSearchView(
 			final Class<T> beanType,
@@ -76,7 +78,9 @@ public abstract class AbstractTableSearchView<T extends Serializable, I extends 
 		this.beanType = beanType;
 		this.entityProvider = entityProvider;
 		this.entityViewName = Optional.of(entityViewName);
-		this.table = buildTable(); 
+		this.definition = definition;
+		this.table = buildTable();
+
 		this.headerComponents = new ArrayList<>(Arrays.asList(headerComponents));
 		this.headerComponents.add(0, newButton);
 	}
