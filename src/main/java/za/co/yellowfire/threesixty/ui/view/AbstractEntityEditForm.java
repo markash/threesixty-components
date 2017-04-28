@@ -1,37 +1,39 @@
 package za.co.yellowfire.threesixty.ui.view;
 
 import com.vaadin.annotations.PropertyId;
+import com.vaadin.data.Binder;
 import com.vaadin.data.HasValue;
+import com.vaadin.data.converter.StringToLongConverter;
 import com.vaadin.server.Responsive;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.TextField;
 import com.vaadin.v7.data.Property;
 import com.vaadin.v7.data.Property.ValueChangeEvent;
-import com.vaadin.v7.data.fieldgroup.BeanFieldGroup;
-import com.vaadin.v7.data.fieldgroup.FieldGroup.CommitException;
-import com.vaadin.v7.data.fieldgroup.FieldGroup.CommitHandler;
-import com.vaadin.v7.ui.Field;
 import org.springframework.data.domain.Persistable;
-import za.co.yellowfire.threesixty.ui.component.BeanBinder;
 import za.co.yellowfire.threesixty.ui.component.panel.PanelBuilder;
 
 import java.io.Serializable;
 import java.util.LinkedHashSet;
 
-@SuppressWarnings("serial")
 public abstract class AbstractEntityEditForm<T extends Persistable<Long>> extends HorizontalLayout {
 	private static String[] DEFAULT_NESTED_PROPERTIES = new String[] {};
 	
 	@PropertyId("id")
     protected TextField idField = new TextField("Id");
-	
-	private BeanFieldGroup<T> fieldGroup;
+
+	private Binder<T> binder;
 	private LinkedHashSet<DirtyListener> dirtyListeners = new LinkedHashSet<>();
 	
 	private boolean layoutCompleted = false;
 	
-	public AbstractEntityEditForm() {
+	public AbstractEntityEditForm(Class<T> beanType) {
+
+		this.binder = new Binder<>(beanType);
+		this.binder.forField(idField)
+                .withConverter(new StringToLongConverter("Unable to convert id"))
+                .bind("id");
+
 		setSpacing(true);
 		setMargin(false);
 		setSizeFull();
@@ -41,6 +43,8 @@ public abstract class AbstractEntityEditForm<T extends Persistable<Long>> extend
         //idField.setNullRepresentation("");
 	}
 
+	public Binder<T> getBinder() { return this.binder; }
+
 	/**
 	 * Returns the list of nested properties that the form group should bind to. The default
 	 * is an empty array.
@@ -48,44 +52,41 @@ public abstract class AbstractEntityEditForm<T extends Persistable<Long>> extend
 	 */
 	protected String[] getNestedProperties() { return DEFAULT_NESTED_PROPERTIES; }
 	
-	public T getValue() { 
-		return this.fieldGroup != null ? this.fieldGroup.getItemDataSource().getBean() : null; 
-	}
+	public T getValue() {  return this.binder.getBean();  }
 	
 	public void bindToEmpty() {
 		bind(null);
 	}
 	
 	public void bind(final T newValue) {
-		T value = newValue != null ? buildEntity(newValue) :buildEntity(buildEmpty());
-		this.fieldGroup = BeanBinder.bind(value, this, true, getNestedProperties());
-		
+		this.binder.setBean(newValue);
+
 		updateDependentFields();
-		updateFieldContraints();
-		registerDirtyListener();
+		updateFieldConstraints();
+		//registerDirtyListener();
 	}
 	
-	public void discard() {
-		this.fieldGroup.discard();
-	}
-	
-	public void commit() throws CommitException {
-		this.fieldGroup.commit();
-	}
+//	public void discard() {
+//		this.binder.discard();
+//	}
+//
+//	public void commit() throws CommitException {
+//		this.binder.commit();
+//	}
 	
 	public boolean isModified() {
-		return this.fieldGroup.isModified();
+		return this.binder.hasChanges();
 	}
 	
 	public boolean isValid() {
-		return this.fieldGroup.isValid();
+		return this.binder.isValid();
 	}
 	
-	public void addCommitHandler(final CommitHandler commitHandler) {
-		if (commitHandler != null) {
-			this.fieldGroup.addCommitHandler(commitHandler);
-		}
-	}
+//	public void addCommitHandler(final CommitHandler commitHandler) {
+//		if (commitHandler != null) {
+//			this.binder.addCommitHandler(commitHandler);
+//		}
+//	}
 	
 	public void addDirtyListener(final DirtyListener listener) {
 		if (listener != null) {
@@ -99,23 +100,23 @@ public abstract class AbstractEntityEditForm<T extends Persistable<Long>> extend
 		}
 	}
 	
-	protected void registerDirtyListener() {
-		/* Link the changing of the id text with a form dirty since this
-		 * is the only field on the form sometimes which makes it difficult
-		 * for the user to know that a tab is required to enable the Save button
-		 */
-		if (!idField.isReadOnly()) {
-			idField.addValueChangeListener(this::onTextChange);
-		}
-		
-		/*
-		 * Link a value change to all other fields on the form
-		 */
-		for(Field<?> field : this.fieldGroup.getFields()) {
-			field.removeValueChangeListener(this::onValueChange);
-			field.addValueChangeListener(this::onValueChange);
-		}
-	}
+//	protected void registerDirtyListener() {
+//		/* Link the changing of the id text with a form dirty since this
+//		 * is the only field on the form sometimes which makes it difficult
+//		 * for the user to know that a tab is required to enable the Save button
+//		 */
+//		if (!idField.isReadOnly()) {
+//			idField.addValueChangeListener(this::onTextChange);
+//		}
+//
+//		/*
+//		 * Link a value change to all other fields on the form
+//		 */
+//		for(Field<?> field : this.binder.getFields()) {
+//			field.removeValueChangeListener(this::onValueChange);
+//			field.addValueChangeListener(this::onValueChange);
+//		}
+//	}
 	
 	/**
 	 * Provide a hoot for subclasses to update dependant fields
@@ -125,13 +126,13 @@ public abstract class AbstractEntityEditForm<T extends Persistable<Long>> extend
 	/**
 	 * Update the field constraints to the new bound value
 	 */
-	protected void updateFieldContraints() {
+	protected void updateFieldConstraints() {
 		idField.setEnabled(getValue().isNew());
 		
-		for(Field<?> field : fieldGroup.getFields()) {
-			field.removeValueChangeListener(this::onValueChange);
-			field.addValueChangeListener(this::onValueChange);
-		}
+//		for(Field<?> field : fieldGroup.getFields()) {
+//			field.removeValueChangeListener(this::onValueChange);
+//			field.addValueChangeListener(this::onValueChange);
+//		}
 	}
 		
 	protected abstract T buildEmpty();

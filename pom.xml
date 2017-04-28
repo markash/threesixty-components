@@ -4,7 +4,7 @@
     
 	<groupId>za.co.yellowfire.threesixty</groupId>
 	<artifactId>threesixty-components</artifactId>
-	<version>0.2.0</version>
+	<version>0.2.1</version>
 	<packaging>jar</packaging>
 	
 	<name>threesixty-components</name>
@@ -15,7 +15,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <spring-boot.version>1.5.3.RELEASE</spring-boot.version>
 		<vaadin.version>8.0.5</vaadin.version>
-        <viritin.version>2.0-SNAPSHOT</viritin.version>
+        <viritin.version>2.0.beta1</viritin.version>
 	</properties>
 
     <parent>
