@@ -12,9 +12,14 @@
 
 	<properties>
 		<java.version>1.8</java.version>
+
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
         <spring-boot.version>1.5.3.RELEASE</spring-boot.version>
-		<vaadin.version>8.0.5</vaadin.version>
+
+        <vaadin.version>8.0.5</vaadin.version>
+        <vaadin4spring.version>2.0.1-SNAPSHOT</vaadin4spring.version>
+
         <viritin.version>2.0.beta1</viritin.version>
 	</properties>
 

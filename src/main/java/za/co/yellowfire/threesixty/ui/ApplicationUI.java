@@ -7,15 +7,20 @@ import com.vaadin.ui.Component;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.util.StringUtils;
 import za.co.yellowfire.threesixty.ui.view.ErrorView;
-
 
 public abstract class ApplicationUI extends UI {
 	private static final long serialVersionUID = 1L;
 
+    @Value("${threesixty.application.title:Application}")
+	private String title;
+
 	@Override
     protected void init(VaadinRequest vaadinRequest) {
-		getPage().setTitle("Beam");
+		getPage().setTitle(StringUtils.isEmpty(this.title) ?  "Application" : this.title);
         final HorizontalLayout rootLayout = new HorizontalLayout();
         rootLayout.setSizeFull();
         setContent(rootLayout);
@@ -28,6 +33,7 @@ public abstract class ApplicationUI extends UI {
         navigator.setErrorView(new ErrorView());
         navigator.addProvider(getViewProvider());
         setNavigator(navigator);
+
 
         rootLayout.addComponent(getSideBar());
         rootLayout.addComponent(viewContainer);

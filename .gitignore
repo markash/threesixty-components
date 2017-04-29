@@ -11,6 +11,7 @@ target/*
 # Eclipse #
 ###########
 .settings/org.eclipse.*.prefs
+.project
 
 # Compiled source #
 ###################
