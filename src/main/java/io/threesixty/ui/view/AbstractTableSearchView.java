@@ -1,5 +1,6 @@
 package io.threesixty.ui.view;
 
+import com.vaadin.data.Binder;
 import com.vaadin.data.provider.ListDataProvider;
 import com.vaadin.server.Responsive;
 import com.vaadin.ui.Button.ClickEvent;
@@ -7,6 +8,7 @@ import com.vaadin.ui.Component;
 import com.vaadin.ui.Grid;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.v7.data.Container.Filter;
+import io.threesixty.ui.component.field.ExtendedFilterTextField;
 import org.apache.commons.lang3.StringUtils;
 import io.threesixty.ui.component.EntityGrid;
 import io.threesixty.ui.component.button.ButtonBuilder;
@@ -56,7 +58,7 @@ public abstract class AbstractTableSearchView<T extends Serializable, I extends 
                 .withDefinition(definition);
 
         if (definition.getFilterProperties() != null) {
-            this.headerButtons = new HeaderButtons(HeaderButtons.combine(new FilterTextField<T>(dataProvider, definition.getFilterProperties()), headerComponents));
+            this.headerButtons = new HeaderButtons(HeaderButtons.combine(new ExtendedFilterTextField<>(dataProvider, definition.getFilterProperties()), headerComponents));
         } else {
             this.headerButtons = new HeaderButtons(headerComponents);
         }
@@ -96,6 +98,10 @@ public abstract class AbstractTableSearchView<T extends Serializable, I extends 
         root.addComponent(this.grid);
         
         return root;
+    }
+
+    protected Binder<T> getTableBinder() {
+        return this.grid.getEditor().getBinder();
     }
 	
 //	@SuppressWarnings({"unchecked", "serial"})

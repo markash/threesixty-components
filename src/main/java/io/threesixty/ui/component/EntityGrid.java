@@ -1,7 +1,9 @@
 package io.threesixty.ui.component;
 
+import com.vaadin.data.Binder;
 import com.vaadin.data.provider.DataProvider;
 import com.vaadin.ui.renderers.HtmlRenderer;
+import io.threesixty.ui.view.ColumnDefinition;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.vaadin.viritin.grid.MGrid;
@@ -25,23 +27,28 @@ public class EntityGrid<T> extends MGrid<T> {
         return this;
     }
 
-    public EntityGrid<T> withDefinition(final TableDefinition definition) {
-        int i = 0;
+    public EntityGrid<T> withDefinition(final TableDefinition<T> definition) {
         Column<T, ?> column;
+        Binder<T> binder = getEditor().getBinder();
 
         /* Remove the columns added by the constructor when evaluating the beanType */
         removeAllColumns();
 
         /* Redefine the columns based upon the definition */
-        for(String p : definition.getPropertyNames()) {
-            if (p.equals(definition.getIdPropertyName())) {
-                column = addColumn(row -> buildNavigationLink(row, p, Optional.of(definition.getEntityViewName()).orElse("error")), new HtmlRenderer());
-                column.setCaption(definition.getHeaders()[i]);
+        for(ColumnDefinition<T, ?> c : definition.getColumns()) {
+            if (c.isId()) {
+                column = addColumn(row -> buildNavigationLink(row, c, definition.getEntityViewName().orElse("error")), new HtmlRenderer());
+                column.setCaption(c.getHeading());
             } else {
-                column = addColumn(p);
-                column.setCaption(definition.getHeaders()[i]);
+                column = addColumn(c.getProperty());
+                column.setCaption(c.getHeading());
+
+                Optional<Binder.Binding<T, ?>> binding = Optional.ofNullable(c.bind(binder));
+                if (binding.isPresent()) {
+                    column.setEditorBinding(binding.get());
+                    getEditor().setEnabled(true);
+                }
             }
-            i++;
         }
         return this;
     }
@@ -60,7 +67,15 @@ public class EntityGrid<T> extends MGrid<T> {
     public EntityGrid<T> setRows(List<T> rows) {
         return (EntityGrid<T>) super.setRows(rows);
     }
-
+    /**
+     * Builds the navigation link for the table column that is used to drill down into a single instance of the row
+     * @param value The row object to read the property link value from
+     * @return The navigation link
+     */
+    private String buildNavigationLink(final Object value, final ColumnDefinition columnDefinition, final String entityViewName) {
+        final String linkValue = getPropertyValue(value, columnDefinition.getProperty());
+        return "<a href='#!" + buildNavigationState(entityViewName, linkValue) + "' target='_top'>" + linkValue + "</a>";
+    }
     /**
      * Builds the navigation link for the table column that is used to drill down into a single instance of the row
      * @param value The row object to read the property link value from

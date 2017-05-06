@@ -4,54 +4,65 @@ import com.vaadin.data.provider.ListDataProvider;
 import com.vaadin.event.ShortcutListener;
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.server.SerializablePredicate;
+import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.themes.ValoTheme;
 import org.apache.commons.beanutils.BeanUtils;
 import org.springframework.util.StringUtils;
 
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Optional;
+import java.util.stream.Stream;
 
 /**
  * @author Mark P Ashworth (mp.ashworth@gmail.com)
  * @param <T> The entity type of the grid / container
+ * @param <S> The combo box type
  */
-public class FilterTextField<T> extends TextField {
+public class FilterSelectField<T,S> extends ComboBox<S> {
 	private static final long serialVersionUID = 1L;
 
 	private final ListDataProvider<T> dataProvider;
-    private final String[] propertiesToFilterOn;
-    private SerializablePredicate<T> filter;
+    private final String propertyToFilterOn;
 
-    public FilterTextField(final ListDataProvider<T> dataProvider, final String[] propertiesToFilterOn) {
-        this.dataProvider = dataProvider;
-        this.propertiesToFilterOn = propertiesToFilterOn;
-        setIcon(VaadinIcons.SEARCH);
-        addStyleName(ValoTheme.TEXTFIELD_INLINE_ICON);
-    }
+	public FilterSelectField(
+	        final ListDataProvider<T> dataProvider,
+            final Collection<S> options,
+            final String propertyToFilterOn) {
+		super(null, options);
 
-    public FilterTextField<T> withDefaultValueChangeListener() {
+		this.dataProvider = dataProvider;
+		this.propertyToFilterOn = propertyToFilterOn;
+        this.setEmptySelectionAllowed(true);
+
+        addValueChangeListener(this::onFilter);
+        addShortcutListener(new FilterShortcutListener<>(this));
+	}
+
+    public FilterSelectField<T,S> withDefaultValueChangeListener() {
         return withValueChangeListener(this::onFilter);
     }
 
-    public FilterTextField<T> withDefaultShortcutListener() {
-        addShortcutListener(new FilterShortcutListener<>(this));
+    public FilterSelectField<T,S> withDefaultShortcutListener() {
+        addShortcutListener(new FilterSelectField.FilterShortcutListener<>(this));
         return this;
     }
 
-    public FilterTextField<T> withValueChangeListener(ValueChangeListener<String> listener) {
+    public FilterSelectField<T,S> withValueChangeListener(ValueChangeListener<S> listener) {
         addValueChangeListener(listener);
         return this;
     }
 
     public SerializablePredicate<T> getFilter(final ValueChangeEvent event) {
-        return (SerializablePredicate<T>) value -> Arrays.stream(propertiesToFilterOn)
+        return (SerializablePredicate<T>) value -> Stream.of(propertyToFilterOn)
                 .anyMatch(property -> propertyContainsText(value, property, (String) event.getValue()));
     }
 
 	private void onFilter(final ValueChangeEvent event) {
-        this.dataProvider.clearFilters();
-        this.dataProvider.addFilter(getFilter(event));
+	    this.dataProvider.clearFilters();
+	    this.dataProvider.addFilter(getFilter(event));
 	}
 
 	private boolean propertyContainsText(final T value, final String property, final String text) {
@@ -63,18 +74,18 @@ public class FilterTextField<T> extends TextField {
         return false;
     }
 
-	private static class FilterShortcutListener<T> extends ShortcutListener {
-		private final FilterTextField<T> textField;
+	private static class FilterShortcutListener<T,S> extends ShortcutListener {
+		private final FilterSelectField<T,S> field;
 
-		FilterShortcutListener(final FilterTextField<T> textField) {
+		FilterShortcutListener(final FilterSelectField<T,S> field) {
 			super("Clear", KeyCode.ESCAPE, (int[]) null);
-			this.textField = textField;
+			this.field = field;
 		}
 
     	@Override
         public void handleAction(final Object sender, final Object target) {
-            textField.setValue("");
-            textField.dataProvider.clearFilters();
+            field.setSelectedItem(null);
+            field.dataProvider.clearFilters();
         }
     }
 }
