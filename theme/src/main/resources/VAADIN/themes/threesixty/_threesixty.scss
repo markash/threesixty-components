@@ -1,0 +1,16 @@
+@import "fonts.scss";
+
+.Vaadin-Icons {
+    font-family: 'Vaadin-Icons';
+}
+
+@import "variables";
+@import "../valo/valo";
+@import "../../addons/statistics/statistics.scss";
+@import "menu";
+@import "login";
+
+@mixin threesixty {
+    @include valo;
+    @include statistics;
+}
