@@ -1,11 +1,7 @@
 package io.threesixty.ui.component.panel;
 
 import com.vaadin.server.Sizeable.Unit;
-import com.vaadin.ui.Alignment;
-import com.vaadin.ui.Component;
-import com.vaadin.ui.HorizontalLayout;
-import com.vaadin.ui.Layout;
-import com.vaadin.ui.VerticalLayout;
+import com.vaadin.ui.*;
 
 public class PanelBuilder {
 

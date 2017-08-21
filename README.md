@@ -4,7 +4,7 @@ This project is the secret sauce that when added to a new ThreeSixty project all
 
 ## ThreeSixty Components
 
-The hightlights are:-
+The highlights are:-
 - AbstractDashboardView : Mmmmm...provides the basic dashboard stuffies
 - AbstractEntityEditForm : An entity edit form which is placed within a view
 - AbstractEntityEditView : The view for the entity edit

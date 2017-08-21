@@ -1,41 +1,43 @@
 package io.threesixty.ui.view;
 
-import java.util.Optional;
-
-import javax.annotation.PostConstruct;
-
-import org.springframework.context.ApplicationEventPublisher;
-
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.server.Responsive;
-import com.vaadin.ui.Component;
-import com.vaadin.ui.HorizontalLayout;
-import com.vaadin.ui.Label;
-import com.vaadin.ui.Layout;
-import com.vaadin.ui.Panel;
-import com.vaadin.ui.VerticalLayout;
+import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
+import io.threesixty.ui.event.CloseOpenWindowsEvent;
+import io.threesixty.ui.event.EventBusPublisherWrapper;
+import org.springframework.context.ApplicationEventPublisher;
+import org.vaadin.spring.events.EventBus;
+
+import javax.annotation.PostConstruct;
+import java.util.Optional;
 
 @SuppressWarnings("serial")
 public abstract class AbstractDashboardView extends Panel implements View {
     private final VerticalLayout root;
     private final String viewCaption;
-    private transient Optional<ApplicationEventPublisher> eventPublisher;
+    private transient ApplicationEventPublisher eventPublisher;
     
     protected static final String STYLE_DASHBOARD_VIEW = "dashboard-view";
     
     public AbstractDashboardView(final String viewCaption) {
     	this.viewCaption = viewCaption;
     	this.root = new VerticalLayout();
-    	this.eventPublisher = Optional.empty();
+    	this.eventPublisher = null;
     }
 	
 	public AbstractDashboardView(final String viewCaption, final ApplicationEventPublisher eventPublisher) {
 		this.viewCaption = viewCaption;
     	this.root = new VerticalLayout();
-    	this.eventPublisher = Optional.of(eventPublisher);
+    	this.eventPublisher = eventPublisher;
     }
+
+	public AbstractDashboardView(final String viewCaption, final EventBus eventBus) {
+		this.viewCaption = viewCaption;
+		this.root = new VerticalLayout();
+		this.eventPublisher = new EventBusPublisherWrapper(this, eventBus);
+	}
 
 	protected abstract Component buildContent();
 	
@@ -63,7 +65,7 @@ public abstract class AbstractDashboardView extends Panel implements View {
 	        Component content = buildContent();
 	        root.addComponent(content);
 	        root.setExpandRatio(content, 1);
-	        root.addLayoutClickListener(event -> eventPublisher.ifPresent(ep -> ep.publishEvent(new CloseOpenWindowsEvent(event))));
+	        root.addLayoutClickListener(event -> Optional.of(eventPublisher).ifPresent(ep -> ep.publishEvent(new CloseOpenWindowsEvent(event))));
 		}
 	}
 	

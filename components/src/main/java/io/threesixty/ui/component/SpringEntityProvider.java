@@ -1,11 +1,11 @@
 package io.threesixty.ui.component;
 
-import java.io.Serializable;
-import java.util.List;
-
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.vaadin.viritin.LazyList.CountProvider;
 import org.vaadin.viritin.v7.SortableLazyList.SortablePagingProvider;
+
+import java.io.Serializable;
+import java.util.List;
 
 public class SpringEntityProvider<T, I extends Serializable> implements SortablePagingProvider<T>, CountProvider {
 	private static final long serialVersionUID = 1L;

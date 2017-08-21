@@ -1,21 +1,26 @@
 package io.threesixty.ui.view;
 
-import io.threesixty.ui.component.EntitySupplier;
-import io.threesixty.ui.component.button.ButtonBuilder;
-import org.springframework.data.domain.Persistable;
-
+import com.vaadin.data.BinderValidationStatus;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.server.Responsive;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.VerticalLayout;
-
 import io.threesixty.ui.component.BlankSupplier;
-import io.threesixty.ui.component.EntityConsumer;
+import io.threesixty.ui.component.EntityPersistFunction;
+import io.threesixty.ui.component.EntitySupplier;
+import io.threesixty.ui.component.button.ButtonBuilder;
 import io.threesixty.ui.component.button.HeaderButtons;
+import io.threesixty.ui.component.notification.NotificationBuilder;
+import io.threesixty.ui.event.EntityPersistEvent;
+import org.springframework.context.ApplicationEvent;
+import org.springframework.data.domain.Persistable;
 
-public abstract class AbstractEntityEditView<T extends Persistable<Long>> extends AbstractDashboardView {
+import java.io.Serializable;
+
+@SuppressWarnings("unused")
+public abstract class AbstractEntityEditView<T extends Persistable<Serializable>> extends AbstractDashboardView {
 	private static final long serialVersionUID = 1L;
 	          
     private Button saveButton = ButtonBuilder.SAVE(this::onSave);
@@ -24,26 +29,26 @@ public abstract class AbstractEntityEditView<T extends Persistable<Long>> extend
 	
     private Button[] buttons = new Button[] {saveButton, resetButton, createButton};
     private final AbstractEntityEditForm<T> form;
-    private transient EntityConsumer<T> entityConsumer;
-    private transient EntitySupplier<T, Long> entitySupplier;
+    private transient EntityPersistFunction<T> entityPersistFunction;
+    private transient EntitySupplier<T, Serializable> entitySupplier;
     private transient BlankSupplier<T> blankSupplier;
     
     public AbstractEntityEditView(
     		final String viewCaption,
     		final AbstractEntityEditForm<T> form,
-    		final EntitySupplier<T, Long> entitySupplier,
+    		final EntitySupplier<T, Serializable> entitySupplier,
     		final BlankSupplier<T> blankSupplier,
-    		final EntityConsumer<T> entityConsumer) {
-    	this(viewCaption, form, true, entitySupplier, blankSupplier, entityConsumer);
+    		final EntityPersistFunction<T> entityPersistFunction) {
+    	this(viewCaption, form, true, entitySupplier, blankSupplier, entityPersistFunction);
     }
     
     public AbstractEntityEditView( 
     		final String viewCaption,
     		final AbstractEntityEditForm<T> form,
     		final boolean enableCreation,
-    		final EntitySupplier<T, Long> entitySupplier,
+    		final EntitySupplier<T, Serializable> entitySupplier,
     		final BlankSupplier<T> blankSupplier,
-    		final EntityConsumer<T> entityConsumer) {
+    		final EntityPersistFunction<T> entityPersistFunction) {
 		super(viewCaption);
 		
 		this.form = form;
@@ -51,7 +56,7 @@ public abstract class AbstractEntityEditView<T extends Persistable<Long>> extend
 		this.createButton.setEnabled(enableCreation);
 		this.entitySupplier = entitySupplier;
 		this.blankSupplier = blankSupplier;
-		this.entityConsumer = entityConsumer;
+		this.entityPersistFunction = entityPersistFunction;
 	}
 
 	@Override
@@ -76,27 +81,47 @@ public abstract class AbstractEntityEditView<T extends Persistable<Long>> extend
     public void enter(final ViewChangeEvent event) {
 		String[] parameters = event.getParameters().split("/");
 		if (parameters.length > 0) {
-			form.bind(entitySupplier.get(Long.parseLong(parameters[0])).orElse(blankSupplier.blank()));
+			form.bind(entitySupplier.get(parameters[0]).orElse(blankSupplier.blank()));
 		}
 //		build();
 		onClean();
     }
-	
-	protected void onSave(ClickEvent event) {
-//		try {
-//			//Validate the field group
-//	        form.commit();
-//	        //Persist the outcome
-//	        T result = getService().save(form.getValue(), getCurrentUser());
-//	        //Bind the form to the result
-//	        form.bind(result);
-//	        //Notify the user of the outcome
-//	        NotificationBuilder.showNotification("Update", result.getId() + " updated successfully.", 2000);
-//	        //DashboardEventBus.post(new ProfileUpdatedEvent());
-//	        onClean();
-//		} catch (CommitException exception) {
-//            Notification.show("Error while updating : " + exception.getMessage(), Type.ERROR_MESSAGE);
-//        }
+
+    /**
+     * Saves the entity using the EntityPersistFunction and binds the result to the form
+     * @param event The click event
+     */
+    @SuppressWarnings("unused")
+	private void onSave(final ClickEvent event) {
+
+        //Validate the field group
+        BinderValidationStatus<T> status = form.validate();
+        if (status.isOk()) {
+            //Persist the outcome
+            T result = entityPersistFunction.apply(form.getValue());
+            //Bind the form to the result
+            form.bind(result);
+            //Notify the user of the outcome
+            NotificationBuilder.showNotification(
+                    "Update",
+                    result.getId() + " updated successfully.",
+                    2000);
+            //Notify the system of the outcome
+            publishOnEventBus(new EntityPersistEvent<T>(this, result));
+            //Set the button status
+            onClean();
+        } else {
+            StringBuilder errors = new StringBuilder();
+            status.getFieldValidationErrors()
+                    .stream()
+                    .map(m -> m.getMessage().orElse(""))
+                    .forEach(errors::append);
+
+            NotificationBuilder.showNotification(
+                    "Validation",
+                    errors.toString(),
+                    2000);
+        }
 	}
 	
 	protected void add(ClickEvent event) {
@@ -187,7 +212,14 @@ public abstract class AbstractEntityEditView<T extends Persistable<Long>> extend
 		this.saveButton.setEnabled(false);
 		this.resetButton.setEnabled(false);
 	}
-	
+
+    /**
+     * Used by the implementing class to notify the system via an event bus
+     */
+	protected void publishOnEventBus(final ApplicationEvent event) {
+
+    }
+
 //	protected User getCurrentUser() {
 //		return ((MainUI) UI.getCurrent()).getCurrentUser();
 //	}

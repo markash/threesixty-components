@@ -4,10 +4,10 @@ import com.vaadin.data.Binder;
 import com.vaadin.data.provider.DataProvider;
 import com.vaadin.ui.renderers.HtmlRenderer;
 import io.threesixty.ui.view.ColumnDefinition;
+import io.threesixty.ui.view.TableDefinition;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.vaadin.viritin.grid.MGrid;
-import io.threesixty.ui.view.TableDefinition;
 
 import java.beans.PropertyDescriptor;
 import java.util.List;

@@ -1,10 +1,10 @@
 package io.threesixty.ui.component;
 
-import java.io.Serializable;
-import java.util.List;
-
 import org.vaadin.viritin.LazyList.CountProvider;
 import org.vaadin.viritin.v7.SortableLazyList.SortablePagingProvider;
+
+import java.io.Serializable;
+import java.util.List;
 
 @SuppressWarnings("serial")
 public class EntitiesSupplierPagingProvider<T extends Serializable> implements SortablePagingProvider<T>, CountProvider {

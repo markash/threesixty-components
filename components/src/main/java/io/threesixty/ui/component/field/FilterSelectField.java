@@ -2,17 +2,12 @@ package io.threesixty.ui.component.field;
 
 import com.vaadin.data.provider.ListDataProvider;
 import com.vaadin.event.ShortcutListener;
-import com.vaadin.icons.VaadinIcons;
 import com.vaadin.server.SerializablePredicate;
 import com.vaadin.ui.ComboBox;
-import com.vaadin.ui.TextField;
-import com.vaadin.ui.themes.ValoTheme;
 import org.apache.commons.beanutils.BeanUtils;
 import org.springframework.util.StringUtils;
 
-import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Optional;
 import java.util.stream.Stream;
 

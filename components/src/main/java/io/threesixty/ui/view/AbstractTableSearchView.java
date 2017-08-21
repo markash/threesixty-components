@@ -8,12 +8,11 @@ import com.vaadin.ui.Component;
 import com.vaadin.ui.Grid;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.v7.data.Container.Filter;
-import io.threesixty.ui.component.field.ExtendedFilterTextField;
-import org.apache.commons.lang3.StringUtils;
 import io.threesixty.ui.component.EntityGrid;
 import io.threesixty.ui.component.button.ButtonBuilder;
 import io.threesixty.ui.component.button.HeaderButtons;
-import io.threesixty.ui.component.field.FilterTextField;
+import io.threesixty.ui.component.field.ExtendedFilterTextField;
+import org.apache.commons.lang3.StringUtils;
 
 import java.io.Serializable;
 
@@ -74,17 +73,17 @@ public abstract class AbstractTableSearchView<T extends Serializable, I extends 
 	 * @return The entity view path
 	 */
 	protected String buildNavigationState(final String entityViewName, final I id) {
-		return buildNavigationState(entityViewName, id.toString());
+
+		String entityId;
+		if (id instanceof String) {
+			entityId = (String) id;
+		} else {
+			entityId = id != null ? id.toString() : "";
+		}
+
+		return entityViewName + (entityId != null && StringUtils.isBlank(entityId) ? "" : "/" + entityId);
 	}
-    /**
-     * Builds the navigation state for the entity view path, i.e. !#entityViewName/id
-     * @param entityViewName The entity view name
-     * @param id The id value of the grid that was clicked
-     * @return The entity view path
-     */
-    protected String buildNavigationState(final String entityViewName, final String id) {
-        return entityViewName + (id != null && StringUtils.isBlank(id) ? "" : "/" + id);
-    }
+
 	@Override
 	protected Component getHeaderButtons() { return this.headerButtons; }
 

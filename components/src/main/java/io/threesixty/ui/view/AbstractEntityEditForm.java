@@ -1,37 +1,36 @@
 package io.threesixty.ui.view;
 
-import com.vaadin.annotations.PropertyId;
 import com.vaadin.data.Binder;
+import com.vaadin.data.BinderValidationStatus;
 import com.vaadin.data.HasValue;
-import com.vaadin.data.converter.StringToLongConverter;
 import com.vaadin.server.Responsive;
+import com.vaadin.shared.Registration;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.TextField;
-import com.vaadin.v7.data.Property;
-import com.vaadin.v7.data.Property.ValueChangeEvent;
-import org.springframework.data.domain.Persistable;
 import io.threesixty.ui.component.panel.PanelBuilder;
+import org.springframework.data.domain.Persistable;
 
 import java.io.Serializable;
+import java.util.HashMap;
 import java.util.LinkedHashSet;
+import java.util.Map;
 
-public abstract class AbstractEntityEditForm<T extends Persistable<Long>> extends HorizontalLayout {
+public abstract class AbstractEntityEditForm<T extends Persistable<Serializable>> extends HorizontalLayout {
 	private static String[] DEFAULT_NESTED_PROPERTIES = new String[] {};
 	
-	@PropertyId("id")
-    protected TextField idField = new TextField("Id");
-
+    private TextField idField = new TextField("Id");
 	private Binder<T> binder;
 	private LinkedHashSet<DirtyListener> dirtyListeners = new LinkedHashSet<>();
-	
+	private Map<HasValue, Registration> changeListeners = new HashMap<>();
+
 	private boolean layoutCompleted = false;
 	
 	public AbstractEntityEditForm(Class<T> beanType) {
 
 		this.binder = new Binder<>(beanType);
 		this.binder.forField(idField)
-                .withConverter(new StringToLongConverter("Unable to convert id"))
+                //.withConverter(new StringToLongConverter("Unable to convert id"))
                 .bind("id");
 
 		setSpacing(true);
@@ -40,7 +39,6 @@ public abstract class AbstractEntityEditForm<T extends Persistable<Long>> extend
 		Responsive.makeResponsive(this);
 		
         idField.setWidth(100.0f, Unit.PERCENTAGE);
-        //idField.setNullRepresentation("");
 	}
 
 	public Binder<T> getBinder() { return this.binder; }
@@ -70,9 +68,13 @@ public abstract class AbstractEntityEditForm<T extends Persistable<Long>> extend
 //		this.binder.discard();
 //	}
 //
-//	public void commit() throws CommitException {
-//		this.binder.commit();
-//	}
+	/**
+     * Validates the form and returns the status
+     * @return the validation status
+     */
+	public BinderValidationStatus<T> validate() {
+		return this.binder.validate();
+	}
 	
 	public boolean isModified() {
 		return this.binder.hasChanges();
@@ -100,24 +102,28 @@ public abstract class AbstractEntityEditForm<T extends Persistable<Long>> extend
 		}
 	}
 	
-//	protected void registerDirtyListener() {
-//		/* Link the changing of the id text with a form dirty since this
-//		 * is the only field on the form sometimes which makes it difficult
-//		 * for the user to know that a tab is required to enable the Save button
-//		 */
-//		if (!idField.isReadOnly()) {
-//			idField.addValueChangeListener(this::onTextChange);
-//		}
-//
-//		/*
-//		 * Link a value change to all other fields on the form
-//		 */
-//		for(Field<?> field : this.binder.getFields()) {
-//			field.removeValueChangeListener(this::onValueChange);
-//			field.addValueChangeListener(this::onValueChange);
-//		}
-//	}
-	
+	protected void registerDirtyListener() {
+		/* Link the changing of the id text with a form dirty since this
+		 * is the only field on the form sometimes which makes it difficult
+		 * for the user to know that a tab is required to enable the Save button
+		 */
+		if (!idField.isReadOnly()) {
+			idField.addValueChangeListener(this::onTextChange);
+		}
+
+		/*
+		 * Link a value change to all other fields on the form
+		 */
+		this.binder.getFields().forEach(this::registerFieldDirtyListener);
+	}
+
+	private void registerFieldDirtyListener(HasValue<?> field) {
+	    if (this.changeListeners.containsKey(field)) {
+	        this.changeListeners.remove(field);
+        }
+        this.changeListeners.put(field, field.addValueChangeListener(this::onValueChange));
+    }
+
 	/**
 	 * Provide a hoot for subclasses to update dependant fields
 	 */
@@ -160,73 +166,25 @@ public abstract class AbstractEntityEditForm<T extends Persistable<Long>> extend
         addComponent(new Label(""));
 	}
 	
-	protected void onValueChange(final ValueChangeEvent event) {
+	protected void onValueChange(final HasValue.ValueChangeEvent<?> event) {
 		if (isModified()) {
-			fireFormDirty(new FormDirtyEvent(event.getProperty()));
+			fireFormDirty(new FormDirtyEvent(event.getSource(), event.getOldValue(), event.getValue()));
 		}
 	}
 	
-	protected void onTextChange(final HasValue.ValueChangeEvent event) {
-		fireFormDirty(new FormDirtyEvent());
+	private void onTextChange(final HasValue.ValueChangeEvent event) {
+		fireFormDirty(new FormDirtyEvent(event.getSource(), event.getOldValue(), event.getValue()));
 	}
 		
-	protected void fireFormClean() {
+	private void fireFormClean() {
 		fireFormDirty(new FormDirtyEvent(DirtyStatus.CLEAN));
 	}
 	
-	protected void fireFormDirty(final FormDirtyEvent event) {
-		if (dirtyListeners != null) {
-			for (DirtyListener listener : dirtyListeners) {
-				listener.onDirty(event);
-			}
-		}
-	}
-
-	/**
-	 * A listener to determine if the form is dirty (i.e. a field has changed) or 
-	 * clean (i.e. the fields are persisted). The dirty / clean state of the form usual determines
-	 * whether functionality like Save, Reset, Delete are enabled.
-     */
-    public interface DirtyListener extends Serializable {
-        public void onDirty(DirtyEvent event);
-    }
-    
-    public static enum DirtyStatus {
-    	DIRTY,
-    	CLEAN
-    }
-    
-    public interface DirtyEvent extends Serializable {
-        public Property<?> getProperty();
-        public DirtyStatus getStatus(); 
-        public boolean isRecalculationRequired();
-    }
-    
-    public static class FormDirtyEvent implements DirtyEvent {
-    	private final Property<?> property;
-    	private final DirtyStatus status;
-    	private final boolean recalculationRequired;
-    	
-    	public FormDirtyEvent() {
-    		this(null, false);
-    	}
-    	public FormDirtyEvent(final DirtyStatus status) {
-    		this(null, false, status);
-    	}
-    	public FormDirtyEvent(Property<?> property) {
-    		this(property, false);
-    	}
-    	public FormDirtyEvent(final Property<?> property, final boolean recalculationRequired) {
-    		this(property, recalculationRequired, DirtyStatus.DIRTY);
-    	}
-    	public FormDirtyEvent(final Property<?> property, final boolean recalculationRequired, final DirtyStatus status) {
-    		this.property = property;
-    		this.status = status;
-    		this.recalculationRequired = recalculationRequired;
-    	}
-    	
-    	public Property<?> getProperty() { return this.property; }
-    	public DirtyStatus getStatus() { return this.status; }
-    	public boolean isRecalculationRequired() { return this.recalculationRequired; }
+	private void fireFormDirty(final FormDirtyEvent event) {
+        if (dirtyListeners != null) {
+            for (DirtyListener listener : dirtyListeners) {
+                listener.onDirty(event);
+            }
+        }
     }
 }

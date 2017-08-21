@@ -5,9 +5,9 @@ import com.vaadin.server.Sizeable.Unit;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.themes.ValoTheme;
+import io.threesixty.ui.I8n;
 import io.threesixty.ui.Style;
 import org.apache.commons.lang3.StringUtils;
-import io.threesixty.ui.I8n;
 
 public class ButtonBuilder {
 	

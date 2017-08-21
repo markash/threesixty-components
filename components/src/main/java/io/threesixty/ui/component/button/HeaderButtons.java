@@ -1,12 +1,12 @@
 package io.threesixty.ui.component.button;
 
+import com.vaadin.ui.Component;
+import com.vaadin.ui.HorizontalLayout;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
-
-import com.vaadin.ui.Component;
-import com.vaadin.ui.HorizontalLayout;
 
 public class HeaderButtons extends HorizontalLayout {
 	private static final long serialVersionUID = 1L;

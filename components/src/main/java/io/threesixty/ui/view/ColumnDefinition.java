@@ -4,9 +4,8 @@ import com.vaadin.data.Binder;
 import com.vaadin.data.HasValue;
 import com.vaadin.data.ValueProvider;
 import com.vaadin.server.Setter;
-import jdk.nashorn.internal.runtime.options.Option;
+import com.vaadin.ui.renderers.Renderer;
 
-import java.awt.*;
 import java.util.Optional;
 
 /**
@@ -23,13 +22,14 @@ public class ColumnDefinition<BEAN, FIELD> {
     private HasValue<FIELD> editor;
     private ValueProvider<BEAN, FIELD> getter;
     private Setter<BEAN, FIELD> setter;
-
+    private Renderer<?> renderer;
     public ColumnDefinition() { }
 
     public boolean isId() { return id; }
     public String getHeading() { return heading; }
     public String getProperty() { return property; }
     public boolean isSearchable() { return searchable; }
+    public Optional<Renderer<?>> getRenderer() { return Optional.of(this.renderer); }
 
     public Binder.Binding<BEAN, FIELD> bind(final Binder<BEAN> binder) {
         if (editor != null && setter != null && getter != null) {
@@ -77,6 +77,16 @@ public class ColumnDefinition<BEAN, FIELD> {
 
     public ColumnDefinition<BEAN, FIELD> editor(final HasValue<FIELD> field) {
         this.editor = field;
+        return this;
+    }
+
+    public ColumnDefinition<BEAN, FIELD> identity() {
+        this.id = true;
+        return this;
+    }
+
+    public ColumnDefinition<BEAN, FIELD> renderer(Renderer<?> renderer) {
+        this.renderer = renderer;
         return this;
     }
 }

@@ -13,7 +13,7 @@
 
     <properties>
         <finalName>threesixty-${project.name}</finalName>
-        <vaadin.version>8.0.4</vaadin.version>
+        <vaadin.version>8.1.1</vaadin.version>
     </properties>
 
     <dependencies>

@@ -16,9 +16,9 @@
 
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
-        <spring-boot.version>1.5.3.RELEASE</spring-boot.version>
+        <spring-boot.version>1.5.6.RELEASE</spring-boot.version>
 
-        <vaadin.version>8.0.5</vaadin.version>
+        <vaadin.version>8.1.1</vaadin.version>
         <vaadin4spring.version>2.0.1-SNAPSHOT</vaadin4spring.version>
 
         <viritin.version>2.0.beta1</viritin.version>
@@ -27,7 +27,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>1.5.3.RELEASE</version>
+        <version>1.5.6.RELEASE</version>
         <relativePath/>
     </parent>
     
@@ -44,7 +44,10 @@
     </dependencyManagement>
 
 	<dependencies>
-	   <dependency>
+        <!-- **************************************************************
+		                      Infrastructure
+		*************************************************************** -->
+	    <dependency>
             <groupId>org.springframework.data</groupId>
             <artifactId>spring-data-commons</artifactId>
         </dependency>
@@ -52,11 +55,23 @@
             <groupId>org.springframework</groupId>
             <artifactId>spring-context</artifactId>
         </dependency>
+        <!-- **************************************************************
+		                      User Interface
+		*************************************************************** -->
 	   <dependency>
            <groupId>org.vaadin</groupId>
            <artifactId>viritin</artifactId>
            <version>${viritin.version}</version>
         </dependency>
+        <dependency>
+            <groupId>org.vaadin.spring.addons</groupId>
+            <artifactId>vaadin-spring-addon-eventbus</artifactId>
+            <version>${vaadin4spring.version}</version>
+            <optional>true</optional>
+        </dependency>
+        <!-- **************************************************************
+		                      Testing
+		*************************************************************** -->
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
