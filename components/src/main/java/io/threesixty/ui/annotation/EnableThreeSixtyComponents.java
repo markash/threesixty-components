@@ -1,6 +1,6 @@
 package io.threesixty.ui.annotation;
 
-import io.threesixty.ui.config.ThreeSixtyComponensConfiguration;
+import io.threesixty.ui.config.ThreeSixtyComponentsConfiguration;
 import org.springframework.context.annotation.Import;
 
 import java.lang.annotation.*;
@@ -11,6 +11,6 @@ import java.lang.annotation.*;
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
-@Import(ThreeSixtyComponensConfiguration.class)
+@Import(ThreeSixtyComponentsConfiguration.class)
 public @interface EnableThreeSixtyComponents {
 }
