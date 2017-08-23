@@ -35,6 +35,19 @@
 
     <dependencyManagement>
         <dependencies>
+            <!--********************************************************************
+            ** Spring Boot
+            *********************************************************************-->
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-dependencies</artifactId>
+                <version>${spring-boot.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <!--********************************************************************
+            ** Vaadin
+            *********************************************************************-->
             <dependency>
 				<groupId>com.vaadin</groupId>
 				<artifactId>vaadin-bom</artifactId>
@@ -43,31 +56,9 @@
 				<scope>import</scope>
 			</dependency>
             <dependency>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-dependencies</artifactId>
-                <version>${spring-boot.version}</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.camel</groupId>
-                <artifactId>camel-spring-boot-starter</artifactId>
-                <version>${camel.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.camel</groupId>
-                <artifactId>camel-bam</artifactId>
-                <version>${camel.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.camel</groupId>
-                <artifactId>camel-mail</artifactId>
-                <version>${camel.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.camel</groupId>
-                <artifactId>camel-ftp</artifactId>
-                <version>${camel.version}</version>
+                <groupId>org.vaadin</groupId>
+                <artifactId>viritin</artifactId>
+                <version>${viritin.version}</version>
             </dependency>
             <dependency>
                 <groupId>io.threesixty</groupId>
@@ -99,10 +90,18 @@
             <artifactId>vaadin-spring-addon-eventbus</artifactId>
             <version>${vaadin4spring.version}</version>
             </dependency>
+            <!--********************************************************************
+            ** Security
+            *********************************************************************-->
             <dependency>
-            <groupId>org.vaadin</groupId>
-            <artifactId>viritin</artifactId>
-            <version>${viritin.version}</version>
+                <groupId>org.vaadin.spring.extensions</groupId>
+                <artifactId>vaadin-spring-ext-security</artifactId>
+                <version>${vaadin4spring.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.security</groupId>
+                <artifactId>spring-security-core</artifactId>
+                <version>${spring-security.version}</version>
             </dependency>
             <!--********************************************************************
             ** Mock FTP Server dependencies
@@ -141,8 +140,28 @@
             <version>0.7.5</version>
             </dependency>
             <!--********************************************************************
-            ** End  
-            *********************************************************************-->  
+            ** Camel
+            *********************************************************************-->
+            <dependency>
+                <groupId>org.apache.camel</groupId>
+                <artifactId>camel-spring-boot-starter</artifactId>
+                <version>${camel.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.camel</groupId>
+                <artifactId>camel-bam</artifactId>
+                <version>${camel.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.camel</groupId>
+                <artifactId>camel-mail</artifactId>
+                <version>${camel.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.camel</groupId>
+                <artifactId>camel-ftp</artifactId>
+                <version>${camel.version}</version>
+            </dependency>
 
             <!--
             Provides the cron expression handling for defining deadlines 

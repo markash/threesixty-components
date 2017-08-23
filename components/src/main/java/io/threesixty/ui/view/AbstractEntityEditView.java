@@ -203,9 +203,9 @@ public abstract class AbstractEntityEditView<T extends Persistable<Serializable>
 	protected void onCreate(ClickEvent event) {
 	}
 	
-	protected void onDirty(final AbstractEntityEditForm.DirtyEvent event) {
-		this.saveButton.setEnabled(event.getStatus() == AbstractEntityEditForm.DirtyStatus.DIRTY);
-		this.resetButton.setEnabled(event.getStatus() == AbstractEntityEditForm.DirtyStatus.DIRTY);
+	protected void onDirty(final DirtyEvent event) {
+		this.saveButton.setEnabled(event.getStatus() == DirtyStatus.DIRTY);
+		this.resetButton.setEnabled(event.getStatus() == DirtyStatus.DIRTY);
 	}
 	
 	protected void onClean() {

@@ -61,7 +61,7 @@ public abstract class AbstractEntityEditForm<T extends Persistable<Serializable>
 
 		updateDependentFields();
 		updateFieldConstraints();
-		//registerDirtyListener();
+		registerDirtyListener();
 	}
 	
 //	public void discard() {
@@ -125,20 +125,15 @@ public abstract class AbstractEntityEditForm<T extends Persistable<Serializable>
     }
 
 	/**
-	 * Provide a hoot for subclasses to update dependant fields
+	 * Provide a hook for subclasses to update dependant fields
 	 */
 	protected void updateDependentFields() { }
 	
 	/**
 	 * Update the field constraints to the new bound value
 	 */
-	protected void updateFieldConstraints() {
+	private void updateFieldConstraints() {
 		idField.setEnabled(getValue().isNew());
-		
-//		for(Field<?> field : fieldGroup.getFields()) {
-//			field.removeValueChangeListener(this::onValueChange);
-//			field.addValueChangeListener(this::onValueChange);
-//		}
 	}
 		
 	protected abstract T buildEmpty();
@@ -154,22 +149,20 @@ public abstract class AbstractEntityEditForm<T extends Persistable<Serializable>
 		return entity;
 	}
 	
-	public void layout() {
+	protected void layout() {
 		if (!layoutCompleted) {
 			internalLayout();
 			layoutCompleted = true;
 		}
 	}
-	
+
 	protected void internalLayout() {
 		addComponent(PanelBuilder.FORM(idField));
         addComponent(new Label(""));
 	}
 	
-	protected void onValueChange(final HasValue.ValueChangeEvent<?> event) {
-		if (isModified()) {
-			fireFormDirty(new FormDirtyEvent(event.getSource(), event.getOldValue(), event.getValue()));
-		}
+	private void onValueChange(final HasValue.ValueChangeEvent<?> event) {
+	    fireFormDirty(new FormDirtyEvent(event.getSource(), event.getOldValue(), event.getValue()));
 	}
 	
 	private void onTextChange(final HasValue.ValueChangeEvent event) {

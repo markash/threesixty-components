@@ -65,7 +65,7 @@ public abstract class AbstractDashboardView extends Panel implements View {
 	        Component content = buildContent();
 	        root.addComponent(content);
 	        root.setExpandRatio(content, 1);
-	        root.addLayoutClickListener(event -> Optional.of(eventPublisher).ifPresent(ep -> ep.publishEvent(new CloseOpenWindowsEvent(event))));
+	        root.addLayoutClickListener(event -> Optional.ofNullable(eventPublisher).ifPresent(ep -> ep.publishEvent(new CloseOpenWindowsEvent(event))));
 		}
 	}
 	
