@@ -10,10 +10,14 @@ public class EntityPersistEvent<T extends Persistable<Serializable>> extends App
 
     private final T entity;
 
-    public EntityPersistEvent(final Object source, final T entity) {
+    private EntityPersistEvent(final Object source, final T entity) {
         super(source);
         this.entity = entity;
     }
 
     public T getEntity() { return entity; }
+
+    public static <T extends Persistable<Serializable>> EntityPersistEvent build(final Object source, final T entity) {
+        return new EntityPersistEvent<>(source, entity);
+    }
 }

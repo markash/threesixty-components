@@ -1,12 +1,11 @@
 package io.threesixty.ui.view;
 
 import com.vaadin.data.BinderValidationStatus;
+import com.vaadin.data.ValidationException;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.server.Responsive;
-import com.vaadin.ui.Button;
+import com.vaadin.ui.*;
 import com.vaadin.ui.Button.ClickEvent;
-import com.vaadin.ui.Component;
-import com.vaadin.ui.VerticalLayout;
 import io.threesixty.ui.component.BlankSupplier;
 import io.threesixty.ui.component.EntityPersistFunction;
 import io.threesixty.ui.component.EntitySupplier;
@@ -14,15 +13,19 @@ import io.threesixty.ui.component.button.ButtonBuilder;
 import io.threesixty.ui.component.button.HeaderButtons;
 import io.threesixty.ui.component.notification.NotificationBuilder;
 import io.threesixty.ui.event.EntityPersistEvent;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.context.ApplicationEvent;
 import org.springframework.data.domain.Persistable;
+import org.vaadin.dialogs.ConfirmDialog;
 
 import java.io.Serializable;
+import java.util.Optional;
 
 @SuppressWarnings("unused")
 public abstract class AbstractEntityEditView<T extends Persistable<Serializable>> extends AbstractDashboardView {
 	private static final long serialVersionUID = 1L;
-	          
+	private static final String NEW_ENTITY_ID = "new-entity";
+
     private Button saveButton = ButtonBuilder.SAVE(this::onSave);
 	private Button resetButton = ButtonBuilder.RESET(this::onReset);
 	private Button createButton = ButtonBuilder.NEW(this::onCreate);	
@@ -32,7 +35,11 @@ public abstract class AbstractEntityEditView<T extends Persistable<Serializable>
     private transient EntityPersistFunction<T> entityPersistFunction;
     private transient EntitySupplier<T, Serializable> entitySupplier;
     private transient BlankSupplier<T> blankSupplier;
-    
+    /* The name of the current view when the enter() is triggered */
+    private transient String viewName = null;
+    /* The id of the entity for the current view when entered() is triggered */
+    private transient String entityId = null;
+
     public AbstractEntityEditView(
     		final String viewCaption,
     		final AbstractEntityEditForm<T> form,
@@ -52,11 +59,18 @@ public abstract class AbstractEntityEditView<T extends Persistable<Serializable>
 		super(viewCaption);
 		
 		this.form = form;
-		this.form.addDirtyListener(this::onDirty);
 		this.createButton.setEnabled(enableCreation);
 		this.entitySupplier = entitySupplier;
 		this.blankSupplier = blankSupplier;
 		this.entityPersistFunction = entityPersistFunction;
+
+        this.form.addStatusChangeListener(event -> {
+            boolean isValid = event.getBinder().isValid();
+            boolean hasChanges = event.getBinder().hasChanges();
+
+            saveButton.setEnabled(hasChanges && isValid);
+            resetButton.setEnabled(hasChanges);
+        });
 	}
 
 	@Override
@@ -80,12 +94,20 @@ public abstract class AbstractEntityEditView<T extends Persistable<Serializable>
 	@Override
     public void enter(final ViewChangeEvent event) {
 		String[] parameters = event.getParameters().split("/");
-		if (parameters.length > 0) {
-			form.bind(entitySupplier.get(parameters[0]).orElse(blankSupplier.blank()));
-		}
-//		build();
-		onClean();
+		this.viewName = event.getViewName();
+		onEnter(parameters.length > 0 ? parameters[0] : null);
     }
+
+    private void onEnter(final String entityId) {
+        this.entityId = entityId;
+        if (NEW_ENTITY_ID.equals(entityId)) {
+            form.bind(blankSupplier.blank());
+        } else {
+            Optional.ofNullable(this.entityId)
+                    .ifPresent(id -> form.bind(entitySupplier.get(id).orElse(blankSupplier.blank())));
+        }
+		//build()
+	}
 
     /**
      * Saves the entity using the EntityPersistFunction and binds the result to the form
@@ -94,68 +116,63 @@ public abstract class AbstractEntityEditView<T extends Persistable<Serializable>
     @SuppressWarnings("unused")
 	private void onSave(final ClickEvent event) {
 
-        //Validate the field group
-        BinderValidationStatus<T> status = form.validate();
-        if (status.isOk()) {
-            //Persist the outcome
-            T result = entityPersistFunction.apply(form.getValue());
-            //Bind the form to the result
-            form.bind(result);
-            //Notify the user of the outcome
-            NotificationBuilder.showNotification(
-                    "Update",
-                    result.getId() + " updated successfully.",
-                    2000);
-            //Notify the system of the outcome
-            publishOnEventBus(new EntityPersistEvent<T>(this, result));
-            //Set the button status
-            onClean();
-        } else {
-            StringBuilder errors = new StringBuilder();
-            status.getFieldValidationErrors()
-                    .stream()
-                    .map(m -> m.getMessage().orElse(""))
-                    .forEach(errors::append);
+        try {
+            //Validate the field group
+            BinderValidationStatus<T> status = form.validate();
+            if (status.isOk()) {
+                //Persist the outcome
+                form.commit();
+                T result = entityPersistFunction.apply(form.getValue());
+                //Bind the form to the result
+                form.bind(result);
+                //Notify the user of the outcome
+                NotificationBuilder.showNotification(
+                        "Update",
+                        result.getId() + " updated successfully.",
+                        2000);
+                //Notify the system of the outcome
+                publishOnEventBus(EntityPersistEvent.build(this, result));
+            } else {
+                StringBuilder errors = new StringBuilder();
+                status.getFieldValidationErrors()
+                        .stream()
+                        .map(m -> m.getMessage().orElse(""))
+                        .forEach(errors::append);
 
-            NotificationBuilder.showNotification(
-                    "Validation",
-                    errors.toString(),
-                    2000);
+                NotificationBuilder.showNotification(
+                        "Validation",
+                        errors.toString(),
+                        2000);
+            }
+        } catch (ValidationException e) {
+            Notification.show("Validation error count: " + e.getValidationErrors().size());
         }
 	}
 	
 	protected void add(ClickEvent event) {
-//		if (form.isModified()) {
-//			ConfirmDialog.show(
-//					UI.getCurrent(), 
-//					"Confirmation", 
-//					"Would you like to discard you changes?",
-//					"Yes",
-//					"No",
-//			        new ConfirmDialog.Listener() {
-//			            public void onClose(ConfirmDialog dialog) {
-//			                if (dialog.isConfirmed()) {
-//			                    //Discard the field group
-//			                	form.discard();
-//			                    //DashboardEventBus.post(new ProfileUpdatedEvent());
-//			                    //Set a new data source
-//			                	form.bindToEmpty();
-//			                	onClean();
-//			                }
-//			            }
-//			        });
-//		} else {
-//			form.discard();
-//			form.bindToEmpty();
-//			onClean();
-//		}
+		if (form.isModified()) {
+			ConfirmDialog.show(
+					UI.getCurrent(),
+					"Confirmation",
+					"Would you like to discard you changes?",
+					"Yes",
+					"No",
+                    (ConfirmDialog.Listener) dialog -> {
+                        if (dialog.isConfirmed()) {
+                            //Load and enter a new entity id
+                            onEnter(NEW_ENTITY_ID);
+                        }
+                    });
+		} else {
+            onEnter(NEW_ENTITY_ID);
+		}
 	}
 	
 	protected void delete(ClickEvent event) {
 //		try {
 //			ConfirmDialog.show(
-//					UI.getCurrent(), 
-//					"Confirmation", 
+//					UI.getCurrent(),
+//					"Confirmation",
 //					"Are you sure you would like to delete this rating question?",
 //					"Yes",
 //					"No",
@@ -167,50 +184,35 @@ public abstract class AbstractEntityEditView<T extends Persistable<Serializable>
 //			                    //Notify the user of the outcome
 //			                    NotificationBuilder.showNotification("Update", "Rating question updated successfully", 2000);
 //			                    //Discard the field group
-//			                    form.discard();
-//			                    //DashboardEventBus.post(new ProfileUpdatedEvent());
-//			                    onClean();
+//			                    onEnter(NEW_ENTITY_ID);
 //			                }
 //			            }
 //			        });
 //		} catch (Exception e) {
-//            Notification.show("Error while deleting outcome", Type.ERROR_MESSAGE);
+//            Notification.show("Error while deleting outcome", Notification.Type.ERROR_MESSAGE);
 //        }
 	}
 	
-	protected void onReset(ClickEvent event) {
-//		if (form.isModified()) {
-//			ConfirmDialog.show(
-//					UI.getCurrent(), 
-//					"Confirmation", 
-//					"Would you like to discard you changes?",
-//					"Yes",
-//					"No",
-//			        new ConfirmDialog.Listener() {
-//			            public void onClose(ConfirmDialog dialog) {
-//			                if (dialog.isConfirmed()) {
-//			                	form.discard();
-//			                	onClean();
-//			                }
-//			            }
-//			        });
-//		} else {
-//			form.discard();
-//			onClean();
-//		}
+	private void onReset(ClickEvent event) {
+		if (form.isModified()) {
+			ConfirmDialog.show(
+					UI.getCurrent(),
+					"Confirmation",
+					"Would you like to discard you changes?",
+					"Yes",
+					"No",
+					(ConfirmDialog.Listener) dialog -> {
+                        if (dialog.isConfirmed()) {
+                            onEnter(this.entityId);
+                        }
+                    });
+		} else {
+			onEnter(this.entityId);
+		}
 	}
 	
-	protected void onCreate(ClickEvent event) {
-	}
-	
-	protected void onDirty(final DirtyEvent event) {
-		this.saveButton.setEnabled(event.getStatus() == DirtyStatus.DIRTY);
-		this.resetButton.setEnabled(event.getStatus() == DirtyStatus.DIRTY);
-	}
-	
-	protected void onClean() {
-		this.saveButton.setEnabled(false);
-		this.resetButton.setEnabled(false);
+	private void onCreate(ClickEvent event) {
+        UI.getCurrent().getNavigator().navigateTo(encodeNavigationState(this.viewName, NEW_ENTITY_ID));
 	}
 
     /**
@@ -220,10 +222,6 @@ public abstract class AbstractEntityEditView<T extends Persistable<Serializable>
 
     }
 
-//	protected User getCurrentUser() {
-//		return ((MainUI) UI.getCurrent()).getCurrentUser();
-//	}
-
 	protected AbstractEntityEditForm<T> getForm() {
 		return this.form;
 	}
@@ -231,5 +229,15 @@ public abstract class AbstractEntityEditView<T extends Persistable<Serializable>
 	protected Button getSaveButton() { return this.saveButton; }
 	protected Button getResetButton() { return this.resetButton; }
 	protected Button getCreateButton() { return this.createButton; }
+
+    /**
+     * Encodes the navigation state for the view and id for the entity views
+     * @param viewName The view name
+     * @param id The id of the entity
+     * @return The navigation state
+     */
+    private static String encodeNavigationState(final String viewName, final String id) {
+	    return viewName + (StringUtils.isBlank(id) ? "" : "/" + id);
+	}
 }
 
