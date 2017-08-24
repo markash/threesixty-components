@@ -9,7 +9,6 @@ public class SpringSecurityCurrentUserProvider<T> implements CurrentUserProvider
      */
     @Override
     public UserPrincipal<T> get() {
-        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        return (UserPrincipal<T>) DefaultUserPrincipal.wrap(principal);
+        return (UserPrincipal<T>) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
     }
 }
