@@ -1,0 +1,21 @@
+/**
+ * Redefine the menu logo so that it takes all available space
+ * without any border radius and no margins
+ */
+@mixin valo-menu-logo-style {
+  display: block;
+  overflow: hidden;
+  //width: round($v-unit-size * 1.2) !important;
+  //height: round($v-unit-size * 1.2);
+  //border-radius: $v-border-radius;
+  text-align: center;
+  @include valo-gradient($color: $v-selection-color);
+  color: valo-font-color($v-selection-color, 1);
+  font-size: round($v-unit-size/1.5);
+  line-height: round($v-unit-size * 1.2);
+  //margin: round($v-unit-size/2) auto;
+  @include box-shadow(valo-bevel-and-shadow($shadow: $v-shadow));
+  &:focus {
+    outline: none;
+  }
+}
