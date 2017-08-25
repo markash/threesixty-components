@@ -12,6 +12,7 @@ import io.threesixty.ui.component.EntitySupplier;
 import io.threesixty.ui.component.button.ButtonBuilder;
 import io.threesixty.ui.component.button.HeaderButtons;
 import io.threesixty.ui.component.notification.NotificationBuilder;
+import io.threesixty.ui.event.EnterEntityEditViewEvent;
 import io.threesixty.ui.event.EntityPersistEvent;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.context.ApplicationEvent;
@@ -99,13 +100,18 @@ public abstract class AbstractEntityEditView<T extends Persistable<Serializable>
     }
 
     private void onEnter(final String entityId) {
-        this.entityId = entityId;
-        if (NEW_ENTITY_ID.equals(entityId)) {
-            form.bind(blankSupplier.blank());
+        this.entityId = Optional.ofNullable(entityId).orElse(NEW_ENTITY_ID);
+
+        T entity;
+        if (NEW_ENTITY_ID.equals(this.entityId)) {
+            entity = blankSupplier.blank();
         } else {
-            Optional.ofNullable(this.entityId)
-                    .ifPresent(id -> form.bind(entitySupplier.get(id).orElse(blankSupplier.blank())));
+            T blank = blankSupplier.blank();
+            entity = Optional.ofNullable(entitySupplier.get(this.entityId)).orElse(Optional.of(blank)).get();
         }
+
+		form.bind(entity);
+        publishOnEventBus(new EnterEntityEditViewEvent(this.viewName, entity));
 		//build()
 	}
 
