@@ -99,6 +99,7 @@ public abstract class AbstractEntityEditView<T extends Persistable<Serializable>
 		onEnter(parameters.length > 0 ? parameters[0] : null);
     }
 
+    @SuppressWarnings("unchecked")
     private void onEnter(final String entityId) {
         this.entityId = Optional.ofNullable(entityId).orElse(NEW_ENTITY_ID);
 
