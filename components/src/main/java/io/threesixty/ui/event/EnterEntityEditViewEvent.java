@@ -18,4 +18,8 @@ public class EnterEntityEditViewEvent<T> extends ApplicationEvent {
     public T getEntity() {
         return this.entity;
     }
+
+    public static <T> EnterEntityEditViewEvent build(final String viewName, final T entity) {
+        return new EnterEntityEditViewEvent(viewName, entity);
+    }
 }

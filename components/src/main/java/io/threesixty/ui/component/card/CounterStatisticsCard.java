@@ -62,11 +62,18 @@ public class CounterStatisticsCard extends CustomComponent {
         setPrimaryStyleName(STYLE);
 		setCompositionRoot(buildContent());
 		setSizeUndefined();
+        refreshTextField();
 	}
 
 	public void setStatisticSupplier(final Supplier<CounterStatisticModel> statisticSupplier) {
 	    this.textSupplier.setStatisticSupplier(statisticSupplier);
-	    this.textField.setValue(textSupplier.get());
+        refreshTextField();
+    }
+
+    private void refreshTextField() {
+        if (this.textSupplier != null) {
+            this.textField.setValue(this.textSupplier.get());
+        }
     }
 
 	private CssLayout buildContent() {
@@ -104,9 +111,11 @@ public class CounterStatisticsCard extends CustomComponent {
         @Override
         public String get() {
             return "&nbsp;&nbsp;<strong>" +
-                    Optional.ofNullable(this.statisticSupplier.get()).orElse(new CounterStatisticModel("Unknown", 0)).getFormattedValue() +
+                    Optional.ofNullable(this.statisticSupplier).map(Supplier::get).orElseGet(CounterStatisticsCard::EMPTY).getFormattedValue() +
                     " </strong> " +
                     this.title;
         }
     }
+
+    private static CounterStatisticModel EMPTY() { return new CounterStatisticModel("Unknown", 0); }
 }
