@@ -2,9 +2,11 @@ package io.threesixty.ui.component.card;
 
 import com.vaadin.navigator.Navigator;
 import com.vaadin.navigator.View;
+import com.vaadin.server.VaadinSession;
 import com.vaadin.spring.annotation.SpringComponent;
 import com.vaadin.spring.annotation.UIScope;
 import com.vaadin.spring.navigator.SpringViewProvider;
+import com.vaadin.ui.Component;
 import com.vaadin.ui.CssLayout;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.UI;
@@ -35,7 +37,7 @@ public class MainView extends HorizontalLayout implements View {
         setExpandRatio(viewContainer, 1f);
 
         Navigator navigator = new Navigator(UI.getCurrent(), viewContainer);
-         navigator.addProvider(springViewProvider);
+        navigator.addProvider(springViewProvider);
         navigator.setErrorView(ErrorView.class);
         navigator.navigateTo(navigator.getState());
     }

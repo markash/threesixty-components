@@ -56,6 +56,11 @@
             <artifactId>vaadin-spring-addon-eventbus</artifactId>
             <optional>true</optional>
         </dependency>
+        <dependency>
+            <groupId>org.vaadin.addons</groupId>
+            <artifactId>hybridmenu</artifactId>
+            <version>2.0.2-ALPHA</version>
+        </dependency>
         <!-- **************************************************************
 		                      Testing
 		*************************************************************** -->
@@ -102,6 +107,16 @@
                         </goals>
                     </execution>
                 </executions>
+            </plugin>
+            <plugin>
+                <groupId>com.heroku.sdk</groupId>
+                <artifactId>heroku-maven-plugin</artifactId>
+                <version>1.2.0</version>
+                <configuration>
+                    <processTypes>
+                        <web>web: java -jar target/statistics-card-example-*.jar.jar</web>
+                    </processTypes>
+                </configuration>
             </plugin>
         </plugins>
     </build>

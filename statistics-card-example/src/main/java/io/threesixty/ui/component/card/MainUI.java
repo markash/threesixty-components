@@ -21,18 +21,16 @@ import org.vaadin.spring.sidebar.components.ValoSideBar;
 public class MainUI extends ApplicationUI {
 	private static final long serialVersionUID = 1L;
 
-	//@Autowired
-	//private ConverterFactory converterFactory;
     @Autowired
     private SpringViewProvider viewProvider;
     @Autowired
     private EventBus.SessionEventBus eventBus;
     @Autowired
-    private ValoSideBar sideBar;
-    @Autowired
     private Logo logo;
     @Autowired
     private ApplicationContext applicationContext;
+    @Autowired
+    private ValoSideBar sideBar;
 
     @Override
     protected Component getSideBar() {
@@ -66,5 +64,4 @@ public class MainUI extends ApplicationUI {
     private void showMainScreen() {
         setContent(applicationContext.getBean(MainView.class));
     }
-
 }
