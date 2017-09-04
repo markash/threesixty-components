@@ -5,7 +5,7 @@
     <parent>
         <artifactId>ui</artifactId>
         <groupId>io.threesixty.components</groupId>
-        <version>0.1.0</version>
+        <version>0.1.1</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -113,8 +113,9 @@
                 <artifactId>heroku-maven-plugin</artifactId>
                 <version>1.2.0</version>
                 <configuration>
+                    <appName>statistics-card-example</appName>
                     <processTypes>
-                        <web>web: java -jar target/statistics-card-example-*.jar.jar</web>
+                        <web>web: java -jar target/statistics-card-example-0.1.0.jar</web>
                     </processTypes>
                 </configuration>
             </plugin>
