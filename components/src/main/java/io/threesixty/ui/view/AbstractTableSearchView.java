@@ -13,6 +13,7 @@ import io.threesixty.ui.component.button.ButtonBuilder;
 import io.threesixty.ui.component.button.HeaderButtons;
 import io.threesixty.ui.component.field.ExtendedFilterTextField;
 import org.apache.commons.lang3.StringUtils;
+import org.vaadin.viritin.grid.MGrid;
 
 import java.io.Serializable;
 
@@ -30,7 +31,7 @@ public abstract class AbstractTableSearchView<T extends Serializable, I extends 
 	protected static final String BUTTON_ADD = "New";
 	protected static final String BUTTON_VIEW = "View";
 
-    private Grid<T> grid;
+    private EntityGrid<T> grid;
     private HeaderButtons headerButtons;
 
     /**
@@ -52,9 +53,7 @@ public abstract class AbstractTableSearchView<T extends Serializable, I extends 
 		
 		super(viewCaption);
 
-		this.grid = new EntityGrid<>(beanType)
-                .withDataProvider(dataProvider)
-                .withDefinition(definition);
+		this.grid = new EntityGrid<>(beanType).withDataProvider(dataProvider).withDefinition(definition);
 
         if (definition.getFilterProperties() != null) {
             this.headerButtons = new HeaderButtons(HeaderButtons.combine(new ExtendedFilterTextField<>(dataProvider, definition.getFilterProperties()), headerComponents));

@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * @author Mark P Ashworth
+ * @author Mark P Ashworth (mp.ashworth@gmail.com)
  */
 public class EntityGrid<T> extends MGrid<T> {
 
@@ -73,8 +73,13 @@ public class EntityGrid<T> extends MGrid<T> {
      * @return The navigation link
      */
     private String buildNavigationLink(final Object value, final ColumnDefinition columnDefinition, final String entityViewName) {
+
+        String displayValue = null;
+        if (StringUtils.isNotBlank(columnDefinition.getDisplayProperty())) {
+            displayValue = getPropertyValue(value, columnDefinition.getDisplayProperty());
+        }
         final String linkValue = getPropertyValue(value, columnDefinition.getProperty());
-        return "<a href='#!" + buildNavigationState(entityViewName, linkValue) + "' target='_top'>" + linkValue + "</a>";
+        return "<a href='#!" + buildNavigationState(entityViewName, linkValue) + "' target='_top'>" + Optional.ofNullable(displayValue).orElse(linkValue) + "</a>";
     }
     /**
      * Builds the navigation link for the table column that is used to drill down into a single instance of the row

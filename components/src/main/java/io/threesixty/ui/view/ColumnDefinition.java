@@ -16,6 +16,8 @@ import java.util.Optional;
 public class ColumnDefinition<BEAN, FIELD> {
     private String property;
     private String heading;
+    /* The property to display instead of the property */
+    private String displayProperty;
     private boolean id;
     private boolean searchable;
     private Binder.Binding<BEAN, FIELD> binding;
@@ -23,12 +25,15 @@ public class ColumnDefinition<BEAN, FIELD> {
     private ValueProvider<BEAN, FIELD> getter;
     private Setter<BEAN, FIELD> setter;
     private Renderer<?> renderer;
+
     public ColumnDefinition() { }
 
     public boolean isId() { return id; }
     public String getHeading() { return heading; }
     public String getProperty() { return property; }
+    public String getDisplayProperty() { return this.displayProperty;}
     public boolean isSearchable() { return searchable; }
+
     public Optional<Renderer<?>> getRenderer() { return Optional.of(this.renderer); }
 
     public Binder.Binding<BEAN, FIELD> bind(final Binder<BEAN> binder) {
@@ -66,7 +71,7 @@ public class ColumnDefinition<BEAN, FIELD> {
     }
 
     public ColumnDefinition<BEAN, FIELD> getter(final ValueProvider<BEAN, FIELD> getter) {
-        this.getter = getter;
+        this.setGetter(getter);
         return this;
     }
 
@@ -80,8 +85,24 @@ public class ColumnDefinition<BEAN, FIELD> {
         return this;
     }
 
+    /**
+     * Sets the column definition as an identity for the record
+     * @return The column definition
+     */
     public ColumnDefinition<BEAN, FIELD> identity() {
         this.id = true;
+        return this;
+    }
+
+    /**
+     * Sets the display property for the column. This only makes sense in the case of an identity
+     * @param property The property that should be displayed instead of the identity value. This used when for example
+     *                 the application does not want to expose the database id but would rather hyperlink on the
+     *                 name or some other property instead in the grid.
+     * @return The column definition
+     */
+    public ColumnDefinition<BEAN, FIELD> display(final String property) {
+        this.displayProperty = property;
         return this;
     }
 
