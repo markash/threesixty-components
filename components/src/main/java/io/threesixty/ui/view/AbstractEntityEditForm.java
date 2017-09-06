@@ -39,6 +39,10 @@ public abstract class AbstractEntityEditForm<T extends Persistable<Serializable>
         idField.setWidth(100.0f, Unit.PERCENTAGE);
 	}
 
+	protected TextField getIdField() {
+		return idField;
+	}
+
 	public Binder<T> getBinder() { return this.binder; }
 
 	/**
