@@ -107,8 +107,8 @@ public abstract class AbstractEntityEditView<T extends Persistable<Serializable>
         if (NEW_ENTITY_ID.equals(this.entityId)) {
             entity = blankSupplier.blank();
         } else {
-            T blank = blankSupplier.blank();
-            entity = Optional.ofNullable(entitySupplier.get(this.entityId)).orElse(Optional.of(blank)).get();
+            entity = entitySupplier.get(this.entityId).orElse(blankSupplier.blank());
+            //entity = Optional.ofNullable(entitySupplier.get(this.entityId)).orElse(Optional.of(blank)).get();
         }
 
 		form.bind(entity);
