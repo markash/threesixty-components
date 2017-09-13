@@ -35,7 +35,8 @@ public abstract class AbstractEntityEditForm<T extends Persistable<Serializable>
 		setMargin(false);
 		setSizeFull();
 		Responsive.makeResponsive(this);
-		
+
+		idField.setReadOnly(true);
         idField.setWidth(100.0f, Unit.PERCENTAGE);
 	}
 
