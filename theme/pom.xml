@@ -4,17 +4,19 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>io.threesixty.components</groupId>
-    <artifactId>theme</artifactId>
-    <version>0.1.1</version>
+    <parent>
+        <groupId>io.threesixty.components</groupId>
+        <artifactId>ui</artifactId>
+        <version>0.1.1</version>
+    </parent>
 
+    <artifactId>theme</artifactId>
     <name>theme</name>
     <description>ThreeSixty Theme</description>
 
     <properties>
         <finalName>threesixty-${project.name}</finalName>
         <java.version>1.8</java.version>
-        <vaadin.version>8.1.1</vaadin.version>
     </properties>
 
     <dependencies>
@@ -37,7 +39,7 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>io.threesixty</groupId>
+            <groupId>io.threesixty.components</groupId>
             <artifactId>components</artifactId>
             <version>0.2.1</version>
             <scope>provided</scope>
@@ -49,7 +51,6 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-clean-plugin</artifactId>
-                <version>3.0.0</version>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>

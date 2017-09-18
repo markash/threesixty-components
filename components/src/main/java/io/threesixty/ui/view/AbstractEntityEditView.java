@@ -66,11 +66,8 @@ public abstract class AbstractEntityEditView<T extends Persistable<Serializable>
 		this.entityPersistFunction = entityPersistFunction;
 
         this.form.addStatusChangeListener(event -> {
-            boolean isValid = event.getBinder().isValid();
-            boolean hasChanges = event.getBinder().hasChanges();
-
-            saveButton.setEnabled(hasChanges && isValid);
-            resetButton.setEnabled(hasChanges);
+            saveButton.setEnabled(this.form.isModified() && this.form.isValid());
+            resetButton.setEnabled(this.form.isModified());
         });
 	}
 
@@ -111,7 +108,7 @@ public abstract class AbstractEntityEditView<T extends Persistable<Serializable>
             //entity = Optional.ofNullable(entitySupplier.get(this.entityId)).orElse(Optional.of(blank)).get();
         }
 
-		form.bind(entity);
+		form.setValue(entity);
         publishOnEventBus(new EnterEntityEditViewEvent(this.viewName, entity));
 		//build()
 	}
@@ -131,7 +128,7 @@ public abstract class AbstractEntityEditView<T extends Persistable<Serializable>
                 form.commit();
                 T result = entityPersistFunction.apply(form.getValue());
                 //Bind the form to the result
-                form.bind(result);
+                form.setValue(result);
                 //Notify the user of the outcome
                 NotificationBuilder.showNotification(
                         "Update",

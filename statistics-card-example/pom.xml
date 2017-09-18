@@ -20,7 +20,7 @@
         <dependency>
             <groupId>io.threesixty.components</groupId>
             <artifactId>theme</artifactId>
-            <version>0.1.0</version>
+            <version>0.1.1</version>
         </dependency>
         <dependency>
             <groupId>io.threesixty.components</groupId>
@@ -30,7 +30,7 @@
         <dependency>
             <groupId>io.threesixty.components</groupId>
             <artifactId>statistics-card</artifactId>
-            <version>0.1.0</version>
+            <version>0.1.1</version>
         </dependency>
         <!-- **************************************************************
 		                      User Interface
@@ -38,6 +38,12 @@
         <dependency>
             <groupId>org.vaadin</groupId>
             <artifactId>viritin</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>com.vaadin</groupId>
+                    <artifactId>vaadin-compatibility-server</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>com.vaadin</groupId>

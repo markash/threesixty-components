@@ -9,8 +9,8 @@
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
-
     <artifactId>statistics-card</artifactId>
+    <name>Statistics Card</name>
 
     <properties>
         <maven.compiler.source>1.8</maven.compiler.source>
