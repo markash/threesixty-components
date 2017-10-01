@@ -12,6 +12,7 @@ import io.threesixty.ui.component.EntityGrid;
 import io.threesixty.ui.component.button.ButtonBuilder;
 import io.threesixty.ui.component.button.HeaderButtons;
 import io.threesixty.ui.component.field.ExtendedFilterTextField;
+import io.threesixty.ui.component.field.FilterField;
 import org.apache.commons.lang3.StringUtils;
 import org.vaadin.viritin.grid.MGrid;
 
@@ -22,6 +23,7 @@ import java.io.Serializable;
  * @author Mark P Ashworth
  * @version 0.2.0
  */
+@SuppressWarnings("unused")
 public abstract class AbstractTableSearchView<T extends Serializable, I extends Serializable> extends AbstractDashboardView {
 	private static final long serialVersionUID = 1L;
 
@@ -33,6 +35,8 @@ public abstract class AbstractTableSearchView<T extends Serializable, I extends 
 
     private EntityGrid<T> grid;
     private HeaderButtons headerButtons;
+    private ExtendedFilterTextField<T> filters;
+    private FilterField<T> filter;
 
     /**
 	 * Constructs a search view for a class that is provided by an EntityProvider and that
@@ -48,22 +52,20 @@ public abstract class AbstractTableSearchView<T extends Serializable, I extends 
 			final Class<T> beanType,
 			final String viewCaption,
 			final ListDataProvider<T> dataProvider,
-			final TableDefinition definition,
+			final TableDefinition<T> definition,
 			final Component...headerComponents) {
 		
 		super(viewCaption);
 
 		this.grid = new EntityGrid<>(beanType).withDataProvider(dataProvider).withDefinition(definition);
-
-        if (definition.getFilterProperties() != null) {
-            this.headerButtons = new HeaderButtons(HeaderButtons.combine(new ExtendedFilterTextField<>(dataProvider, definition.getFilterProperties()), headerComponents));
-        } else {
-            this.headerButtons = new HeaderButtons(headerComponents);
-        }
+        this.filters = new ExtendedFilterTextField<>(dataProvider, definition.getFilterProperties());
+        this.filter = new FilterField<>(dataProvider, definition);
+        this.headerButtons = new HeaderButtons(HeaderButtons.combine(filters, headerComponents));
+		this.headerButtons.addComponent(filter);
 		this.headerButtons.addComponentAsFirst(ButtonBuilder.NEW(this::onCreate));
 	}
 	
-	protected abstract void onCreate(ClickEvent event);
+	abstract void onCreate(ClickEvent event);
 
 	/**
 	 * Builds the navigation state for the entity view path, i.e. !#entityViewName/id
