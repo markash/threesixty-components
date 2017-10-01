@@ -110,4 +110,8 @@ public class ColumnDefinition<BEAN, FIELD> {
         this.renderer = renderer;
         return this;
     }
+
+    public FilterDefinition filterDefinition() {
+        return new FilterDefinition(heading, property);
+    }
 }
