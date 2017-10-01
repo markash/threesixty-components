@@ -6,10 +6,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import java.util.Optional;
 
 public class SpringSecurityCurrentUserProvider<T> implements CurrentUserProvider<T> {
-    /**
-     * Get the user
-     * @return The user
-     */
+
     @Override
     public Optional<UserPrincipal<T>> get() {
 
@@ -18,5 +15,10 @@ public class SpringSecurityCurrentUserProvider<T> implements CurrentUserProvider
             return Optional.ofNullable((UserPrincipal<T>) authentication.getPrincipal());
         }
         return Optional.empty();
+    }
+
+    @Override
+    public Optional<T> getUser() {
+        return this.get().map(UserPrincipal::getUser);
     }
 }

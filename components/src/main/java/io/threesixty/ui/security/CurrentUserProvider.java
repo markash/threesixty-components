@@ -8,9 +8,9 @@ import java.util.function.Supplier;
  * @author Mark P Ashworth (mp.ashworth@gmail.com)
  */
 public interface CurrentUserProvider<T> extends Supplier<Optional<UserPrincipal<T>>> {
-    /**
-     * Get the user
-     * @return The user
-     */
+
     Optional<UserPrincipal<T>> get();
+
+
+    Optional<T> getUser();
 }
