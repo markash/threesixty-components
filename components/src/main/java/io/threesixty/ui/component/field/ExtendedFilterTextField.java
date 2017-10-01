@@ -18,9 +18,8 @@ import java.util.List;
 public class ExtendedFilterTextField<T> extends HorizontalLayout {
 
     private final ListDataProvider<T> dataProvider;
-    private FilterTextField<T> filterTextField;
-    private List<FilterSelectField<T, ?>> filterSelectFields;
-    private Button clearButton = ButtonBuilder.CLEAR_ALL(this::onClear);
+    private final FilterTextField<T> filterTextField;
+    private final List<FilterSelectField<T, ?>> filterSelectFields = new ArrayList<>();
 
     public ExtendedFilterTextField(final ListDataProvider<T> dataProvider, final String[] propertiesToFilterOn) {
         this.dataProvider = dataProvider;
@@ -30,17 +29,29 @@ public class ExtendedFilterTextField<T> extends HorizontalLayout {
                         .withValueChangeListener(this::onFilter)
                         .withDefaultShortcutListener();
 
-        this.filterSelectFields = new ArrayList<>();
+//        this.filterSelectFields = new ArrayList<>();
 
         Collection<String> options = new ArrayList<>(Arrays.asList("Aries 1", "Aries 3"));
         this.filterSelectFields.add(new FilterSelectField<>(dataProvider, options, "project").withValueChangeListener(this::onFilter).withDefaultShortcutListener());
 
         this.addComponent(this.filterTextField);
         this.addComponent(this.filterSelectFields.get(0));
-        this.addComponent(clearButton);
+        this.addComponent(ButtonBuilder.CLEAR_ALL(this::onClear));
 
         this.setMargin(false);
         this.setSpacing(true);
+    }
+
+    public void addFilterSelection(
+            final String propertyToFilterOn,
+            final Collection<String> options) {
+
+        FilterSelectField<T, ?> field = new FilterSelectField<>(this.dataProvider, options, propertyToFilterOn)
+                .withValueChangeListener(this::onFilter)
+                .withDefaultShortcutListener();
+
+        this.filterSelectFields.add(field);
+        this.addComponent(field);
     }
 
     private void onClear(final Button.ClickEvent event) {

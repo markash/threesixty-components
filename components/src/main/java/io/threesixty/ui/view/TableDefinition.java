@@ -7,6 +7,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  *
@@ -79,6 +80,11 @@ public class TableDefinition<T> {
                 .map(ColumnDefinition::getProperty)
                 .collect(Collectors.toList())
                 .toArray(new String[this.getColumns().size()]);
+    }
+    public Stream<ColumnDefinition<T, ?>> getFilterableColumns() {
+        return this.getColumns()
+                .stream()
+                .filter(ColumnDefinition::isSearchable);
     }
 	/**
 	 * The array of object properties that should be included in the filter
