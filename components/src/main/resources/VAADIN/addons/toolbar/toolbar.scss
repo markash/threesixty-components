@@ -1,0 +1,18 @@
+@mixin toolbar {
+
+    .toolbar {
+        border-bottom: 1px solid silver;
+    }
+
+    .toolbar-caption {
+        margin-top: 4px;
+    }
+
+    .toolbar-action {
+        border-left: 1px solid silver;
+    }
+
+    .toolbar-gutter {
+        margin-bottom: 4px;
+    }
+}

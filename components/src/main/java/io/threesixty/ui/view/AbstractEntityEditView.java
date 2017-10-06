@@ -4,13 +4,15 @@ import com.vaadin.data.BinderValidationStatus;
 import com.vaadin.data.ValidationException;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.server.Responsive;
+import com.vaadin.shared.ui.ContentMode;
 import com.vaadin.ui.*;
 import com.vaadin.ui.Button.ClickEvent;
+import com.vaadin.ui.themes.ValoTheme;
 import io.threesixty.ui.component.BlankSupplier;
 import io.threesixty.ui.component.EntityPersistFunction;
 import io.threesixty.ui.component.EntitySupplier;
 import io.threesixty.ui.component.button.ButtonBuilder;
-import io.threesixty.ui.component.button.HeaderButtons;
+import io.threesixty.ui.component.field.Toolbar;
 import io.threesixty.ui.component.notification.NotificationBuilder;
 import io.threesixty.ui.event.EnterEntityEditViewEvent;
 import io.threesixty.ui.event.EntityPersistEvent;
@@ -18,6 +20,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.context.ApplicationEvent;
 import org.springframework.data.domain.Persistable;
 import org.vaadin.dialogs.ConfirmDialog;
+import org.vaadin.viritin.label.MLabel;
 
 import java.io.Serializable;
 import java.util.Optional;
@@ -30,8 +33,7 @@ public abstract class AbstractEntityEditView<T extends Persistable<Serializable>
     private Button saveButton = ButtonBuilder.SAVE(this::onSave);
 	private Button resetButton = ButtonBuilder.RESET(this::onReset);
 	private Button createButton = ButtonBuilder.NEW(this::onCreate);	
-	
-    private Button[] buttons = new Button[] {saveButton, resetButton, createButton};
+
     private final AbstractEntityEditForm<T> form;
     private transient EntityPersistFunction<T> entityPersistFunction;
     private transient EntitySupplier<T, Serializable> entitySupplier;
@@ -69,6 +71,15 @@ public abstract class AbstractEntityEditView<T extends Persistable<Serializable>
             saveButton.setEnabled(this.form.isModified() && this.form.isValid());
             resetButton.setEnabled(this.form.isModified());
         });
+
+
+        getToolbar().add(saveButton, Toolbar.ToolbarSection.ACTION);
+        getToolbar().add(resetButton, Toolbar.ToolbarSection.ACTION);
+        getToolbar().add(createButton, Toolbar.ToolbarSection.ACTION);
+        getToolbar().add(
+                new MLabel("The fields marked with <span class='v-required-field-indicator'>*</span> are required")
+                        .withContentMode(ContentMode.HTML),
+                Toolbar.ToolbarSection.GUTTER);
 	}
 
 	@Override
@@ -83,12 +94,7 @@ public abstract class AbstractEntityEditView<T extends Persistable<Serializable>
         root.addComponent(form); 
 		return root;
 	}
-    
-	@Override
-    protected Component getHeaderButtons() {
-        return new HeaderButtons(buttons);
- 	}
-    
+
 	@Override
     public void enter(final ViewChangeEvent event) {
 		String[] parameters = event.getParameters().split("/");

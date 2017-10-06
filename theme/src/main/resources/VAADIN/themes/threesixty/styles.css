@@ -15610,3 +15610,36 @@ div.v-layout.v-horizontal.v-widget {
 .threesixty .card-container {
 	padding: 2px 16px;
 }
+
+.threesixty .active-filters-text {
+	font-weight: bold;
+	margin-top: 4px;
+}
+
+.threesixty .filter-pill {
+	background-color: #166ed5;
+	font-weight: bold;
+	color: white;
+}
+
+.threesixty .filter-pill-text {
+	color: white;
+	margin-top: 4px;
+	margin-left: 8px;
+}
+
+.threesixty .filter-close-button {
+	color: white;
+}
+
+.threesixty .toolbar {
+	border-bottom: 1px solid silver;
+}
+
+.threesixty .toolbar-caption {
+	margin-top: 4px;
+}
+
+.threesixty .toolbar-action {
+	border-left: 1px solid silver;
+}

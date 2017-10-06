@@ -9,8 +9,12 @@
 @import "../../addons/statistics/statistics.scss";
 @import "menu";
 @import "login";
+@import "../../addons/filter/filter.scss";
+@import "../../addons/toolbar/toolbar.scss";
 
 @mixin threesixty {
     @include valo;
     @include statistics;
+    @include filter;
+    @include toolbar;
 }

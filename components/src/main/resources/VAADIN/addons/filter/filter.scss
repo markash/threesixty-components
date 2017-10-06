@@ -1,0 +1,23 @@
+@mixin filter {
+
+    .active-filters-text {
+        font-weight: bold;
+        margin-top: 4px;
+    }
+
+    .filter-pill {
+        background-color: #166ed5;
+        font-weight: bold;
+        color: white;
+    }
+
+    .filter-pill-text {
+        color: white;
+        margin-top: 4px;
+        margin-left: 8px
+    }
+
+    .filter-close-button {
+        color: white;
+    }
+}

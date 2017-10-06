@@ -8,6 +8,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
+@Deprecated
 public class HeaderButtons extends HorizontalLayout {
 	private static final long serialVersionUID = 1L;
 			

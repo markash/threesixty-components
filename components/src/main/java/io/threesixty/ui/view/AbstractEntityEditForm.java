@@ -4,11 +4,10 @@ import com.vaadin.data.*;
 import com.vaadin.event.EventRouter;
 import com.vaadin.server.Responsive;
 import com.vaadin.shared.Registration;
-import com.vaadin.ui.HorizontalLayout;
-import com.vaadin.ui.Label;
-import com.vaadin.ui.TextField;
+import com.vaadin.ui.*;
 import io.threesixty.ui.component.panel.PanelBuilder;
 import org.springframework.data.domain.Persistable;
+import org.vaadin.viritin.layouts.MVerticalLayout;
 
 import java.io.Serializable;
 
@@ -170,7 +169,12 @@ public abstract class AbstractEntityEditForm<T extends Persistable<Serializable>
     }
 
     protected void internalLayout() {
-        addComponent(PanelBuilder.FORM(idField));
+
+        addComponent(new MVerticalLayout()
+                        .withSpacing(true)
+                        .withMargin(false)
+                        .withWidth(100.0f, Unit.PERCENTAGE)
+                        .with(idField));
         addComponent(new Label(""));
     }
 

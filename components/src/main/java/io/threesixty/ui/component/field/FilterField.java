@@ -1,9 +1,10 @@
 package io.threesixty.ui.component.field;
 
 import com.vaadin.data.provider.ListDataProvider;
+import com.vaadin.event.EventRouter;
 import com.vaadin.event.ShortcutListener;
 import com.vaadin.server.SerializablePredicate;
-import com.vaadin.ui.Button;
+import com.vaadin.shared.Registration;
 import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.CustomField;
@@ -14,7 +15,6 @@ import io.threesixty.ui.view.TableDefinition;
 import org.apache.commons.beanutils.BeanUtils;
 import org.springframework.util.StringUtils;
 import org.vaadin.viritin.layouts.MHorizontalLayout;
-import io.threesixty.ui.component.button.ButtonBuilder;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,6 +41,8 @@ public class FilterField<T> extends CustomField<TableDefinition<T>> {
     private ComboBox<String> optionsField = new ComboBox<>();
     private TextField textField = new TextField();
 
+    private EventRouter eventRouter;
+
 	public FilterField(
 	        final ListDataProvider<T> dataProvider,
             final TableDefinition<T> tableDefinition) {
@@ -52,49 +54,68 @@ public class FilterField<T> extends CustomField<TableDefinition<T>> {
 
 		this.attributeField.addValueChangeListener(this::onAttributeChange);
         this.attributeField.setDataProvider(new ListDataProvider<>(filterDefinitions));
+        this.attributeField.setTextInputAllowed(false);
 
         this.optionsField.setDataProvider(optionsDataProvider);
 
         this.tableDefinition.getFilterableColumns().map(ColumnDefinition::filterDefinition).forEach(filterDefinitions::add);
-        if (filterDefinitions.size() > 0) {
+        if (hasFilterDefinitions()) {
             this.attributeField.setSelectedItem(this.filterDefinitions.get(0));
         }
 
-        this.optionsField.addValueChangeListener(this::onFilter);
+        this.optionsField.addValueChangeListener(this::onFilterOptionSelected);
         this.optionsField.addShortcutListener(new ClearFilterShortcutListener<>(this));
         this.textField.addShortcutListener(new FilterShortcutListener<>(this));
         this.textField.addShortcutListener(new ClearFilterShortcutListener<>(this));
 	}
 
     @Override
+    public TableDefinition<T> getValue() {
+
+        return this.tableDefinition;
+    }
+
+    public boolean hasFilterDefinitions() {
+
+	    return this.filterDefinitions.size() > 0;
+    }
+
+    public Registration addFilterChangeListener(
+            final FilterChangeListener listener) {
+
+        return getEventRouter()
+                .addListener(
+                        FilterChangeEvent.class,
+                        listener,
+                        FilterChangeListener.class.getDeclaredMethods()[0]);
+    }
+
+    public void onFilterChange(
+            final FilterChangeEvent event) {
+
+	    if (event.getAction() == FilterChangeEvent.FilterAction.CLEAR) {
+
+            clearFilter();
+
+        } else if (event.getAction() == FilterChangeEvent.FilterAction.CLEAR_ALL) {
+
+	        clearFilter();
+
+        }
+    }
+
+    @Override
     protected Component initContent() {
 
-	    return new MHorizontalLayout()
+        return new MHorizontalLayout()
                 .withMargin(false)
-                .with(attributeField, textField, optionsField, ButtonBuilder.CLEAR_ALL(this::onClear));
+                .with(attributeField, textField, optionsField);
     }
 
     @Override
     protected void doSetValue(final TableDefinition<T> tableDefinition) {
 
-	    this.tableDefinition = tableDefinition;
-    }
-
-    @Override
-    public TableDefinition<T> getValue() {
-
-	    return this.tableDefinition;
-    }
-
-    public FilterField<T> withDefaultValueChangeListener() {
-
-	    return withValueChangeListener(this::onFilter);
-    }
-
-    public FilterField<T> withDefaultShortcutListener() {
-
-	    addShortcutListener(new FilterField.FilterShortcutListener<>(this));
-        return this;
+        this.tableDefinition = tableDefinition;
     }
 
     void clearFilter() {
@@ -147,26 +168,43 @@ public class FilterField<T> extends CustomField<TableDefinition<T>> {
         }
     }
 
-	private void onFilter(final ValueChangeEvent event) {
-	    onFilter((String) event.getValue());
+	private void onFilterOptionSelected(
+	        final ValueChangeEvent event) {
+
+	    if (this.currentFilterDefinition != null) {
+            onFilter(this.currentFilterDefinition.getHeading(), this.currentFilterDefinition.getProperty(), (String) event.getValue());
+        }
 	}
 
-    private void onFilter(final String filterText) {
+    private void onFilter(
+            final String heading,
+            final String property,
+            final String filterText) {
+
         this.dataProvider.clearFilters();
         this.dataProvider.addFilter(getFilter(filterText));
+        getEventRouter().fireEvent(FilterChangeEvent.ADD(this, heading, property, filterText));
     }
 
-    private void onClear(final Button.ClickEvent event) {
-        clearFilter();
-    }
+	private boolean propertyContainsText(
+	        final T value,
+            final String property,
+            final String text) {
 
-	private boolean propertyContainsText(final T value, final String property, final String text) {
 	    try {
 	    	final String searchText = StringUtils.isEmpty(text) ? "" : text.trim().toLowerCase();
 	    	final String propertyText = Optional.of(BeanUtils.getProperty(value, property)).orElse("").trim().toLowerCase();
             return propertyText.contains(searchText);
         } catch (Exception e) { /*IGNORE*/ }
         return false;
+    }
+
+    private EventRouter getEventRouter() {
+
+	    if (eventRouter == null) {
+            eventRouter = new EventRouter();
+        }
+        return eventRouter;
     }
 
     private static class FilterShortcutListener<T> extends ShortcutListener {
@@ -178,8 +216,28 @@ public class FilterField<T> extends CustomField<TableDefinition<T>> {
         }
 
         @Override
-        public void handleAction(final Object sender, final Object target) {
-            field.onFilter(field.textField.getValue());
+        public void handleAction(
+                final Object sender,
+                final Object target) {
+
+            if (field.attributeField.getSelectedItem().isPresent()) {
+
+                String filterText = "";
+                FilterDefinition definition = field.attributeField.getSelectedItem().get();
+                if (definition.hasOptions()) {
+
+                    if (field.optionsField.getSelectedItem().isPresent()) {
+                        filterText = field.optionsField.getSelectedItem().get();
+                    }
+
+                } else {
+
+                    filterText = field.textField.getValue();
+
+                }
+
+                field.onFilter(definition.getHeading(), definition.getProperty(), filterText);
+            }
         }
     }
 

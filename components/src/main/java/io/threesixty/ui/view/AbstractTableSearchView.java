@@ -7,14 +7,11 @@ import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.Grid;
 import com.vaadin.ui.VerticalLayout;
-import com.vaadin.v7.data.Container.Filter;
+import io.threesixty.ui.I8n;
 import io.threesixty.ui.component.EntityGrid;
-import io.threesixty.ui.component.button.ButtonBuilder;
-import io.threesixty.ui.component.button.HeaderButtons;
-import io.threesixty.ui.component.field.ExtendedFilterTextField;
 import io.threesixty.ui.component.field.FilterField;
 import org.apache.commons.lang3.StringUtils;
-import org.vaadin.viritin.grid.MGrid;
+import org.vaadin.viritin.button.MButton;
 
 import java.io.Serializable;
 
@@ -34,9 +31,9 @@ public abstract class AbstractTableSearchView<T extends Serializable, I extends 
 	protected static final String BUTTON_VIEW = "View";
 
     private EntityGrid<T> grid;
-    private HeaderButtons headerButtons;
-    private ExtendedFilterTextField<T> filters;
-    private FilterField<T> filter;
+    //private HeaderButtons headerButtons;
+    //private ExtendedFilterTextField<T> filters;
+    //private FilterField<T> filter;
 
     /**
 	 * Constructs a search view for a class that is provided by an EntityProvider and that
@@ -58,14 +55,11 @@ public abstract class AbstractTableSearchView<T extends Serializable, I extends 
 		super(viewCaption);
 
 		this.grid = new EntityGrid<>(beanType).withDataProvider(dataProvider).withDefinition(definition);
-        this.filters = new ExtendedFilterTextField<>(dataProvider, definition.getFilterProperties());
-        this.filter = new FilterField<>(dataProvider, definition);
-        this.headerButtons = new HeaderButtons(HeaderButtons.combine(filters, headerComponents));
-		this.headerButtons.addComponent(filter);
-		this.headerButtons.addComponentAsFirst(ButtonBuilder.NEW(this::onCreate));
+        getToolbar().setFilter(new FilterField<>(dataProvider, definition));
+        getToolbar().addAction(new MButton(I8n.Button.NEW, this::onCreate));
 	}
 	
-	abstract void onCreate(ClickEvent event);
+	public abstract void onCreate(ClickEvent event);
 
 	/**
 	 * Builds the navigation state for the entity view path, i.e. !#entityViewName/id
@@ -85,9 +79,6 @@ public abstract class AbstractTableSearchView<T extends Serializable, I extends 
 		return entityViewName + (entityId != null && StringUtils.isBlank(entityId) ? "" : "/" + entityId);
 	}
 
-	@Override
-	protected Component getHeaderButtons() { return this.headerButtons; }
-
 	protected Component buildContent() {
 		VerticalLayout root = new VerticalLayout();
         root.setSpacing(true);
@@ -103,56 +94,6 @@ public abstract class AbstractTableSearchView<T extends Serializable, I extends 
     protected Binder<T> getTableBinder() {
         return this.grid.getEditor().getBinder();
     }
-	
-//	@SuppressWarnings({"unchecked", "serial"})
-//	private Grid<T> buildGrid(final DataProvider<T, ?> dataProvider) {
-//
-//	    Grid<T> grid = new EntityGrid<>(beanType)
-//                .withDataProvider(this.data)
-//                .withDefinition(definition);
-//
-//
-//
-//		MTable<T> grid = new FilterableTable<T>(beanType)
-//				.setBeans(new SortableLazyList<T>(entityProvider, entityProvider, 100))
-//                .withProperties(definition.getPropertyNames())
-//                .withColumnHeaders(definition.getHeaders())
-//                ;
-//
-//
-//
-//		grid.addGeneratedColumn(getLinkPropertyText(), new Table.ColumnGenerator() {
-//			@Override
-//			public Object generateCell(Table source, Object itemId, Object columnId) {
-//				Item x = source.getItem(itemId);
-//
-//				Property<I> linkId = x.getItemProperty(getLinkPropertyId());
-//				Property<?> linkText = x.getItemProperty(getLinkPropertyText());
-//				Converter<String, Object> linkTextConverter = grid.getConverter(getLinkPropertyText());
-//
-//				String text;
-//				if (linkText.getValue() != null) {
-//					if (linkTextConverter != null) {
-//						text = linkTextConverter.convertToPresentation(linkText.getValue(), String.class, Locale.getDefault());
-//					} else {
-//						text = linkText.getValue().toString();
-//					}
-//				} else {
-//					text = "null";
-//				}
-//
-//				Button button = new Button(text);
-//				button.setStyleName("link");
-//				button.addClickListener(event -> onTableIdClick(event, linkId.getValue()));
-//				return button;
-//			}
-//		});
-//
-//		return grid;
-//	}
 
 	protected Grid<T> getGrid() { return this.grid; }
-	protected void addFilter(final Filter filter) {
-	    //((FilterableTable<T>)this.grid).addFilter(filter);
-	}
 }
