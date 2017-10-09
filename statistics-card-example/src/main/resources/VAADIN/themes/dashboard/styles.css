@@ -15653,3 +15653,7 @@ div.v-layout.v-horizontal.v-widget {
 .dashboard .toolbar-action {
 	border-left: 1px solid silver;
 }
+
+.dashboard .toolbar-gutter {
+	margin-bottom: 4px;
+}

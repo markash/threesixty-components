@@ -15643,3 +15643,7 @@ div.v-layout.v-horizontal.v-widget {
 .threesixty .toolbar-action {
 	border-left: 1px solid silver;
 }
+
+.threesixty .toolbar-gutter {
+	margin-bottom: 4px;
+}

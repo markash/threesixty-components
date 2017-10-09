@@ -11,10 +11,9 @@ import org.vaadin.viritin.button.MButton;
 import org.vaadin.viritin.label.MLabel;
 import org.vaadin.viritin.layouts.MHorizontalLayout;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
+@SuppressWarnings("unused")
 public class ActiveFiltersField extends CustomField<ActiveFiltersField.ActiveFiltersModel> {
 
     private ActiveFiltersModel filters = new ActiveFiltersModel();
@@ -62,37 +61,55 @@ public class ActiveFiltersField extends CustomField<ActiveFiltersField.ActiveFil
 
         if (event.getAction() == FilterChangeEvent.FilterAction.ADD) {
 
-            ActiveFilterField filterField = new ActiveFilterField(event.getFilter());
-            Registration registration = filterField.addFilterChangeListener(this::onFilterChange);
-            this.filters.add(event.getFilter(), filterField, registration);
-            this.layout.add(filterField);
+            addFilter(event.getFilter());
 
         } else if (event.getAction() == FilterChangeEvent.FilterAction.CLEAR) {
 
-            Optional<ActiveFilterReference> reference = this.filters.remove(event.getFilter());
-            if (reference.isPresent()) {
-                this.layout.removeComponent(reference.get().getComponent());
-                reference.get().getRegistration().remove();
-            }
-
+            removeFilter(event.getFilter());
             getEventRouter().fireEvent(event);
 
         } else if (event.getAction() == FilterChangeEvent.FilterAction.CLEAR_ALL) {
 
-            for(FilterModel filter : this.filters.filters.keySet()) {
-                Optional<ActiveFilterReference> reference = this.filters.remove(filter);
-                if (reference.isPresent()) {
-                    this.layout.removeComponent(reference.get().getComponent());
-                    reference.get().getRegistration().remove();
-                }
-            }
+            removeFilters();
         }
     }
 
     private void onClearAll(
             final Button.ClickEvent event) {
 
+        removeFilters();
         getEventRouter().fireEvent(FilterChangeEvent.CLEAR_ALL(this));
+    }
+
+    private void removeFilters() {
+
+        Set<FilterModel> filterModels = this.filters.filters.keySet();
+        removeFilter(filterModels.toArray(new FilterModel[filterModels.size()]));
+    }
+
+    private void removeFilter(
+            final FilterModel[] filters) {
+
+        Arrays.stream(filters).forEach(this::removeFilter);
+    }
+
+    private void removeFilter(
+            final FilterModel filter) {
+
+        Optional<ActiveFilterReference> reference = this.filters.remove(filter);
+        if (reference.isPresent()) {
+            this.layout.removeComponent(reference.get().getComponent());
+            reference.get().getRegistration().remove();
+        }
+    }
+
+    private void addFilter(
+            final FilterModel filter) {
+
+        ActiveFilterField filterField = new ActiveFilterField(filter);
+        Registration registration = filterField.addFilterChangeListener(this::onFilterChange);
+        this.filters.add(filter, filterField, registration);
+        this.layout.add(filterField);
     }
 
     private EventRouter getEventRouter() {
