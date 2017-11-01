@@ -1,11 +1,9 @@
 package io.threesixty.ui.component.field;
 
-import com.vaadin.server.SerializablePredicate;
-
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
-import java.util.Optional;
 
 public class FilterModel implements Serializable {
     private static final long serialVersionUID = 1L;
@@ -33,7 +31,7 @@ public class FilterModel implements Serializable {
     public FilterModel(
             final String header,
             final String property,
-            final List<String> options) {
+            final Collection<String> options) {
 
         this(header, property, options, null);
     }
@@ -41,7 +39,7 @@ public class FilterModel implements Serializable {
     private FilterModel(
             final String header,
             final String property,
-            final List<String> options,
+            final Collection<String> options,
             final String value) {
 
         this.header = header;
@@ -55,7 +53,7 @@ public class FilterModel implements Serializable {
     public String getHeader() { return header; }
     public String getProperty() { return property; }
     public String getValue() { return value; }
-    public List<String> getAvailableOptions() { return availableOptions; }
+    public Collection<String> getAvailableOptions() { return availableOptions; }
     public boolean hasAvailableOptions() { return this.availableOptions != null && this.availableOptions.size() > 0; }
 
     public FilterModel withValue(

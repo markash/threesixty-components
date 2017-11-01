@@ -7,6 +7,9 @@ import com.vaadin.server.Setter;
 import com.vaadin.ui.renderers.Renderer;
 import io.threesixty.ui.component.field.FilterModel;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -26,6 +29,7 @@ public class ColumnDefinition<BEAN, FIELD> {
     private ValueProvider<BEAN, FIELD> getter;
     private Setter<BEAN, FIELD> setter;
     private Renderer<?> renderer;
+    private List<String> filterOptions;
 
     public ColumnDefinition() { }
 
@@ -66,8 +70,16 @@ public class ColumnDefinition<BEAN, FIELD> {
         return this;
     }
 
+    public ColumnDefinition<BEAN, FIELD> enableTextSearch(final Collection<?> options) {
+        this.setSearchable(true);
+        this.filterOptions = new ArrayList<>();
+        options.stream().map(Object::toString).forEach(this.filterOptions::add);
+        return this;
+    }
+
     public ColumnDefinition<BEAN, FIELD> disableTextSearch() {
         this.setSearchable(false);
+        this.filterOptions = null;
         return this;
     }
 
@@ -113,6 +125,6 @@ public class ColumnDefinition<BEAN, FIELD> {
     }
 
     public FilterModel filterDefinition() {
-        return new FilterModel(heading, property);
+        return new FilterModel(heading, property, this.filterOptions);
     }
 }
