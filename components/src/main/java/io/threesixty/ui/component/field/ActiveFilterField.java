@@ -64,9 +64,7 @@ public class ActiveFilterField extends CustomField<FilterModel> {
                 .fireEvent(
                         FilterChangeEvent.CLEAR(
                                 this,
-                                this.filter.getHeader(),
-                                this.filter.getProperty(),
-                                this.filter.getValue()));
+                                this.filter));
     }
 
     private String getText() {

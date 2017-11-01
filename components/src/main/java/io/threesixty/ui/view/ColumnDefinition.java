@@ -5,6 +5,7 @@ import com.vaadin.data.HasValue;
 import com.vaadin.data.ValueProvider;
 import com.vaadin.server.Setter;
 import com.vaadin.ui.renderers.Renderer;
+import io.threesixty.ui.component.field.FilterModel;
 
 import java.util.Optional;
 
@@ -111,7 +112,7 @@ public class ColumnDefinition<BEAN, FIELD> {
         return this;
     }
 
-    public FilterDefinition filterDefinition() {
-        return new FilterDefinition(heading, property);
+    public FilterModel filterDefinition() {
+        return new FilterModel(heading, property);
     }
 }
