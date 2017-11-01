@@ -10,7 +10,6 @@ import com.vaadin.ui.Component;
 import com.vaadin.ui.CustomField;
 import com.vaadin.ui.TextField;
 import io.threesixty.ui.view.ColumnDefinition;
-import io.threesixty.ui.view.FilterDefinition;
 import io.threesixty.ui.view.TableDefinition;
 import org.apache.commons.beanutils.BeanUtils;
 import org.springframework.util.StringUtils;
@@ -30,18 +29,21 @@ public class FilterField<T> extends CustomField<TableDefinition<T>> {
 
 	private final ListDataProvider<T> dataProvider;
     private TableDefinition<T> tableDefinition;
-    private FilterDefinition currentFilterDefinition = null;
+    private FilterModel currentFilterDefinition = null;
+    private List<FilterModel> filterDefinitions = new ArrayList<>();
+    private List<FilterModel> appliedFilters = new ArrayList<>();
+    private EventRouter eventRouter;
 
-    private List<String> options = new ArrayList<>();
-    private List<FilterDefinition> filterDefinitions = new ArrayList<>();
+    /* Attributes */
+    private ComboBox<FilterModel> attributeField = new ComboBox<>();
 
-    private ListDataProvider<String> optionsDataProvider = new ListDataProvider<>(options);
-
-    private ComboBox<FilterDefinition> attributeField = new ComboBox<>();
-    private ComboBox<String> optionsField = new ComboBox<>();
+    /* Attribute text : Used by attributes that are searched by text */
     private TextField textField = new TextField();
 
-    private EventRouter eventRouter;
+    /* Attribute options : Used by attributes that have a fixed set of filter options */
+    private List<String> options = new ArrayList<>();
+    private ListDataProvider<String> optionsDataProvider = new ListDataProvider<>(options);
+    private ComboBox<String> optionsField = new ComboBox<>();
 
 	public FilterField(
 	        final ListDataProvider<T> dataProvider,
@@ -70,6 +72,21 @@ public class FilterField<T> extends CustomField<TableDefinition<T>> {
 	}
 
     @Override
+    protected Component initContent() {
+
+        return new MHorizontalLayout()
+                .withMargin(false)
+                .with(attributeField, textField, optionsField);
+    }
+
+    @Override
+    protected void doSetValue(
+            final TableDefinition<T> tableDefinition) {
+
+        this.tableDefinition = tableDefinition;
+    }
+
+    @Override
     public TableDefinition<T> getValue() {
 
         return this.tableDefinition;
@@ -90,40 +107,30 @@ public class FilterField<T> extends CustomField<TableDefinition<T>> {
                         FilterChangeListener.class.getDeclaredMethods()[0]);
     }
 
-    public void onFilterChange(
-            final FilterChangeEvent event) {
+    void addFilter(
+            final FilterModel filter) {
 
-	    if (event.getAction() == FilterChangeEvent.FilterAction.CLEAR) {
-
-            clearFilter();
-
-        } else if (event.getAction() == FilterChangeEvent.FilterAction.CLEAR_ALL) {
-
-	        clearFilter();
-
-        }
+	    this.appliedFilters.add(filter);
+	    this.dataProvider.addFilter(FilterPredicateBuilder.build(filter));
+        getEventRouter().fireEvent(FilterChangeEvent.ADD(this, filter));
     }
 
-    @Override
-    protected Component initContent() {
+    void removeFilter(
+            final FilterModel filter) {
 
-        return new MHorizontalLayout()
-                .withMargin(false)
-                .with(attributeField, textField, optionsField);
+	    this.dataProvider.clearFilters();
+	    this.appliedFilters.remove(filter);
+	    this.appliedFilters.forEach(f -> this.dataProvider.addFilter(FilterPredicateBuilder.build(f)));
     }
 
-    @Override
-    protected void doSetValue(final TableDefinition<T> tableDefinition) {
-
-        this.tableDefinition = tableDefinition;
-    }
-
-    void clearFilter() {
+    void removeFilters() {
 
 	    this.textField.clear();
 	    this.options.clear();
+        this.appliedFilters.clear();
         this.dataProvider.clearFilters();
     }
+
 
     private FilterField<T> withValueChangeListener(
             ValueChangeListener<TableDefinition<T>> listener) {
@@ -132,39 +139,48 @@ public class FilterField<T> extends CustomField<TableDefinition<T>> {
         return this;
     }
 
-    private SerializablePredicate<T> getFilter(
-            final ValueChangeEvent event) {
+//    private SerializablePredicate<T> buildFilterPredicate(
+//            final FilterModel filterModel,
+//            final String filterText) {
+//
+//        return (SerializablePredicate<T>) value ->
+//                propertyContainsText(
+//                        value,
+//                        Optional.ofNullable(this.currentFilterDefinition).map(FilterModel::getProperty).orElse(""),
+//                        filterText);
+//    }
 
-	    return getFilter((String) event.getValue());
-    }
+    public void onFilterChange(
+            final FilterChangeEvent event) {
 
-    private SerializablePredicate<T> getFilter(
-            final String filterText) {
+        if (event.getAction() == FilterChangeEvent.FilterAction.CLEAR) {
 
-        return (SerializablePredicate<T>) value ->
-                propertyContainsText(
-                        value,
-                        Optional.ofNullable(this.currentFilterDefinition).map(FilterDefinition::getProperty).orElse(""),
-                        filterText);
+            removeFilter(event.getFilter());
+
+        } else if (event.getAction() == FilterChangeEvent.FilterAction.CLEAR_ALL) {
+
+            removeFilters();
+
+        }
     }
 
     private void onAttributeChange(
-            final ValueChangeEvent<FilterDefinition> event) {
+            final ValueChangeEvent<FilterModel> event) {
 
 	    this.currentFilterDefinition = event.getValue();
 	    if (this.currentFilterDefinition != null) {
-            boolean multiple = this.currentFilterDefinition.hasOptions();
+            boolean multiple = this.currentFilterDefinition.hasAvailableOptions();
 
             this.options.clear();
-            this.options.addAll(this.currentFilterDefinition.getOptions());
+            this.options.addAll(this.currentFilterDefinition.getAvailableOptions());
             this.optionsField.setVisible(multiple);
             this.optionsDataProvider.refreshAll();
 
             this.textField.clear();
-            this.textField.setPlaceholder("Filter by " + this.currentFilterDefinition.getHeading() + " ...");
+            this.textField.setPlaceholder("Filter by " + this.currentFilterDefinition.getHeader() + " ...");
             this.textField.setVisible(!multiple);
         } else {
-            clearFilter();
+            removeFilters();
         }
     }
 
@@ -172,32 +188,9 @@ public class FilterField<T> extends CustomField<TableDefinition<T>> {
 	        final ValueChangeEvent event) {
 
 	    if (this.currentFilterDefinition != null) {
-            onFilter(this.currentFilterDefinition.getHeading(), this.currentFilterDefinition.getProperty(), (String) event.getValue());
+            addFilter(this.currentFilterDefinition.withValue((String) event.getValue()));
         }
 	}
-
-    private void onFilter(
-            final String heading,
-            final String property,
-            final String filterText) {
-
-        this.dataProvider.clearFilters();
-        this.dataProvider.addFilter(getFilter(filterText));
-        getEventRouter().fireEvent(FilterChangeEvent.ADD(this, heading, property, filterText));
-    }
-
-	private boolean propertyContainsText(
-	        final T value,
-            final String property,
-            final String text) {
-
-	    try {
-	    	final String searchText = StringUtils.isEmpty(text) ? "" : text.trim().toLowerCase();
-	    	final String propertyText = Optional.of(BeanUtils.getProperty(value, property)).orElse("").trim().toLowerCase();
-            return propertyText.contains(searchText);
-        } catch (Exception e) { /*IGNORE*/ }
-        return false;
-    }
 
     private EventRouter getEventRouter() {
 
@@ -223,8 +216,8 @@ public class FilterField<T> extends CustomField<TableDefinition<T>> {
             if (field.attributeField.getSelectedItem().isPresent()) {
 
                 String filterText = "";
-                FilterDefinition definition = field.attributeField.getSelectedItem().get();
-                if (definition.hasOptions()) {
+                FilterModel definition = field.attributeField.getSelectedItem().get();
+                if (definition.hasAvailableOptions()) {
 
                     if (field.optionsField.getSelectedItem().isPresent()) {
                         filterText = field.optionsField.getSelectedItem().get();
@@ -236,7 +229,7 @@ public class FilterField<T> extends CustomField<TableDefinition<T>> {
 
                 }
 
-                field.onFilter(definition.getHeading(), definition.getProperty(), filterText);
+                field.addFilter(definition.withValue(filterText));
             }
         }
     }
@@ -251,7 +244,33 @@ public class FilterField<T> extends CustomField<TableDefinition<T>> {
 
     	@Override
         public void handleAction(final Object sender, final Object target) {
-            field.clearFilter();
+            field.removeFilters();
+        }
+    }
+
+    private static class FilterPredicateBuilder<T> {
+
+        public static <T> SerializablePredicate<T> build(
+                final FilterModel filter) {
+
+            return (SerializablePredicate<T>) value ->
+                    propertyContainsText(
+                            value,
+                            Optional.ofNullable(filter).map(FilterModel::getProperty).orElse(""),
+                            filter.getValue());
+        }
+
+	    private static <T> boolean propertyContainsText(
+                final T value,
+                final String property,
+                final String text) {
+
+            try {
+                final String searchText = StringUtils.isEmpty(text) ? "" : text.trim().toLowerCase();
+                final String propertyText = Optional.of(BeanUtils.getProperty(value, property)).orElse("").trim().toLowerCase();
+                return propertyText.contains(searchText);
+            } catch (Exception e) { /*IGNORE*/ }
+            return false;
         }
     }
 }

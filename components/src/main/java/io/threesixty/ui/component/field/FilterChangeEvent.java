@@ -18,27 +18,23 @@ public class FilterChangeEvent extends EventObject {
 
     public static FilterChangeEvent ADD (
             final Object source,
-            final String header,
-            final String property,
-            final String value) {
+            final FilterModel filter) {
 
         return new FilterChangeEvent(
                 source,
                 FilterAction.ADD,
-                new FilterModel(header, property, value)
+                filter
         );
     }
 
     public static FilterChangeEvent CLEAR (
             final Object source,
-            final String header,
-            final String property,
-            final String value) {
+            final FilterModel filter) {
 
         return new FilterChangeEvent(
                 source,
                 FilterAction.CLEAR,
-                new FilterModel(header, property, value)
+                filter
         );
     }
 
@@ -48,7 +44,7 @@ public class FilterChangeEvent extends EventObject {
         return new FilterChangeEvent(
                 source,
                 FilterAction.CLEAR_ALL,
-                new FilterModel(null, null, null )
+                new FilterModel(null, null)
         );
     }
 

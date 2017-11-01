@@ -1,7 +1,5 @@
 package io.threesixty.ui.view;
 
-import org.apache.commons.lang3.builder.ToStringBuilder;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,8 +21,4 @@ public class FilterDefinition {
     public List<String> getOptions() { return options; }
     public boolean hasOptions() { return this.options != null && this.options.size() > 0; }
 
-    @Override
-    public String toString() {
-        return getHeading();
-    }
 }
