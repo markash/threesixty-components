@@ -54,11 +54,15 @@ public class FilterField<T> extends CustomField<TableDefinition<T>> {
 		this.dataProvider = dataProvider;
 		this.tableDefinition = tableDefinition;
 
+		this.attributeField.setStyleName("filter-attribute");
 		this.attributeField.addValueChangeListener(this::onAttributeChange);
         this.attributeField.setDataProvider(new ListDataProvider<>(filterDefinitions));
         this.attributeField.setTextInputAllowed(false);
 
+        this.optionsField.setStyleName("filter-options");
         this.optionsField.setDataProvider(optionsDataProvider);
+
+        this.textField.setStyleName("filter-text");
 
         this.tableDefinition.getFilterableColumns().map(ColumnDefinition::filterDefinition).forEach(filterDefinitions::add);
         if (hasFilterDefinitions()) {

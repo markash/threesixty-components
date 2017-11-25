@@ -15642,6 +15642,14 @@ div.v-layout.v-horizontal.v-widget {
 	color: white;
 }
 
+.dashboard .filter-options {
+	width: 280px;
+}
+
+.dashboard .filter-text {
+	width: 280px;
+}
+
 .dashboard .toolbar {
 	border-bottom: 1px solid silver;
 }

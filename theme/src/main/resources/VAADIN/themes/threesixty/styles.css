@@ -15632,6 +15632,14 @@ div.v-layout.v-horizontal.v-widget {
 	color: white;
 }
 
+.threesixty .filter-options {
+	width: 280px;
+}
+
+.threesixty .filter-text {
+	width: 280px;
+}
+
 .threesixty .toolbar {
 	border-bottom: 1px solid silver;
 }
