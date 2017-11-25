@@ -110,9 +110,12 @@ public class FilterField<T> extends CustomField<TableDefinition<T>> {
     void addFilter(
             final FilterModel filter) {
 
-	    this.appliedFilters.add(filter);
-	    this.dataProvider.addFilter(FilterPredicateBuilder.build(filter));
-        getEventRouter().fireEvent(FilterChangeEvent.ADD(this, filter));
+	    /* Ensure that the filter value is not null */
+	    if (filter != null && filter.getValue() != null) {
+            this.appliedFilters.add(filter);
+            this.dataProvider.addFilter(FilterPredicateBuilder.build(filter));
+            getEventRouter().fireEvent(FilterChangeEvent.ADD(this, filter));
+        }
     }
 
     void removeFilter(
