@@ -7,7 +7,6 @@ import com.vaadin.server.Responsive;
 import com.vaadin.shared.ui.ContentMode;
 import com.vaadin.ui.*;
 import com.vaadin.ui.Button.ClickEvent;
-import com.vaadin.ui.themes.ValoTheme;
 import io.threesixty.ui.component.BlankSupplier;
 import io.threesixty.ui.component.EntityPersistFunction;
 import io.threesixty.ui.component.EntitySupplier;
@@ -227,6 +226,7 @@ public abstract class AbstractEntityEditView<T extends Persistable<Serializable>
 
     /**
      * Used by the implementing class to notify the system via an event bus
+	 * @param event The event to publish
      */
 	protected void publishOnEventBus(final ApplicationEvent event) {
 
