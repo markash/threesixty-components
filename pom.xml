@@ -89,4 +89,11 @@
             </plugins>
         </pluginManagement>
     </build>
+
+    <scm>
+        <connection>scm:git:git@github.com:markash/threesixty-components.git</connection>
+        <developerConnection>scm:git:git@github.com:markash/threesixty-components.git</developerConnection>
+        <url>https://github.com/markash/threesixty-components</url>
+        <tag>HEAD</tag>
+    </scm>
 </project>

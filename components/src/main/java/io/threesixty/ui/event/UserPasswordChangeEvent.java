@@ -20,6 +20,6 @@ public class UserPasswordChangeEvent<T> extends ApplicationEvent {
     }
 
     public static <T> UserPasswordChangeEvent build(final String viewName, final T entity) {
-        return new UserPasswordChangeEvent(viewName, entity);
+        return new UserPasswordChangeEvent<>(viewName, entity);
     }
 }

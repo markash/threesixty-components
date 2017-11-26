@@ -48,7 +48,8 @@ public abstract class AbstractEntityEditView<T extends Persistable<Serializable>
     		final EntitySupplier<T, Serializable> entitySupplier,
     		final BlankSupplier<T> blankSupplier,
     		final EntityPersistFunction<T> entityPersistFunction) {
-    	this(viewCaption, form, true, entitySupplier, blankSupplier, entityPersistFunction);
+
+        this(viewCaption, form, true, entitySupplier, blankSupplier, entityPersistFunction);
     }
     
     public AbstractEntityEditView( 
@@ -58,7 +59,8 @@ public abstract class AbstractEntityEditView<T extends Persistable<Serializable>
     		final EntitySupplier<T, Serializable> entitySupplier,
     		final BlankSupplier<T> blankSupplier,
     		final EntityPersistFunction<T> entityPersistFunction) {
-		super(viewCaption);
+
+        super(viewCaption);
 		
 		this.form = form;
 		this.createButton.setEnabled(enableCreation);
@@ -95,14 +97,22 @@ public abstract class AbstractEntityEditView<T extends Persistable<Serializable>
 	}
 
 	@Override
-    public void enter(final ViewChangeEvent event) {
-		String[] parameters = event.getParameters().split("/");
+    public void enter(
+            final ViewChangeEvent event) {
+
+        String[] parameters = event.getParameters().split("/");
 		this.viewName = event.getViewName();
-		onEnter(parameters.length > 0 ? parameters[0] : null);
+
+		onEnter(
+		        parameters.length > 0 ? parameters[0] : null,
+                parameters);
     }
 
     @SuppressWarnings("unchecked")
-    private void onEnter(final String entityId) {
+    private void onEnter(
+            final String entityId,
+            final String[] parameters) {
+
         this.entityId = Optional.ofNullable(entityId).orElse(NEW_ENTITY_ID);
 
         T entity;
@@ -110,13 +120,26 @@ public abstract class AbstractEntityEditView<T extends Persistable<Serializable>
             entity = blankSupplier.blank();
         } else {
             entity = entitySupplier.get(this.entityId).orElse(blankSupplier.blank());
-            //entity = Optional.ofNullable(entitySupplier.get(this.entityId)).orElse(Optional.of(blank)).get();
         }
 
 		form.setValue(entity);
         publishOnEventBus(new EnterEntityEditViewEvent(this.viewName, entity));
-		//build()
+        onEnter(entity, parameters);
 	}
+
+    /**
+     * Called to inform sub-classes of the entity and the parameters when entered.
+     *
+     * By default does nothing.
+     *
+     * @param entity The entity
+     * @param parameters The parameters of the view
+     */
+	public void onEnter(
+	        final T entity,
+            final String[] parameters) {
+
+    }
 
     /**
      * Saves the entity using the EntityPersistFunction and binds the result to the form
@@ -158,7 +181,9 @@ public abstract class AbstractEntityEditView<T extends Persistable<Serializable>
         }
 	}
 	
-	protected void add(ClickEvent event) {
+	protected void add(
+	        final ClickEvent event) {
+
 		if (form.isModified()) {
 			ConfirmDialog.show(
 					UI.getCurrent(),
@@ -169,11 +194,11 @@ public abstract class AbstractEntityEditView<T extends Persistable<Serializable>
                     (ConfirmDialog.Listener) dialog -> {
                         if (dialog.isConfirmed()) {
                             //Load and enter a new entity id
-                            onEnter(NEW_ENTITY_ID);
+                            onEnter(NEW_ENTITY_ID, new String[0]);
                         }
                     });
 		} else {
-            onEnter(NEW_ENTITY_ID);
+            onEnter(NEW_ENTITY_ID, new String[0]);
 		}
 	}
 	
@@ -212,11 +237,11 @@ public abstract class AbstractEntityEditView<T extends Persistable<Serializable>
 					"No",
 					(ConfirmDialog.Listener) dialog -> {
                         if (dialog.isConfirmed()) {
-                            onEnter(this.entityId);
+                            onEnter(this.entityId, new String[0]);
                         }
                     });
 		} else {
-			onEnter(this.entityId);
+			onEnter(this.entityId, new String[0]);
 		}
 	}
 	
