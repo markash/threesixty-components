@@ -54,11 +54,15 @@ public class FilterField<T> extends CustomField<TableDefinition<T>> {
 		this.dataProvider = dataProvider;
 		this.tableDefinition = tableDefinition;
 
+		this.attributeField.setStyleName("filter-attribute");
 		this.attributeField.addValueChangeListener(this::onAttributeChange);
         this.attributeField.setDataProvider(new ListDataProvider<>(filterDefinitions));
         this.attributeField.setTextInputAllowed(false);
 
+        this.optionsField.setStyleName("filter-options");
         this.optionsField.setDataProvider(optionsDataProvider);
+
+        this.textField.setStyleName("filter-text");
 
         this.tableDefinition.getFilterableColumns().map(ColumnDefinition::filterDefinition).forEach(filterDefinitions::add);
         if (hasFilterDefinitions()) {
@@ -110,9 +114,12 @@ public class FilterField<T> extends CustomField<TableDefinition<T>> {
     void addFilter(
             final FilterModel filter) {
 
-	    this.appliedFilters.add(filter);
-	    this.dataProvider.addFilter(FilterPredicateBuilder.build(filter));
-        getEventRouter().fireEvent(FilterChangeEvent.ADD(this, filter));
+	    /* Ensure that the filter value is not null */
+	    if (filter != null && filter.getValue() != null) {
+            this.appliedFilters.add(filter);
+            this.dataProvider.addFilter(FilterPredicateBuilder.build(filter));
+            getEventRouter().fireEvent(FilterChangeEvent.ADD(this, filter));
+        }
     }
 
     void removeFilter(
