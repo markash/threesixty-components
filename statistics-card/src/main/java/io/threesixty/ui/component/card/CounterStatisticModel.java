@@ -1,83 +1,175 @@
 package io.threesixty.ui.component.card;
 
-import org.apache.commons.lang3.StringUtils;
+import io.threesixty.ui.component.chart.options.DataPoint;
 
 import java.io.Serializable;
-import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
 public class CounterStatisticModel implements Serializable {
 	private static final long serialVersionUID = 1L;
-	
-	private String type;
-	private Optional<Number> value;
-	private CounterFormat format = CounterFormat.INTEGER;
-	private Number defaultValue = 0L;
-	private String prefix = "";
-	private String suffix = "";
-	
-	public CounterStatisticModel(String type, Optional<Number> value) {
-		this(type, value, CounterFormat.INTEGER, 0L);
-	}
-	
-	public CounterStatisticModel(String type, Number value) {
-		this(type, Optional.ofNullable(value));
-	}
-	
-	public CounterStatisticModel(String type, Optional<Number> value, CounterFormat format) {
-		this(type, value, format, 0L);
+	static DataPoint defaultValue = new DataPoint(0.00);
+
+	private String category;
+	private List<DataPoint> values = new ArrayList<>();
+	private StatisticShow show = StatisticShow.Sum;
+	private boolean iconVisible = true;
+	private boolean varianceVisible = true;
+    private DataLabelSettings dataLabelSettings = new DataLabelSettings();
+    private DataPoint startingPoint = null;
+    private Integer pointInterval = null;
+    private CategoryPosition categoryPosition = CategoryPosition.TOP;
+
+    /**
+     * Constructor to create a statistics model that has only one value
+     * @param category A descriptive name or label for the category for statistic
+     * @param value The value of the statistic
+     */
+    public CounterStatisticModel(
+            final String category,
+            final Number value) {
+
+        this(category, new DataPoint(value));
+    }
+
+    public CounterStatisticModel(
+            final String category,
+            final DataPoint...values) {
+        this(category, Arrays.asList(values));
+    }
+
+	public CounterStatisticModel(
+			final String category,
+			final List<DataPoint> values) {
+
+		this(category, null, values);
 	}
 
 	public CounterStatisticModel(
-			final String type, 
-			final Optional<Number> value, 
-			final CounterFormat format, 
-			final Number defaultValue) {
-		this.type = type;
-		this.value = value;
-		this.format = format;
-		this.defaultValue = defaultValue;
+			final String category,
+            final DataLabelSettings dataLabelSettings,
+			final List<DataPoint> points) {
+
+		this.category = category;
+		if (points != null) {
+		    this.values.addAll(points);
+        }
+		if (dataLabelSettings != null) {
+            this.dataLabelSettings = dataLabelSettings;
+        }
 	}
 
-	public String getType() { return type; }
-	public Optional<Number> getValue() { return value; }
-	
-	public String getFormattedValue() {
-		return StringUtils.defaultString(prefix, "") + getFormattedNumberValue() + StringUtils.defaultString(suffix, "");
+	public String getCategory() { return this.category; }
+
+    /**
+     * Clears the statistics data points and sets the single data point of `value`. Use setValues(List&lt;DataPoint&gt;) to
+     * set data points with multiple values.
+     *
+     * @param value The value of the statistic
+     */
+    public void setValue(
+            final Number value) {
+
+        this.values.clear();
+        this.values.add(new DataPoint(value));
+    }
+
+	public Number getValue() {
+
+	    switch(this.show) {
+            case Last:
+                return this.values.isEmpty() ? this.values.get(this.values.size() - 1).getY() : defaultValue.getY();
+            case Sum:
+                return this.values.stream().map(DataPoint::getY).mapToDouble(Number::doubleValue).sum();
+            default:
+                return defaultValue.getY();
+	    }
 	}
-	
-	private String getFormattedNumberValue() {
-		switch (format) {
-		case INTEGER: return DecimalFormat.getIntegerInstance().format(getValue().orElse(defaultValue));
-		case NUMBER: return DecimalFormat.getNumberInstance().format(getValue().orElse(defaultValue));
-		case PERCENTAGE: return DecimalFormat.getPercentInstance().format(getValue().orElse(defaultValue));
-		default: return DecimalFormat.getIntegerInstance().format(getValue().orElse(defaultValue));
+
+	public Number getVariance() {
+
+	    return getLast().orElse(defaultValue).getY().doubleValue() - getFirst().orElse(defaultValue).getY().doubleValue();
+	}
+
+	private Optional<DataPoint> getFirst() {
+
+    	if (!this.values.isEmpty()) {
+			return Optional.ofNullable(this.values.get(this.values.size() - 1));
 		}
-	}
-	
-	public CounterStatisticModel prefix(final String value) {
-		this.prefix = value;
-		return this;
-	}
-	
-	public CounterStatisticModel suffix(final String value) {
-		this.suffix = value;
-		return this;
-	}
-	
-	@Override
-	public String toString() {
-		return String.format(
-				"CounterStatistics [type=%s, value=%s, format=%s, defaultValue=%s]", 
-				type, 
-				value, 
-				format,
-				defaultValue);
+		return Optional.empty();
 	}
 
-	public static enum CounterFormat {
-		INTEGER,
-		NUMBER,
-		PERCENTAGE
+	private Optional<DataPoint> getLast() {
+
+		if (!this.values.isEmpty()) {
+			return Optional.ofNullable(this.values.get(0));
+		}
+		return Optional.empty();
 	}
+
+    public StatisticShow getShow() { return show; }
+    public void setShow(final StatisticShow show) { this.show = show; }
+
+    public boolean isIconVisible() { return iconVisible; }
+    public void setIconVisible(final boolean iconVisible) { this.iconVisible = iconVisible; }
+
+    public boolean isVarianceVisible() { return varianceVisible; }
+    public void setVarianceVisible(final boolean varianceVisible) { this.varianceVisible = varianceVisible; }
+    public boolean hasVariance() { return this.getVariance().doubleValue() != 0.00; }
+
+    public DataLabelSettings getDataLabelSettings() { return dataLabelSettings; }
+    public void setDataLabelSettings(final DataLabelSettings dataLabelSettings) { this.dataLabelSettings = dataLabelSettings; }
+
+    public List<DataPoint> getValues() { return values; }
+    public void setValues(final List<DataPoint> values) { this.values = values; }
+
+    public Optional<DataPoint> getStartingPoint() { return Optional.ofNullable(startingPoint); }
+    public void setStartingPoint(final DataPoint startingPoint) { this.startingPoint = startingPoint; }
+
+    public Optional<Integer> getPointInterval() { return Optional.ofNullable(pointInterval); }
+    public void setPointInterval(final Integer pointInterval) { this.pointInterval = pointInterval; }
+
+    public CategoryPosition getCategoryPosition() { return categoryPosition; }
+    public void setCategoryPosition(final CategoryPosition categoryPosition) { this.categoryPosition = categoryPosition; }
+
+    public CounterStatisticModel withShow(
+            final StatisticShow show) {
+
+        this.setShow(show);
+        return this;
+    }
+
+    public CounterStatisticModel withStartingPoint(
+            final DataPoint startingPoint) {
+
+        this.setStartingPoint(startingPoint);
+        return this;
+    }
+
+    public CounterStatisticModel withPointInterval(
+            final int pointInterval) {
+
+        this.setPointInterval(pointInterval);
+        return this;
+    }
+
+    public CounterStatisticModel withIconHidden() {
+
+        this.iconVisible = false;
+        return this;
+    }
+
+    public CounterStatisticModel withStatFollowedByCategory() {
+
+        this.categoryPosition = CategoryPosition.MIDDLE;
+        return this;
+    }
+
+    public CounterStatisticModel withCategoryFollowedByStat() {
+
+        this.categoryPosition = CategoryPosition.TOP;
+        return this;
+    }
 }

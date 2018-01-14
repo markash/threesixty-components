@@ -7,7 +7,7 @@
     <parent>
         <groupId>io.threesixty.components</groupId>
         <artifactId>ui</artifactId>
-        <version>0.1.1</version>
+        <version>0.1.2</version>
     </parent>
 
     <artifactId>theme</artifactId>
@@ -59,7 +59,7 @@
             <plugin>
                 <groupId>com.vaadin</groupId>
                 <artifactId>vaadin-maven-plugin</artifactId>
-                <version>${vaadin.version}</version>
+                <version>${vaadin-plugin.version}</version>
                 <executions>
                     <execution>
                         <goals>

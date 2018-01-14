@@ -1109,7 +1109,7 @@
  */
 
 .v-vaadin-version:after {
-	content: "8.1.4";
+	content: "8.1.7";
 }
 
 .v-widget {
@@ -1200,7 +1200,7 @@
 	overflow: auto;
 }
 
-.v-assistive-device-only {
+.v-assistive-device-only, .v-assistive-device-only-label label {
 	position: absolute;
 	top: -2000px;
 	left: -2000px;
@@ -15501,6 +15501,51 @@ div.v-layout.v-horizontal.v-widget {
 	overflow: hidden;
 }
 
+.dashboard .active-filters-text {
+	font-weight: bold;
+	margin-top: 4px;
+}
+
+.dashboard .filter-pill {
+	background-color: #166ed5;
+	font-weight: bold;
+	color: white;
+}
+
+.dashboard .filter-pill-text {
+	color: white;
+	margin-top: 4px;
+	margin-left: 8px;
+}
+
+.dashboard .filter-close-button {
+	color: white;
+}
+
+.dashboard .filter-options {
+	width: 280px;
+}
+
+.dashboard .filter-text {
+	width: 280px;
+}
+
+.dashboard .toolbar {
+	border-bottom: 1px solid silver;
+}
+
+.dashboard .toolbar-caption {
+	margin-top: 4px;
+}
+
+.dashboard .toolbar-action {
+	border-left: 1px solid silver;
+}
+
+.dashboard .toolbar-gutter {
+	margin-bottom: 4px;
+}
+
 .dashboard .stats-panel {
 	position: relative;
 	overflow: hidden;
@@ -15565,7 +15610,6 @@ div.v-layout.v-horizontal.v-widget {
 
 .dashboard .card {
 	width: 265px;
-	height: 160px;
 	border-top: 5px;
 	border-top-color: #044970;
 	border-top-style: solid;
@@ -15591,13 +15635,21 @@ div.v-layout.v-horizontal.v-widget {
 	font-size: 20px;
 }
 
-.dashboard .card-title .v-widget {
-	text-align: centre;
+.dashboard .card-title-left {
+	text-align: left;
 }
 
-.dashboard .card-description {
-	height: 60px;
+.dashboard .card-title-center {
+	text-align: center;
+}
+
+.dashboard .card-title-right {
+	text-align: right;
+}
+
+.dashboard .card-category {
 	white-space: normal;
+	text-align: center;
 }
 
 .dashboard .card-link {
@@ -15621,47 +15673,10 @@ div.v-layout.v-horizontal.v-widget {
 	padding: 2px 16px;
 }
 
-.dashboard .active-filters-text {
-	font-weight: bold;
-	margin-top: 4px;
+.dashboard .positive {
+	color: green;
 }
 
-.dashboard .filter-pill {
-	background-color: #166ed5;
-	font-weight: bold;
-	color: white;
-}
-
-.dashboard .filter-pill-text {
-	color: white;
-	margin-top: 4px;
-	margin-left: 8px;
-}
-
-.dashboard .filter-close-button {
-	color: white;
-}
-
-.dashboard .filter-options {
-	width: 280px;
-}
-
-.dashboard .filter-text {
-	width: 280px;
-}
-
-.dashboard .toolbar {
-	border-bottom: 1px solid silver;
-}
-
-.dashboard .toolbar-caption {
-	margin-top: 4px;
-}
-
-.dashboard .toolbar-action {
-	border-left: 1px solid silver;
-}
-
-.dashboard .toolbar-gutter {
-	margin-bottom: 4px;
+.dashboard .negative {
+	color: red;
 }

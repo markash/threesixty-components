@@ -14,7 +14,9 @@ $v-font-size:14px;
 }
 
 @import "../../themes/threesixty/_threesixty.scss";
+@import "../../addons/statistics/statistics.scss";
 
 .dashboard {
   @include threesixty;
+  @include statistics;
 }

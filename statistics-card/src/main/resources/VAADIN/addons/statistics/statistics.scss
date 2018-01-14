@@ -64,7 +64,7 @@
 
     .card {
     	width: 265px;
-    	height: 160px;
+    	//height: 160px;
 
         border-top: 5px;
         border-top-color: rgb(4, 73, 112);
@@ -96,13 +96,21 @@
         font-size: 20px;
     }
 
-    .card-title .v-widget{
-        text-align: centre;
+    .card-title-left {
+        text-align: left;
     }
 
-    .card-description {
-        height: 60px;
+    .card-title-center {
+        text-align: center;
+    }
+
+    .card-title-right {
+        text-align: right;
+    }
+
+    .card-category {
         white-space: normal;
+        text-align: center;
     }
 
     .card-link {
@@ -126,5 +134,13 @@
     /* Add some padding inside the card container */
     .card-container {
         padding: 2px 16px;
+    }
+
+    .positive {
+        color: green;
+    }
+
+    .negative {
+        color: red;
     }
 }
