@@ -9,8 +9,8 @@
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
-    <artifactId>statistics-card</artifactId>
-    <name>Statistics Card</name>
+    <artifactId>components-spring-boot</artifactId>
+    <name>Components Spring Boot</name>
 
     <properties>
         <maven.compiler.source>1.8</maven.compiler.source>
@@ -29,19 +29,25 @@
 
     <dependencies>
         <dependency>
-            <groupId>org.vaadin</groupId>
-            <artifactId>viritin</artifactId>
+            <groupId>io.threesixty.components</groupId>
+            <artifactId>components</artifactId>
+            <version>${threesixty-components.version}</version>
         </dependency>
         <dependency>
-            <groupId>com.fasterxml.jackson.core</groupId>
-            <artifactId>jackson-databind</artifactId>
-            <version>${jackson.version}</version>
+            <groupId>com.vaadin</groupId>
+            <artifactId>vaadin-spring-boot</artifactId>
+            <version>${vaadin-springboot.version}</version>
         </dependency>
-        <dependency>
-            <groupId>com.fasterxml.jackson.datatype</groupId>
-            <artifactId>jackson-datatype-jdk8</artifactId>
-            <version>${jackson.version}</version>
-        </dependency>
+        <!--<dependency>-->
+            <!--<groupId>org.springframework.boot</groupId>-->
+            <!--<artifactId>spring-boot</artifactId>-->
+            <!--<version>${spring-boot.version}</version>-->
+        <!--</dependency>-->
+        <!--<dependency>-->
+            <!--<groupId>org.springframework.boot</groupId>-->
+            <!--<artifactId>spring-boot-autoconfigure</artifactId>-->
+            <!--<version>${spring-boot.version}</version>-->
+        <!--</dependency>-->
     </dependencies>
 
     <dependencyManagement>

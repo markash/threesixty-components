@@ -39,6 +39,9 @@ public class Options {
             final Series series) {
 
         if (series != null) {
+            if (this.series.contains(series)) {
+                this.series.remove(series);
+            }
             this.series.add(series);
         }
     }
@@ -69,7 +72,7 @@ public class Options {
             return "var options = " + mapper.writerWithDefaultPrettyPrinter().writeValueAsString(this);
         } catch (Exception e) {
             System.out.println("e = " + e);
-            throw new RuntimeException(e.getMessage());
+            throw new RuntimeException("Unable to convert the object model to JSON, " + e.getMessage());
         }
     }
 }

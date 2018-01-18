@@ -1,13 +1,11 @@
 package io.threesixty.ui;
 
 import com.vaadin.navigator.Navigator;
-import com.vaadin.navigator.ViewProvider;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.UI;
-import com.vaadin.ui.VerticalLayout;
-import io.threesixty.ui.view.ErrorView;
+import io.threesixty.ui.view.DisplayView;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.util.StringUtils;
 
@@ -17,6 +15,20 @@ public abstract class ApplicationUI extends UI {
     @Value("${threesixty.application.title:Application}")
 	private String title;
 
+    private DisplayView displayView;
+    /**
+     * Constructs the application user interface
+     * @param navigator The navigator used used by the application to navigate to views
+     * @param displayView The display view is used by the navigator to display the view when a menu items is clicked or navigated to
+     */
+    public ApplicationUI(
+            final Navigator navigator,
+            final DisplayView displayView) {
+
+        setNavigator(navigator);
+        this.displayView = displayView;
+    }
+
 	@Override
     protected void init(VaadinRequest vaadinRequest) {
 		getPage().setTitle(StringUtils.isEmpty(this.title) ?  "Application" : this.title);
@@ -24,19 +36,9 @@ public abstract class ApplicationUI extends UI {
         rootLayout.setSizeFull();
         setContent(rootLayout);
 
-        final VerticalLayout viewContainer = new VerticalLayout();
-        viewContainer.setSizeFull();
-        viewContainer.setMargin(false);
-
-        final Navigator navigator = new Navigator(this, viewContainer);
-        navigator.setErrorView(new ErrorView());
-        navigator.addProvider(getViewProvider());
-        setNavigator(navigator);
-
-
         rootLayout.addComponent(getSideBar());
-        rootLayout.addComponent(viewContainer);
-        rootLayout.setExpandRatio(viewContainer, 1.0f);
+        rootLayout.addComponent(getDisplayView());
+        rootLayout.setExpandRatio(getDisplayView(), 1.0f);
     }
 
     /**
@@ -46,8 +48,8 @@ public abstract class ApplicationUI extends UI {
 	protected abstract Component getSideBar();
 
     /**
-     * The view provider
-     * @return View provider
+     * The display view is used by the navigator to display the view when a menu items is clicked or navigated to
+     * @return The display view
      */
-    protected abstract ViewProvider getViewProvider();
+    private DisplayView getDisplayView() { return this.displayView; }
 }

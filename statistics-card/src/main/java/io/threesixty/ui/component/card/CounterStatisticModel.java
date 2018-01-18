@@ -17,6 +17,7 @@ public class CounterStatisticModel implements Serializable {
 	private StatisticShow show = StatisticShow.Sum;
 	private boolean iconVisible = true;
 	private boolean varianceVisible = true;
+	private boolean showOnlyStatistic = false;
     private DataLabelSettings dataLabelSettings = new DataLabelSettings();
     private DataPoint startingPoint = null;
     private Integer pointInterval = null;
@@ -119,11 +120,16 @@ public class CounterStatisticModel implements Serializable {
     public void setVarianceVisible(final boolean varianceVisible) { this.varianceVisible = varianceVisible; }
     public boolean hasVariance() { return this.getVariance().doubleValue() != 0.00; }
 
+    public boolean isShowOnlyStatistic() { return this.showOnlyStatistic; }
+    public void setShowOnlyStatistic(final boolean showOnlyStatistic) { this.showOnlyStatistic = showOnlyStatistic; }
+
     public DataLabelSettings getDataLabelSettings() { return dataLabelSettings; }
     public void setDataLabelSettings(final DataLabelSettings dataLabelSettings) { this.dataLabelSettings = dataLabelSettings; }
 
     public List<DataPoint> getValues() { return values; }
     public void setValues(final List<DataPoint> values) { this.values = values; }
+    public void addValues(final List<DataPoint> values) { this.values.addAll(values); }
+    public void addValue(final DataPoint value) { this.values.add(value); }
 
     public Optional<DataPoint> getStartingPoint() { return Optional.ofNullable(startingPoint); }
     public void setStartingPoint(final DataPoint startingPoint) { this.startingPoint = startingPoint; }
@@ -170,6 +176,13 @@ public class CounterStatisticModel implements Serializable {
     public CounterStatisticModel withCategoryFollowedByStat() {
 
         this.categoryPosition = CategoryPosition.TOP;
+        return this;
+    }
+
+    public CounterStatisticModel withShowOnlyStatistic(
+            final boolean value) {
+
+        this.showOnlyStatistic = value;
         return this;
     }
 }
