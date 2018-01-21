@@ -1,11 +1,17 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>com.github.markash</groupId>
+        <artifactId>components-parent</artifactId>
+        <version>0.3.0</version>
+    </parent>
     
 	<artifactId>components</artifactId>
 	<packaging>jar</packaging>
 	
-	<name>components</name>
+	<name>ThreeSixty Components</name>
 	<url>http://maven.apache.org</url>
 
 	<properties>
@@ -16,12 +22,6 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
 
-    <parent>
-        <groupId>io.threesixty.components</groupId>
-        <artifactId>ui</artifactId>
-        <version>0.3.0</version>
-    </parent>
-    
     <dependencyManagement>
         <dependencies>
             <dependency>
@@ -32,9 +32,9 @@
                 <scope>import</scope>
             </dependency>
             <dependency>
-                <groupId>io.threesixty.components</groupId>
+                <groupId>com.github.markash</groupId>
                 <artifactId>bom</artifactId>
-                <version>0.1.1</version>
+                <version>0.3.0</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>

@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.github.markash</groupId>
-    <artifactId>ui</artifactId>
+    <artifactId>components-parent</artifactId>
     <version>0.3.0</version>
     <packaging>pom</packaging>
 

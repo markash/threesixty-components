@@ -4,15 +4,15 @@
 	<modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>io.threesixty.components</groupId>
-        <artifactId>ui</artifactId>
+        <groupId>com.github.markash</groupId>
+        <artifactId>components-parent</artifactId>
         <version>0.3.0</version>
     </parent>
 
 	<artifactId>bom</artifactId>
 	<packaging>pom</packaging>
 
-	<name>bom</name>
+	<name>ThreeSixty Bill of Materials</name>
 	<description>ThreeSixty Bill of Materials</description>
 
     <dependencyManagement>
