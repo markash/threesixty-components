@@ -4,12 +4,12 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>io.threesixty.components</groupId>
+    <groupId>com.github.markash</groupId>
     <artifactId>ui</artifactId>
     <version>0.3.0</version>
     <packaging>pom</packaging>
 
-    <name>threesixty-ui</name>
+    <name>ThreeSixty Components Parent</name>
     <description>ThreeSixty User Interface</description>
 
     <organization>
@@ -113,4 +113,12 @@
         <url>https://github.com/markash/threesixty-components</url>
         <tag>HEAD</tag>
     </scm>
+
+    <licenses>
+        <license>
+            <name>Apache License, Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
 </project>
