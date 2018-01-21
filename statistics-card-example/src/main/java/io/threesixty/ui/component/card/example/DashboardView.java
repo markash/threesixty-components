@@ -1,4 +1,4 @@
-package io.threesixty.ui.component.card;
+package io.threesixty.ui.component.card.example;
 
 import com.vaadin.data.Binder;
 import com.vaadin.icons.VaadinIcons;
@@ -7,6 +7,10 @@ import com.vaadin.server.Responsive;
 import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.CssLayout;
+import io.threesixty.ui.component.card.CounterStatisticModel;
+import io.threesixty.ui.component.card.CounterStatisticsCard;
+import io.threesixty.ui.component.card.DataLabelSettings;
+import io.threesixty.ui.component.card.StatisticShow;
 import io.threesixty.ui.component.chart.options.Axis;
 import io.threesixty.ui.component.chart.options.DataPoint;
 import io.threesixty.ui.component.field.Toolbar;
@@ -61,8 +65,8 @@ public class DashboardView extends AbstractDashboardView {
 
         MButton refreshButton = new MButton(VaadinIcons.REFRESH, "Refresh", event -> {
             this.statistics.incrementTraders();
-            this.tradersCountCard.refreshComponent();
-            this.hourlyTradesCard.refreshComponent();
+            this.tradersCountCard.refresh();
+            this.hourlyTradesCard.refresh();
         });
 
         getToolbar().add(refreshButton, Toolbar.ToolbarSection.ACTION);

@@ -1,4 +1,4 @@
-package io.threesixty.ui.component.card;
+package io.threesixty.ui.component.card.example;
 
 import io.threesixty.ui.annotation.EnableThreeSixtyComponents;
 import org.springframework.boot.SpringApplication;

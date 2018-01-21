@@ -32,16 +32,15 @@ public class CounterStatisticsCard extends CustomField<CounterStatisticModel> {
     private static final String STYLE_FOOTER = STYLE + "-footer";
     private static final String STYLE_LINK = STYLE + "-link";
 
-    private MLabel imageField;
-    private MLabel textField;
-    private MLabel categoryLabel;
+    //private final MLabel imageField;
+    private final MLabel textField;
+    private final MLabel categoryLabel;
     private MButton button;
-    private SparklineChart chart = new SparklineChart();
+    private final SparklineChart chart = new SparklineChart();
 
     private final DataLabelSupplier dataLabelSupplier;
-
-    //private CounterStatisticModel statistic;
-    private DataLabelSettings dataLabelSettings = new DataLabelSettings();
+    private final DataLabelSettings dataLabelSettings = new DataLabelSettings();
+    private final CategoryLabelSupplier categoryLabelSupplier;
 
     public CounterStatisticsCard() {
         this(null, null, null);
@@ -61,10 +60,11 @@ public class CounterStatisticsCard extends CustomField<CounterStatisticModel> {
 		super();
 
 		this.dataLabelSupplier = new DataLabelSupplier(statistic, this.dataLabelSettings);
+        this.categoryLabelSupplier = new CategoryLabelSupplier(statistic, icon);
 
-        this.imageField =
-                new MLabel(icon != null ? icon.getHtml() : "")
-                        .withContentMode(ContentMode.HTML);
+        //this.imageField =
+        //        new MLabel(icon != null ? icon.getHtml() : "")
+        //                .withContentMode(ContentMode.HTML);
 
         this.textField =
                 new MLabel()
@@ -83,13 +83,29 @@ public class CounterStatisticsCard extends CustomField<CounterStatisticModel> {
         }
         setPrimaryStyleName(STYLE);
 		setSizeUndefined();
-        refreshComponent();
+        refresh();
 	}
 
     @Override
     protected Component initContent() {
 
-        return buildContent();
+        final MCssLayout container = new MCssLayout()
+                .withPrimaryStyleName(STYLE_CONTAINER)
+                .withWidth(100, Unit.PERCENTAGE)
+                .withComponents(
+                        new MHorizontalLayout(/*imageField,*/ textField)
+                                .withWidth(100, Unit.PERCENTAGE)
+                                .withPrimaryStyleName(STYLE_TITLE),
+                        categoryLabel,
+                        chart);
+
+        final MCssLayout footer = new MCssLayout()
+                .withPrimaryStyleName(STYLE_FOOTER);
+        //.withComponents(button);
+
+        return new MCssLayout()
+                .withWidth(100, Unit.PERCENTAGE)
+                .withComponents(container, footer);
     }
 
     @Override
@@ -97,24 +113,28 @@ public class CounterStatisticsCard extends CustomField<CounterStatisticModel> {
             final CounterStatisticModel value) {
 
         this.dataLabelSupplier.statistic = value;
-        refreshComponent();
+        this.categoryLabelSupplier.statistic = value;
+        refresh();
     }
 
-    protected void refreshComponent() {
+    /**
+     * Refresh the statistics card after providing updated data.
+     */
+    public void refresh() {
         CounterStatisticModel model = this.dataLabelSupplier.statistic;
 
         if (model != null) {
-            this.imageField.setVisible(model.isIconVisible());
+            //this.imageField.setVisible(model.isIconVisible());
 
             if (CategoryPosition.TOP == model.getCategoryPosition()) {
                 this.categoryLabel.setValue(this.dataLabelSupplier.get());
-                this.categoryLabel.setPrimaryStyleName(this.imageField.isVisible() ? STYLE_TITLE_LEFT : STYLE_TITLE_CENTER);
-                this.textField.setValue(model.getCategory());
+                this.categoryLabel.setPrimaryStyleName(/*this.imageField.isVisible() ? STYLE_TITLE_LEFT :*/ STYLE_TITLE_CENTER);
+                this.textField.setValue(this.categoryLabelSupplier.get());
                 this.textField.withPrimaryStyleName(STYLE_CATEGORY);
             } else {
                 this.textField.setValue(this.dataLabelSupplier.get());
-                this.textField.setPrimaryStyleName(this.imageField.isVisible() ? STYLE_TITLE_LEFT : STYLE_TITLE_CENTER);
-                this.categoryLabel.setValue(model.getCategory());
+                this.textField.setPrimaryStyleName(/*this.imageField.isVisible() ? STYLE_TITLE_LEFT :*/ STYLE_TITLE_CENTER);
+                this.categoryLabel.setValue(this.categoryLabelSupplier.get());
                 this.categoryLabel.withPrimaryStyleName(STYLE_CATEGORY);
             }
 
@@ -165,26 +185,29 @@ public class CounterStatisticsCard extends CustomField<CounterStatisticModel> {
         return this;
     }
 
-	private CssLayout buildContent() {
+    private static class CategoryLabelSupplier implements Supplier<String> {
 
-		final MCssLayout container = new MCssLayout()
-                .withPrimaryStyleName(STYLE_CONTAINER)
-                .withWidth(100, Unit.PERCENTAGE)
-                .withComponents(
-                        new MHorizontalLayout(imageField, textField)
-                                .withWidth(100, Unit.PERCENTAGE)
-                                .withPrimaryStyleName(STYLE_TITLE),
-                        categoryLabel,
-                        chart);
+        private CounterStatisticModel statistic;
+        private VaadinIcons icon;
 
-        final MCssLayout footer = new MCssLayout()
-                .withPrimaryStyleName(STYLE_FOOTER);
-                //.withComponents(button);
+        CategoryLabelSupplier(
+                final CounterStatisticModel statistic,
+                final VaadinIcons icon) {
 
-        return new MCssLayout()
-                .withWidth(100, Unit.PERCENTAGE)
-                .withComponents(container, footer);
-	}
+            this.statistic = statistic;
+            this.icon = icon;
+        }
+
+        @Override
+        public String get() {
+            return (this.statistic.isIconVisible() ?
+                        Optional.ofNullable(this.icon)
+                            .map(icon -> icon.getHtml() + "&nbsp;&nbsp;")
+                            .orElse("")  :
+                        "") +
+                    statistic.getCategory();
+        }
+    }
 
 	private static class DataLabelSupplier implements Supplier<String> {
 

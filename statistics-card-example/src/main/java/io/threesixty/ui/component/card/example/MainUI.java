@@ -1,4 +1,4 @@
-package io.threesixty.ui.component.card;
+package io.threesixty.ui.component.card.example;
 
 import com.vaadin.annotations.PreserveOnRefresh;
 import com.vaadin.annotations.Theme;

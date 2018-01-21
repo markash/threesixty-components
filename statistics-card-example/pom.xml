@@ -148,7 +148,7 @@
                         <manifest>
                             <addClasspath>true</addClasspath>
                             <classpathPrefix>lib/</classpathPrefix>
-                            <mainClass>io.threesixty.ui.component.card.Application</mainClass>
+                            <mainClass>io.threesixty.ui.component.card.example.Application</mainClass>
                         </manifest>
                     </archive>
                 </configuration>

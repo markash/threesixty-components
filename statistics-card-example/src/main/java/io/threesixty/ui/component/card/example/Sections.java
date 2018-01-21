@@ -1,4 +1,4 @@
-package io.threesixty.ui.component.card;
+package io.threesixty.ui.component.card.example;
 
 import org.springframework.stereotype.Component;
 import org.vaadin.spring.sidebar.annotation.SideBarSection;
