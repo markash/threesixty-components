@@ -3,9 +3,9 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <artifactId>ui</artifactId>
-        <groupId>io.threesixty.components</groupId>
-        <version>0.1.2</version>
+        <groupId>com.github.markash</groupId>
+        <artifactId>components-parent</artifactId>
+        <version>0.3.0-SNAPSHOT</version>
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
@@ -47,9 +47,9 @@
     <dependencyManagement>
         <dependencies>
             <dependency>
-                <groupId>io.threesixty.components</groupId>
+                <groupId>com.github.markash</groupId>
                 <artifactId>bom</artifactId>
-                <version>${threesixty-theme.version}</version>
+                <version>${project.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
@@ -72,7 +72,7 @@
                 <extensions>true</extensions>
                 <configuration>
                     <instructions>
-                        <Export-Package>io.threesixty.ui.component.card.*</Export-Package>
+                        <Export-Package>com.github.markash.ui.component.card.*</Export-Package>
                     </instructions>
                 </configuration>
                 <executions>
@@ -152,11 +152,4 @@
             </plugin>
         </plugins>
     </build>
-
-    <repositories>
-        <repository>
-            <id>vaadin-addons</id>
-            <url>http://maven.vaadin.com/vaadin-addons</url>
-        </repository>
-    </repositories>
 </project>

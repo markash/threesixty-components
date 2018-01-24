@@ -79,7 +79,7 @@
 
     //2017-08-29 Remove margin-left and margin right because not working in ThreeSixty Review System
     .card-container {
-        margin-left: 5px;
+        //margin-left: 5px;
         //margin-left: 40px;
         //margin-right: 40px;
         margin-bottom: 20px;
@@ -106,6 +106,10 @@
 
     .card-title-right {
         text-align: right;
+    }
+
+    .card-title-large {
+        font-size: 48pt;
     }
 
     .card-category {
