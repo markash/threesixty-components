@@ -10,7 +10,7 @@
 
     <modelVersion>4.0.0</modelVersion>
     <artifactId>statistics-card-example</artifactId>
-
+    <name>Statistics Card Example</name>
     <properties>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
@@ -63,11 +63,6 @@
             <groupId>org.vaadin.spring.addons</groupId>
             <artifactId>vaadin-spring-addon-eventbus</artifactId>
             <optional>true</optional>
-        </dependency>
-        <dependency>
-            <groupId>org.vaadin.addons</groupId>
-            <artifactId>hybridmenu</artifactId>
-            <version>2.0.2-ALPHA</version>
         </dependency>
         <!-- **************************************************************
 		                      Testing
@@ -138,22 +133,6 @@
                     </execution>
                 </executions>
             </plugin>
-            <!--
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-jar-plugin</artifactId>
-                <version>3.0.2</version>
-                <configuration>
-                    <archive>
-                        <manifest>
-                            <addClasspath>true</addClasspath>
-                            <classpathPrefix>lib/</classpathPrefix>
-                            <mainClass>io.threesixty.ui.component.card.example.Application</mainClass>
-                        </manifest>
-                    </archive>
-                </configuration>
-            </plugin>
-            -->
         </plugins>
     </build>
     <repositories>

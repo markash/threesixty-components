@@ -78,7 +78,7 @@
                 <extensions>true</extensions>
                 <configuration>
                     <instructions>
-                        <Export-Package>io.threesixty.ui.component.card.*</Export-Package>
+                        <Export-Package>com.github.markash.ui.component.card.*</Export-Package>
                     </instructions>
                 </configuration>
                 <executions>

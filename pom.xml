@@ -9,12 +9,12 @@
     <version>0.3.0</version>
     <packaging>pom</packaging>
 
-    <name>ThreeSixty Components Parent</name>
+    <name>Components Parent</name>
     <description>ThreeSixty User Interface</description>
 
     <organization>
         <name>Mark P Ashworth</name>
-        <url>https://github.com/markash/threesixty-components/</url>
+        <url>https://github.com/markash</url>
     </organization>
 
     <properties>
@@ -121,4 +121,15 @@
             <distribution>repo</distribution>
         </license>
     </licenses>
+
+    <distributionManagement>
+        <snapshotRepository>
+            <id>ossrh</id>
+            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+        </snapshotRepository>
+        <repository>
+            <id>ossrh</id>
+            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+        </repository>
+    </distributionManagement>
 </project>

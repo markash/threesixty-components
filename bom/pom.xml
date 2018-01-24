@@ -12,7 +12,7 @@
 	<artifactId>bom</artifactId>
 	<packaging>pom</packaging>
 
-	<name>ThreeSixty Bill of Materials</name>
+	<name>Components Bill of Materials</name>
 	<description>ThreeSixty Bill of Materials</description>
 
     <dependencyManagement>

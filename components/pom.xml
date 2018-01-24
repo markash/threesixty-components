@@ -11,7 +11,7 @@
 	<artifactId>components</artifactId>
 	<packaging>jar</packaging>
 	
-	<name>ThreeSixty Components</name>
+	<name>Components</name>
 	<url>http://maven.apache.org</url>
 
 	<properties>
