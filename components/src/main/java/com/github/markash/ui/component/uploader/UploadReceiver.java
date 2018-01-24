@@ -1,4 +1,4 @@
-package io.threesixty.ui.component.uploader;
+package com.github.markash.ui.component.uploader;
 
 import com.vaadin.server.Page;
 import com.vaadin.ui.Notification;

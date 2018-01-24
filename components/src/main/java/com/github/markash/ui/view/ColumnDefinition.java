@@ -5,7 +5,7 @@ import com.vaadin.data.HasValue;
 import com.vaadin.data.ValueProvider;
 import com.vaadin.server.Setter;
 import com.vaadin.ui.renderers.Renderer;
-import io.threesixty.ui.component.field.FilterModel;
+import com.github.markash.ui.component.field.FilterModel;
 
 import java.util.ArrayList;
 import java.util.Collection;

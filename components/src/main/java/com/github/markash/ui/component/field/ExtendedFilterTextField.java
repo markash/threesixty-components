@@ -1,11 +1,11 @@
-package io.threesixty.ui.component.field;
+package com.github.markash.ui.component.field;
 
 import com.vaadin.data.HasValue;
 import com.vaadin.data.provider.ListDataProvider;
 import com.vaadin.server.SerializablePredicate;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.HorizontalLayout;
-import io.threesixty.ui.component.button.ButtonBuilder;
+import com.github.markash.ui.component.button.ButtonBuilder;
 
 import java.util.ArrayList;
 import java.util.Arrays;

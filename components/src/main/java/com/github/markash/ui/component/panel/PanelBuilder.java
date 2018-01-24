@@ -1,4 +1,4 @@
-package io.threesixty.ui.component.panel;
+package com.github.markash.ui.component.panel;
 
 import com.vaadin.server.Sizeable.Unit;
 import com.vaadin.ui.*;

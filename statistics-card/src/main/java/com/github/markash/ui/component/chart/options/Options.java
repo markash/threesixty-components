@@ -1,4 +1,4 @@
-package io.threesixty.ui.component.chart.options;
+package com.github.markash.ui.component.chart.options;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;

@@ -8,7 +8,7 @@ import com.vaadin.ui.Component;
 import com.vaadin.ui.Panel;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.ValoTheme;
-import io.threesixty.ui.component.field.Toolbar;
+import com.github.markash.ui.component.field.Toolbar;
 import com.github.markash.ui.event.CloseOpenWindowsEvent;
 import org.springframework.context.ApplicationEventPublisher;
 

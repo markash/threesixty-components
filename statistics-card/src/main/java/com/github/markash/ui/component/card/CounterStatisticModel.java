@@ -1,6 +1,6 @@
-package io.threesixty.ui.component.card;
+package com.github.markash.ui.component.card;
 
-import io.threesixty.ui.component.chart.options.DataPoint;
+import com.github.markash.ui.component.chart.options.DataPoint;
 
 import java.io.Serializable;
 import java.util.ArrayList;

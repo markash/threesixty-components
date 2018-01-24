@@ -1,4 +1,4 @@
-package io.threesixty.ui.component.field;
+package com.github.markash.ui.component.field;
 
 import java.io.Serializable;
 import java.util.ArrayList;

@@ -1,4 +1,4 @@
-package io.threesixty.ui.component.field;
+package com.github.markash.ui.component.field;
 
 import com.vaadin.data.provider.ListDataProvider;
 import com.vaadin.event.ShortcutListener;

@@ -1,4 +1,4 @@
-package io.threesixty.ui.component.chart;
+package com.github.markash.ui.component.chart;
 
 import com.vaadin.shared.ui.JavaScriptComponentState;
 

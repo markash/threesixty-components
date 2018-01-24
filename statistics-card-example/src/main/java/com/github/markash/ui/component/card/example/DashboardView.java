@@ -1,5 +1,6 @@
 package com.github.markash.ui.component.card.example;
 
+import com.github.markash.ui.component.field.Toolbar;
 import com.vaadin.data.Binder;
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
@@ -7,13 +8,12 @@ import com.vaadin.server.Responsive;
 import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.CssLayout;
-import io.threesixty.ui.component.card.CounterStatisticModel;
-import io.threesixty.ui.component.card.CounterStatisticsCard;
-import io.threesixty.ui.component.card.DataLabelSettings;
-import io.threesixty.ui.component.card.StatisticShow;
-import io.threesixty.ui.component.chart.options.Axis;
-import io.threesixty.ui.component.chart.options.DataPoint;
-import io.threesixty.ui.component.field.Toolbar;
+import com.github.markash.ui.component.card.CounterStatisticModel;
+import com.github.markash.ui.component.card.CounterStatisticsCard;
+import com.github.markash.ui.component.card.DataLabelSettings;
+import com.github.markash.ui.component.card.StatisticShow;
+import com.github.markash.ui.component.chart.options.Axis;
+import com.github.markash.ui.component.chart.options.DataPoint;
 import com.github.markash.ui.view.AbstractDashboardView;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.vaadin.spring.sidebar.annotation.SideBarItem;

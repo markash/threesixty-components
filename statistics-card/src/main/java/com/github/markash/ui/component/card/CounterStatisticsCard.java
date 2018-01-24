@@ -1,12 +1,12 @@
-package io.threesixty.ui.component.card;
+package com.github.markash.ui.component.card;
 
+import com.github.markash.ui.component.chart.SparklineChart;
+import com.github.markash.ui.component.chart.options.Axis;
+import com.github.markash.ui.component.chart.options.DataPoint;
+import com.github.markash.ui.component.chart.options.Series;
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.shared.ui.ContentMode;
 import com.vaadin.ui.*;
-import io.threesixty.ui.component.chart.SparklineChart;
-import io.threesixty.ui.component.chart.options.Axis;
-import io.threesixty.ui.component.chart.options.DataPoint;
-import io.threesixty.ui.component.chart.options.Series;
 import org.vaadin.viritin.button.MButton;
 import org.vaadin.viritin.label.MLabel;
 import org.vaadin.viritin.layouts.MCssLayout;

@@ -1,4 +1,4 @@
-package io.threesixty.ui.component.panel;
+package com.github.markash.ui.component.panel;
 
 import com.vaadin.event.ShortcutAction;
 import com.vaadin.icons.VaadinIcons;
@@ -7,7 +7,7 @@ import com.vaadin.shared.ui.ContentMode;
 import com.vaadin.ui.*;
 import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.themes.ValoTheme;
-import io.threesixty.ui.component.notification.NotificationBuilder;
+import com.github.markash.ui.component.notification.NotificationBuilder;
 
 
 /**

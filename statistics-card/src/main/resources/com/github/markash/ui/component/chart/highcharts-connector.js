@@ -1,4 +1,4 @@
-window.io_threesixty_ui_components_chart_AbstractHighChart = function () {
+window.com_github_markash_ui_component_chart_AbstractHighChart = function () {
 
 	this.onStateChange = function () {
 		// read state

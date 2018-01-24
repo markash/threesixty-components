@@ -1,4 +1,4 @@
-package io.threesixty.ui.component.notification;
+package com.github.markash.ui.component.notification;
 
 import java.io.Serializable;
 import java.util.ArrayList;

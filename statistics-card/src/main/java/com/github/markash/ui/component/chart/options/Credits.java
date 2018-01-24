@@ -1,4 +1,4 @@
-package io.threesixty.ui.component.chart.options;
+package com.github.markash.ui.component.chart.options;
 
 public class Credits {
     private boolean enabled = false;

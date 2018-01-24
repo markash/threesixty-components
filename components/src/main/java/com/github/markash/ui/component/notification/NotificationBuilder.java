@@ -1,4 +1,4 @@
-package io.threesixty.ui.component.notification;
+package com.github.markash.ui.component.notification;
 
 import com.vaadin.server.Page;
 import com.vaadin.shared.Position;

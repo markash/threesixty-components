@@ -1,4 +1,4 @@
-package io.threesixty.ui.component.logo;
+package com.github.markash.ui.component.logo;
 
 import com.vaadin.shared.ui.ContentMode;
 import com.vaadin.ui.Alignment;

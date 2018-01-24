@@ -6,8 +6,8 @@ import com.vaadin.server.Responsive;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.Grid;
 import com.vaadin.ui.VerticalLayout;
-import io.threesixty.ui.component.EntityGrid;
-import io.threesixty.ui.component.field.FilterField;
+import com.github.markash.ui.component.EntityGrid;
+import com.github.markash.ui.component.field.FilterField;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.Serializable;

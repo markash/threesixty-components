@@ -1,4 +1,4 @@
-package io.threesixty.ui.component;
+package com.github.markash.ui.component;
 
 @FunctionalInterface
 public interface BlankSupplier<T> {

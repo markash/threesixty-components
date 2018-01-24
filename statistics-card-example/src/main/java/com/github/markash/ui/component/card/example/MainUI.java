@@ -8,7 +8,7 @@ import com.vaadin.spring.annotation.SpringUI;
 import com.vaadin.spring.navigator.SpringNavigator;
 import com.vaadin.ui.Component;
 import com.github.markash.ui.ApplicationUI;
-import io.threesixty.ui.component.logo.Logo;
+import com.github.markash.ui.component.logo.Logo;
 import com.github.markash.ui.view.DisplayView;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.vaadin.spring.sidebar.components.ValoSideBar;

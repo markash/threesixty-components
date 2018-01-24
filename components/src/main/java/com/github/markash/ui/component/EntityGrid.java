@@ -1,4 +1,4 @@
-package io.threesixty.ui.component;
+package com.github.markash.ui.component;
 
 import com.vaadin.data.Binder;
 import com.vaadin.data.provider.DataProvider;

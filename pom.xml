@@ -36,9 +36,6 @@
         <spring-security.version>4.1.3.RELEASE</spring-security.version>
         <spring-boot.version>1.5.6.RELEASE</spring-boot.version>
 
-        <threesixty-components.version>0.3.0-SNAPSHOT</threesixty-components.version>
-        <threesixty-theme.version>0.3.0-SNAPSHOT</threesixty-theme.version>
-
         <vaadin.version>8.3.0.beta1</vaadin.version>
         <vaadin-plugin.version>8.3.0.beta1</vaadin-plugin.version>
         <vaadin4spring.version>2.0.1-SNAPSHOT</vaadin4spring.version>
@@ -100,6 +97,10 @@
     </build>
 
     <repositories>
+        <repository>
+            <id>vaadin-addons</id>
+            <url>http://maven.vaadin.com/vaadin-addons</url>
+        </repository>
         <repository>
             <id>vaadin-prereleases</id>
             <name>Vaadin Pre-releases</name>

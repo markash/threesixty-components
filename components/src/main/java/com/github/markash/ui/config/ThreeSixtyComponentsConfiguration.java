@@ -1,7 +1,7 @@
 package com.github.markash.ui.config;
 
 import com.vaadin.spring.annotation.SpringViewDisplay;
-import io.threesixty.ui.component.logo.Logo;
+import com.github.markash.ui.component.logo.Logo;
 import com.github.markash.ui.view.DisplayView;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;

@@ -41,7 +41,7 @@
         <dependency>
             <groupId>com.github.markash</groupId>
             <artifactId>components</artifactId>
-            <version>${threesixty-components.version}</version>
+            <version>${project.version}</version>
             <scope>provided</scope>
         </dependency>
     </dependencies>

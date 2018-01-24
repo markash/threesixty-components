@@ -1,8 +1,8 @@
 package com.github.markash.ui.view;
 
-import io.threesixty.ui.component.BlankSupplier;
-import io.threesixty.ui.component.EntityPersistFunction;
-import io.threesixty.ui.component.EntitySupplier;
+import com.github.markash.ui.component.BlankSupplier;
+import com.github.markash.ui.component.EntityPersistFunction;
+import com.github.markash.ui.component.EntitySupplier;
 
 import java.io.Serializable;
 

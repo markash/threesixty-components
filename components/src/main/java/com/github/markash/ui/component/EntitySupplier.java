@@ -1,4 +1,4 @@
-package io.threesixty.ui.component;
+package com.github.markash.ui.component;
 
 import java.io.Serializable;
 import java.util.Optional;

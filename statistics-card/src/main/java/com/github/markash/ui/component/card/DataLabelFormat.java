@@ -1,4 +1,4 @@
-package io.threesixty.ui.component.card;
+package com.github.markash.ui.component.card;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;

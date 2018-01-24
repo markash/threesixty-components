@@ -1,4 +1,4 @@
-package io.threesixty.ui.component.notification;
+package com.github.markash.ui.component.notification;
 
 import com.vaadin.data.HasValue;
 import com.vaadin.event.ShortcutAction.KeyCode;
@@ -6,8 +6,8 @@ import com.vaadin.icons.VaadinIcons;
 import com.vaadin.shared.Registration;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
-import io.threesixty.ui.component.button.ButtonBuilder;
-import io.threesixty.ui.component.panel.PanelBuilder;
+import com.github.markash.ui.component.button.ButtonBuilder;
+import com.github.markash.ui.component.panel.PanelBuilder;
 import org.springframework.util.StringUtils;
 import org.vaadin.viritin.button.MButton;
 import org.vaadin.viritin.label.MLabel;

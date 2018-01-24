@@ -1,4 +1,4 @@
-package io.threesixty.ui.component.button;
+package com.github.markash.ui.component.button;
 
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.server.Sizeable.Unit;

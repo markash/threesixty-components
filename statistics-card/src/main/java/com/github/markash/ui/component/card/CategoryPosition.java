@@ -1,4 +1,4 @@
-package io.threesixty.ui.component.card;
+package com.github.markash.ui.component.card;
 
 public enum CategoryPosition {
     TOP,
