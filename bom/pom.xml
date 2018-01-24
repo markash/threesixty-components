@@ -6,7 +6,7 @@
     <parent>
         <groupId>com.github.markash</groupId>
         <artifactId>components-parent</artifactId>
-        <version>0.3.0</version>
+        <version>0.3.0-SNAPSHOT</version>
     </parent>
 
 	<artifactId>bom</artifactId>
@@ -43,14 +43,14 @@
                 <version>${viritin.version}</version>
             </dependency>
             <dependency>
-                <groupId>io.threesixty</groupId>
-                <artifactId>threesixty-components</artifactId>
-                <version>${threesixty-components.version}</version>
+                <groupId>com.github.markash</groupId>
+                <artifactId>components</artifactId>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
-                <groupId>io.threesixty</groupId>
-                <artifactId>threesixty-theme</artifactId>
-                <version>${threesixty-theme.version}</version>
+                <groupId>com.github.markash</groupId>
+                <artifactId>theme</artifactId>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.vaadin</groupId>

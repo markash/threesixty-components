@@ -5,7 +5,7 @@
     <parent>
         <groupId>com.github.markash</groupId>
         <artifactId>components-parent</artifactId>
-        <version>0.3.0</version>
+        <version>0.3.0-SNAPSHOT</version>
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
@@ -14,25 +14,23 @@
     <properties>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
-
-        <threesixty.version>${threesixty-theme.version}</threesixty.version>
     </properties>
 
     <dependencies>
         <dependency>
             <groupId>com.github.markash</groupId>
             <artifactId>theme</artifactId>
-            <version>${threesixty.version}</version>
+            <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>com.github.markash</groupId>
             <artifactId>components</artifactId>
-            <version>${threesixty-components.version}</version>
+            <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>com.github.markash</groupId>
             <artifactId>statistics-card</artifactId>
-            <version>${threesixty.version}</version>
+            <version>${project.version}</version>
         </dependency>
         <!-- **************************************************************
 		                      User Interface
@@ -84,9 +82,9 @@
                 <scope>import</scope>
             </dependency>
             <dependency>
-                <groupId>io.threesixty.components</groupId>
+                <groupId>com.github.markash</groupId>
                 <artifactId>bom</artifactId>
-                <version>${threesixty.version}</version>
+                <version>${project.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
