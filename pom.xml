@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.github.markash</groupId>
@@ -44,10 +42,10 @@
     </properties>
 
     <modules>
-        <module>bom</module>
+        <module>components-bom</module>
         <module>components</module>
         <module>components-spring-boot</module>
-        <module>theme</module>
+        <module>components-theme</module>
         <module>statistics-card</module>
         <module>statistics-card-example</module>
     </modules>
@@ -119,7 +117,7 @@
         <connection>scm:git:git@github.com:markash/threesixty-components.git</connection>
         <developerConnection>scm:git:git@github.com:markash/threesixty-components.git</developerConnection>
         <url>https://github.com/markash/threesixty-components</url>
-        <tag>HEAD</tag>
+        <tag>components-parent-0.3.0</tag>
     </scm>
 
     <licenses>
