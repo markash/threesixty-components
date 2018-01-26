@@ -9,11 +9,22 @@
 
     <name>Components Parent</name>
     <description>ThreeSixty User Interface</description>
-    <url>http://www.mpashworth.co.za/</url>
+    <url>https://github.com/markash/threesixty-components</url>
+
     <organization>
         <name>Mark P Ashworth</name>
-        <url>https://github.com/markash</url>
+        <url>http://www.mpashworth.co.za/</url>
     </organization>
+
+    <developers>
+        <developer>
+            <name>Mark Ashworth</name>
+            <email>mp.ashworth@gmail.com</email>
+            <organization>Mark P Ashworth</organization>
+            <organizationUrl>http://www.mpashworth.co.za/</organizationUrl>
+        </developer>
+    </developers>
+
 
     <properties>
         <finalName>threesixty-${project.name}</finalName>
