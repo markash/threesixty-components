@@ -4,7 +4,7 @@
 
     <groupId>com.github.markash</groupId>
     <artifactId>components-parent</artifactId>
-    <version>0.3.0-SNAPSHOT</version>
+    <version>0.3.0</version>
     <packaging>pom</packaging>
 
     <name>Components Parent</name>
@@ -180,7 +180,7 @@
         <connection>scm:git:git@github.com:markash/threesixty-components.git</connection>
         <developerConnection>scm:git:git@github.com:markash/threesixty-components.git</developerConnection>
         <url>https://github.com/markash/threesixty-components</url>
-        <tag>components-parent-0.3.0</tag>
+        <tag>component-parent-0.3.0v15</tag>
     </scm>
 
     <licenses>
