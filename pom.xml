@@ -65,6 +65,7 @@
                     <tagNameFormat>v@{project.version}</tagNameFormat>
                     <autoVersionSubmodules>true</autoVersionSubmodules>
                     <releaseProfiles>releases</releaseProfiles>
+                    <goals>deploy nexus-staging:release</goals>
                 </configuration>
             </plugin>
             <plugin>
