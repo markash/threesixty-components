@@ -1,0 +1,1 @@
+web: java -jar statistics/target/statistics-card-example-*.jar --spring.profiles.active=prod --server.port=$PORT

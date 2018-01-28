@@ -58,7 +58,7 @@
         <module>components-spring-boot</module>
         <module>components-theme</module>
         <module>statistics-card</module>
-        <!--<module>statistics-card-example</module>-->
+        <module>statistics-card-example</module>
     </modules>
 
     <build>
