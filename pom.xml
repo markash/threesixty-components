@@ -37,6 +37,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
+        <heroku.version>2.0.2</heroku.version>
         <maven-compiler.version>3.7.0</maven-compiler.version>
         <maven-source.version>3.0.1</maven-source.version>
         <maven-javadoc.version>3.0.0-M1</maven-javadoc.version>
@@ -152,6 +153,11 @@
                     <groupId>org.springframework.boot</groupId>
                     <artifactId>spring-boot-maven-plugin</artifactId>
                     <version>${spring-boot.version}</version>
+                </plugin>
+                <plugin>
+                    <groupId>com.heroku.sdk</groupId>
+                    <artifactId>heroku-maven-plugin</artifactId>
+                    <version>${heroku.version}</version>
                 </plugin>
             </plugins>
         </pluginManagement>

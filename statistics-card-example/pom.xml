@@ -115,12 +115,15 @@
             <plugin>
                 <groupId>com.heroku.sdk</groupId>
                 <artifactId>heroku-maven-plugin</artifactId>
-                <version>1.2.0</version>
                 <configuration>
                     <appName>statistics-card-example</appName>
                     <processTypes>
-                        <web>web: java -jar target/statistics-card-example-0.1.0.jar</web>
+                        <web>web: java -jar target/statistics-card-example-0.3.0.jar</web>
                     </processTypes>
+                    <includeTarget>false</includeTarget>
+                    <includes>
+                        <include>target/statistics-card-example-0.3.0.jar</include>
+                    </includes>
                 </configuration>
             </plugin>
             <plugin>
