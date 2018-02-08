@@ -80,8 +80,10 @@ public class CounterStatisticModel implements Serializable {
 	public Number getValue() {
 
 	    switch(this.show) {
-            case Last:
-                return this.values.isEmpty() ? this.values.get(this.values.size() - 1).getY() : defaultValue.getY();
+	        case Last:
+                return getLast().orElse(defaultValue).getY();
+            case First:
+                return getFirst().orElse(defaultValue).getY();
             case Sum:
                 return this.values.stream().map(DataPoint::getY).mapToDouble(Number::doubleValue).sum();
             default:
@@ -94,7 +96,7 @@ public class CounterStatisticModel implements Serializable {
 	    return getLast().orElse(defaultValue).getY().doubleValue() - getFirst().orElse(defaultValue).getY().doubleValue();
 	}
 
-	private Optional<DataPoint> getFirst() {
+	private Optional<DataPoint> getLast() {
 
     	if (!this.values.isEmpty()) {
 			return Optional.ofNullable(this.values.get(this.values.size() - 1));
@@ -102,7 +104,7 @@ public class CounterStatisticModel implements Serializable {
 		return Optional.empty();
 	}
 
-	private Optional<DataPoint> getLast() {
+	private Optional<DataPoint> getFirst() {
 
 		if (!this.values.isEmpty()) {
 			return Optional.ofNullable(this.values.get(0));
@@ -154,10 +156,21 @@ public class CounterStatisticModel implements Serializable {
         return this;
     }
 
+    /**
+     * @deprecated Use the PointInterval enum instead
+     */
+    @Deprecated
     public CounterStatisticModel withPointInterval(
             final int pointInterval) {
 
         this.setPointInterval(pointInterval);
+        return this;
+    }
+
+    public CounterStatisticModel withPointInterval(
+            final PointInterval pointInterval) {
+
+        this.setPointInterval(pointInterval.getValue());
         return this;
     }
 

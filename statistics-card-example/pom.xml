@@ -65,6 +65,11 @@
             <artifactId>vaadin-sass-compiler</artifactId>
             <version>0.9.13</version>
         </dependency>
+        <dependency>
+            <groupId>com.jarektoro</groupId>
+            <artifactId>responsive-layout</artifactId>
+            <version>2.1.1</version>
+        </dependency>
         <!-- **************************************************************
 		                      Testing
 		*************************************************************** -->
@@ -96,7 +101,6 @@
 
     <build>
         <plugins>
-		<!--
             <plugin>
                 <groupId>com.vaadin</groupId>
                 <artifactId>vaadin-maven-plugin</artifactId>
@@ -113,7 +117,7 @@
                     </execution>
                 </executions>
             </plugin>
-		-->
+
 		<!--
             <plugin>
                 <groupId>com.heroku.sdk</groupId>

@@ -15882,7 +15882,7 @@ div.v-layout.v-horizontal.v-widget {
 }
 
 .dashboard .card {
-	width: 265px;
+	width: 98%;
 	border-top: 5px;
 	border-top-color: #044970;
 	border-top-style: solid;

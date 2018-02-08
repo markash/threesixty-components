@@ -5,7 +5,7 @@ import org.vaadin.spring.sidebar.annotation.SideBarSection;
 import org.vaadin.spring.sidebar.annotation.SideBarSections;
 
 @SideBarSections({
-        @SideBarSection(id = Sections.DEFAULT, caption = "", order=1),
+        @SideBarSection(id = Sections.DEFAULT, order=1),
 })
 @Component
 public class Sections {

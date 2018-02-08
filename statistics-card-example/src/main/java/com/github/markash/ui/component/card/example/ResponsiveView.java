@@ -1,17 +1,17 @@
 package com.github.markash.ui.component.card.example;
 
 import com.github.markash.ui.component.card.*;
+import com.github.markash.ui.component.chart.options.Axis;
+import com.github.markash.ui.component.chart.options.DataPoint;
 import com.github.markash.ui.component.field.Toolbar;
+import com.github.markash.ui.view.AbstractDashboardView;
+import com.jarektoro.responsivelayout.ResponsiveLayout;
+import com.jarektoro.responsivelayout.ResponsiveRow;
 import com.vaadin.data.Binder;
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
-import com.vaadin.server.Responsive;
 import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.ui.Component;
-import com.vaadin.ui.CssLayout;
-import com.github.markash.ui.component.chart.options.Axis;
-import com.github.markash.ui.component.chart.options.DataPoint;
-import com.github.markash.ui.view.AbstractDashboardView;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.vaadin.spring.sidebar.annotation.SideBarItem;
 import org.vaadin.spring.sidebar.annotation.VaadinFontIcon;
@@ -32,14 +32,14 @@ import java.util.stream.Collectors;
 import java.util.stream.DoubleStream;
 import java.util.stream.IntStream;
 
-@SideBarItem(sectionId = Sections.DEFAULT, caption = DashboardView.TITLE)
+@SideBarItem(sectionId = Sections.DEFAULT, caption = ResponsiveView.TITLE)
 @VaadinFontIcon(VaadinIcons.HOME)
-@SpringView(name = DashboardView.VIEW_NAME)
-public class DashboardView extends AbstractDashboardView {
+@SpringView(name = ResponsiveView.VIEW_NAME)
+public class ResponsiveView extends AbstractDashboardView {
 	private static final long serialVersionUID = 1L;
 
-    static final String TITLE = "Dashboard";
-    static final String VIEW_NAME = "dashboard";
+    static final String TITLE = "Response";
+    static final String VIEW_NAME = "responsive";
 
     private CounterStatisticsCard tradesCard = new CounterStatisticsCard(VaadinIcons.STOCK, "");
     private CounterStatisticsCard usersCard = new CounterStatisticsCard(VaadinIcons.USERS, "");
@@ -50,15 +50,11 @@ public class DashboardView extends AbstractDashboardView {
     private Statistics statistics = new Statistics();
 
     @Autowired
-    public DashboardView() {
+    public ResponsiveView() {
         super(TITLE);
     }
 
     protected Component buildContent() {
-        CssLayout dashboardPanels = new CssLayout();
-        dashboardPanels.addStyleName("dashboard-panels");
-        
-        Responsive.makeResponsive(dashboardPanels);
 
         MButton refreshButton = new MButton(VaadinIcons.REFRESH, "Refresh", event -> {
             this.statistics.incrementTraders();
@@ -75,16 +71,14 @@ public class DashboardView extends AbstractDashboardView {
         this.binder.bind(tradersCountCard, Statistics::getTradersCount, Statistics::setTradersCount);
         this.binder.setBean(this.statistics);
 
-        this.usersCard.setWidth(258, Unit.PIXELS);
-        this.tradesCard.setWidth(258, Unit.PIXELS);
-        this.hourlyTradesCard.setWidth(258, Unit.PIXELS);
-        this.tradersCountCard.setWidth(258, Unit.PIXELS);
+        ResponsiveLayout responsiveLayout = new ResponsiveLayout().withDefaultRules(12, 6, 4, 3).withFlexible();
+        ResponsiveRow row = responsiveLayout.addRow().withGrow(true).withSpacing(true);
+        row.addColumn().withComponent(usersCard);
+        row.addColumn().withComponent(tradesCard);
+        row.addColumn().withComponent(hourlyTradesCard);
+        row.addColumn().withComponent(tradersCountCard);
 
-        dashboardPanels.addComponent(usersCard);
-        dashboardPanels.addComponent(tradesCard);
-        dashboardPanels.addComponent(hourlyTradesCard);
-        dashboardPanels.addComponent(tradersCountCard);
-        return dashboardPanels;
+        return responsiveLayout;
     }
 
     @Override
