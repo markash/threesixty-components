@@ -21,8 +21,12 @@ public class NotificationsModel implements Serializable {
     }
 
     protected void setNotifications(final Collection<NotificationModel> notifications) {
-        this.notifications.clear();
+        clearNotifications();
         this.notifications.addAll(notifications);
+    }
+
+    protected void clearNotifications() {
+        this.notifications.clear();
     }
 
     public Stream<NotificationModel> stream() {
