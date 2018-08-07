@@ -7,10 +7,7 @@ import java.util.function.Supplier;
  * Provides the current user of the application
  * @author Mark P Ashworth (mp.ashworth@gmail.com)
  */
-public interface CurrentUserProvider<T> extends Supplier<Optional<UserPrincipal<T>>> {
+public interface CurrentUserProvider<T> extends Supplier<Optional<T>> {
 
-    Optional<UserPrincipal<T>> get();
-
-
-    Optional<T> getUser();
+    Optional<T> get();
 }
