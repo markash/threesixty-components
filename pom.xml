@@ -43,7 +43,7 @@
         <maven-javadoc.version>3.0.0-M1</maven-javadoc.version>
         <maven-clean.version>3.0.0</maven-clean.version>
 
-        <spring-security.version>4.1.3.RELEASE</spring-security.version>
+        <spring-security.version>4.2.5.RELEASE</spring-security.version>
         <spring-boot.version>1.5.12.RELEASE</spring-boot.version>
 
         <vaadin.version>8.4.5</vaadin.version>
@@ -60,6 +60,9 @@
         <module>components-theme</module>
         <module>statistics-card</module>
         <module>statistics-card-example</module>
+        <module>security-example</module>
+        <module>components-menu</module>
+        <module>components-i18n</module>
     </modules>
 
     <build>

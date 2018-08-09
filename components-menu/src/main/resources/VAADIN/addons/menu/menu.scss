@@ -1,0 +1,5 @@
+@import "../../addons/hybrid-menu/hybrid-menu.scss";
+
+@mixin menu {
+    @include hybrid-menu;
+}

@@ -1,0 +1,13 @@
+server:
+    port: 8084
+threesixty:
+    application:
+        title: Stats Card
+        logo: "<span class='v-icon v-icon-compile' style='font-family: Vaadin-Icons;'>&#xe64e;</span>"
+
+---
+
+spring:
+    profiles: development
+server:
+    port: 8081

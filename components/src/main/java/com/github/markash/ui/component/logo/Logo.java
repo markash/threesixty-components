@@ -11,9 +11,17 @@ import org.springframework.beans.factory.annotation.Value;
  * @author Mark P Ashworth
  */
 public class Logo extends HorizontalLayout {
+
+    private final String logo;
+    private final String title;
+
     @Autowired
     public Logo(@Value("${threesixty.application.logo}") final String logo,
                 @Value("${threesixty.application.title}") final String title) {
+
+        this.logo = logo;
+        this.title = title;
+
         setWidth("100%");
 
         Label logoField = new Label(logo, ContentMode.HTML);
@@ -24,5 +32,13 @@ public class Logo extends HorizontalLayout {
 
         setComponentAlignment(logoField, Alignment.TOP_CENTER);
         addStyleName("valo-menu-title");
+    }
+
+    public String getLogo() {
+        return logo;
+    }
+
+    public String getTitle() {
+        return title;
     }
 }
