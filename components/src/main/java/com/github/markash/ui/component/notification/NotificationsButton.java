@@ -17,28 +17,33 @@ import org.vaadin.viritin.layouts.MHorizontalLayout;
 public class NotificationsButton extends Button implements HasValue<NotificationsModel> {
 	private static final long serialVersionUID = 1L;
     private static final String ID = "dashboard-notifications";
-    private static final String STYLE_HEADER = "notification-header";
-    private static final String STYLE_UNREAD = "unread";
     private static final String BUTTON_BELL = "Notifications";
     private static final String CAPTION_HEADER = "Notifications";
     private static final String CAPTION_VIEW_ALL = "View All Notifications";
 
-    private ClickListener viewNotificationsClickListner;
+    private ClickListener viewNotificationsClickListener;
     private Window notificationsWindow;
 
 	private NotificationsModel notifications;
 	private boolean readOnly;
 
     @SuppressWarnings("serial")
-	private NotificationsButton(final NotificationsModel notifications, final String notificationsView) {
-    	this(   notifications,
+	private NotificationsButton(
+	        final NotificationsModel notifications,
+            final String notificationsView) {
+
+        this(
+                notifications,
     	        (ClickListener) event -> UI.getCurrent().getNavigator().navigateTo(notificationsView)
         );
     }
     
-    private NotificationsButton(final NotificationsModel notifications, final ClickListener viewNotificationsClickListner) {
-    	this.notifications = notifications;
-        this.viewNotificationsClickListner = viewNotificationsClickListner;
+    private NotificationsButton(
+            final NotificationsModel notifications,
+            final ClickListener viewNotificationsClickListener) {
+
+        this.notifications = notifications;
+        this.viewNotificationsClickListener = viewNotificationsClickListener;
     	this.addClickListener(this::onOpenNotificationsPopup);
     	
 //        DashboardEventBus.register(this);
@@ -50,9 +55,14 @@ public class NotificationsButton extends Button implements HasValue<Notification
             final VaadinIcons icon,
             final NotificationsModel model,
             final ClickListener listener) {
+
         NotificationsButton button = new NotificationsButton(model, listener);
-        button.setId(id);
-        button.setIcon(icon);
+        if (!StringUtils.isEmpty(id)) {
+            button.setId(id);
+        }
+        if (icon != null) {
+            button.setIcon(icon);
+        }
         if (!StringUtils.isEmpty(caption)) {
             button.setCaption(caption);
         }
@@ -65,6 +75,7 @@ public class NotificationsButton extends Button implements HasValue<Notification
             final VaadinIcons icon,
             final NotificationsModel model,
             final String notificationsView) {
+
         NotificationsButton button = new NotificationsButton(model, notificationsView);
         button.setId(id);
         button.setIcon(icon);
@@ -81,6 +92,7 @@ public class NotificationsButton extends Button implements HasValue<Notification
             final NotificationsModel model,
             final ClickListener listener,
             final String...styles) {
+
         NotificationsButton button = build(id, caption, icon, model, listener);
         if (styles != null && styles.length > 0) {
             for(String style : styles) {
@@ -90,12 +102,14 @@ public class NotificationsButton extends Button implements HasValue<Notification
         return button;
     }
 
-    public static NotificationsButton build(final String id,
-                                            final String caption,
-                                            final VaadinIcons icon,
-                                            final NotificationsModel model,
-                                            final String notificationsView,
-                                            final String...styles) {
+    public static NotificationsButton build(
+            final String id,
+            final String caption,
+            final VaadinIcons icon,
+            final NotificationsModel model,
+            final String notificationsView,
+            final String...styles) {
+
         NotificationsButton button = build(id, caption, icon, model, notificationsView);
         if (styles != null && styles.length > 0) {
             for(String style : styles) {
@@ -105,11 +119,24 @@ public class NotificationsButton extends Button implements HasValue<Notification
         return button;
     }
 
-    public static NotificationsButton BELL(final NotificationsModel model, final ClickListener listener) {
+    public static NotificationsButton BELL(
+            final NotificationsModel model,
+            final ClickListener listener) {
+
         return BELL(ID, model, listener);
     }
 
-    public static NotificationsButton BELL(final String id, final NotificationsModel model, final String notificationsView) {
+    public static NotificationsButton BELL(
+            final NotificationsModel model) {
+
+        return BELL(ID, model, (ClickListener) null);
+    }
+
+    public static NotificationsButton BELL(
+            final String id,
+            final NotificationsModel model,
+            final String notificationsView) {
+
         return build(
                 id,
                 BUTTON_BELL,
@@ -120,7 +147,11 @@ public class NotificationsButton extends Button implements HasValue<Notification
                 ValoTheme.BUTTON_ICON_ONLY);
     }
 
-    public static NotificationsButton BELL(final String id, final NotificationsModel model, final ClickListener listener) {
+    public static NotificationsButton BELL(
+            final String id,
+            final NotificationsModel model,
+            final ClickListener listener) {
+
         return build(
                 id,
                 BUTTON_BELL,
@@ -164,10 +195,10 @@ public class NotificationsButton extends Button implements HasValue<Notification
 
         String description = "Notifications";
         if (count > 0) {
-            addStyleName(STYLE_UNREAD);
+            addStyleName(NotificationStyle.UNREAD);
             description += " (" + count + " unread)";
         } else {
-            removeStyleName(STYLE_UNREAD);
+            removeStyleName(NotificationStyle.UNREAD);
         }
         setDescription(description);
     }
@@ -189,16 +220,18 @@ public class NotificationsButton extends Button implements HasValue<Notification
 //    	DashboardEventBus.post(new NotificationsCountUpdatedEvent());
     }
     
-    private void onOpenNotificationsPopup(final ClickEvent event) {
+    private void onOpenNotificationsPopup(
+            final ClickEvent event) {
+
         VerticalLayout notificationsLayout = new VerticalLayout();
         notificationsLayout.setMargin(true);
         notificationsLayout.setSpacing(true);
 
         
-        Label title = new MLabel(CAPTION_HEADER).withStyleName(ValoTheme.LABEL_H3, ValoTheme.LABEL_NO_MARGIN, STYLE_HEADER);
+        Label title = new MLabel(CAPTION_HEADER).withStyleName(ValoTheme.LABEL_H3, ValoTheme.LABEL_NO_MARGIN, NotificationStyle.HEADER);
         Button clearAllButton = ButtonBuilder.CLEAR_ALL(this::onClearAllNotifications, ValoTheme.BUTTON_BORDERLESS_COLORED, ValoTheme.BUTTON_SMALL);
-        
-        HorizontalLayout titlePanel = PanelBuilder.HORIZONTAL(STYLE_HEADER, title, clearAllButton);
+
+        HorizontalLayout titlePanel = PanelBuilder.HORIZONTAL(NotificationStyle.HEADER, title, clearAllButton);
         titlePanel.addStyleName(ValoTheme.WINDOW_TOP_TOOLBAR);
         titlePanel.setExpandRatio(title, 2.0f);
         titlePanel.setExpandRatio(clearAllButton, 1.0f);
@@ -212,25 +245,25 @@ public class NotificationsButton extends Button implements HasValue<Notification
                 .map(NotificationField::new)
                 .forEach(notificationsLayout::addComponent);
 
-
-        Button showAll = new MButton(CAPTION_VIEW_ALL, viewNotificationsClickListner).withStyleName(ValoTheme.BUTTON_BORDERLESS_COLORED, ValoTheme.BUTTON_SMALL);
-
         HorizontalLayout footer = new MHorizontalLayout()
                 .withStyleName(ValoTheme.WINDOW_BOTTOM_TOOLBAR)
-                .withWidth(100.0f, Unit.PERCENTAGE)
-                .with(showAll);
-
-        footer.setComponentAlignment(showAll, Alignment.TOP_CENTER);
+                .withWidth(100.0f, Unit.PERCENTAGE);
         notificationsLayout.addComponent(footer);
+
+        if (viewNotificationsClickListener != null) {
+            Button showAll = new MButton(CAPTION_VIEW_ALL, viewNotificationsClickListener).withStyleName(ValoTheme.BUTTON_BORDERLESS_COLORED, ValoTheme.BUTTON_SMALL);
+            footer.addComponent(showAll);
+            footer.setComponentAlignment(showAll, Alignment.TOP_CENTER);
+        }
 
         if (notificationsWindow == null) {
             notificationsWindow = new Window();
             notificationsWindow.setWidth(300.0f, Unit.PIXELS);
             notificationsWindow.addStyleName("notifications");
-            notificationsWindow.setClosable(false);
-            notificationsWindow.setResizable(false);
-            notificationsWindow.setDraggable(false);
-            notificationsWindow.addCloseShortcut(KeyCode.ESCAPE, null);
+            notificationsWindow.setClosable(true);
+            notificationsWindow.setResizable(true);
+            notificationsWindow.setDraggable(true);
+            notificationsWindow.addCloseShortcut(KeyCode.ESCAPE);
             notificationsWindow.setContent(notificationsLayout);
         } else {
         	notificationsWindow.setContent(notificationsLayout);
@@ -241,8 +274,10 @@ public class NotificationsButton extends Button implements HasValue<Notification
             notificationsWindow.setPositionX(event.getClientX() - event.getRelativeX() - 300);
             getUI().addWindow(notificationsWindow);
             notificationsWindow.focus();
+            this.setStyleName(NotificationStyle.BUTTON_HIDE);
         } else {
             notificationsWindow.close();
+            this.setStyleName(NotificationStyle.BUTTON_SHOW);
         }
     }
 

@@ -1,0 +1,14 @@
+@mixin notification {
+
+    .notification_button_show {
+        color: black;
+    }
+
+    .notification_button_hide {
+        color: silver;
+    }
+
+    .notification_unread {}
+
+    .notification_header {}
+}

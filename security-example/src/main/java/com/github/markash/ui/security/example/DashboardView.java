@@ -6,6 +6,9 @@ import com.github.markash.ui.component.chart.options.DataPoint;
 import com.github.markash.ui.component.field.Toolbar;
 import com.github.markash.ui.component.menu.annotation.MenuItem;
 import com.github.markash.ui.component.menu.annotation.VaadinFontIcon;
+import com.github.markash.ui.component.notification.NotificationModel;
+import com.github.markash.ui.component.notification.NotificationsButton;
+import com.github.markash.ui.component.notification.NotificationsModel;
 import com.github.markash.ui.view.AbstractDashboardView;
 import com.vaadin.data.Binder;
 import com.vaadin.icons.VaadinIcons;
@@ -13,9 +16,11 @@ import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.server.Responsive;
 import com.vaadin.server.Sizeable;
 import com.vaadin.spring.annotation.SpringView;
+import com.vaadin.ui.Button;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.CssLayout;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
 import org.vaadin.viritin.button.MButton;
 
 import java.io.Serializable;
@@ -40,7 +45,7 @@ public class DashboardView extends AbstractDashboardView {
 	private static final long serialVersionUID = 1L;
 
     static final String TITLE = "Dashboard";
-    static final String VIEW_NAME = "dashboard";
+    static final String VIEW_NAME = "";
 
     private CounterStatisticsCard tradesCard = new CounterStatisticsCard(VaadinIcons.STOCK, "");
     private CounterStatisticsCard usersCard = new CounterStatisticsCard(VaadinIcons.USERS, "");
@@ -50,15 +55,27 @@ public class DashboardView extends AbstractDashboardView {
     private Binder<Statistics> binder = new Binder<>(Statistics.class);
     private Statistics statistics = new Statistics();
 
+    private NotificationsModel notificationsModel;
+    private ApplicationEventPublisher publisher;
+
     @Autowired
-    public DashboardView() {
+    public DashboardView(
+            final ApplicationEventPublisher publisher) {
+
         super(TITLE);
+
+        this.publisher = publisher;
     }
 
     protected Component buildContent() {
         CssLayout dashboardPanels = new CssLayout();
         dashboardPanels.addStyleName("dashboard-panels");
-        
+
+        this.notificationsModel = new NotificationsModel(Arrays.asList(
+                new NotificationModel().withIcon(VaadinIcons.NEWSPAPER).withTitle("Test 1").withMessage("A test notification"),
+                new NotificationModel().withIcon(VaadinIcons.NEWSPAPER).withTitle("Test 2").withMessage("Another test notification")
+        ));
+
         Responsive.makeResponsive(dashboardPanels);
 
         MButton refreshButton = new MButton(VaadinIcons.REFRESH, "Refresh", event -> {
@@ -67,6 +84,7 @@ public class DashboardView extends AbstractDashboardView {
             this.hourlyTradesCard.refresh();
         });
 
+        getToolbar().add(NotificationsButton.BELL(notificationsModel, this::onViewNotifications), Toolbar.ToolbarSection.ACTION);
         getToolbar().add(refreshButton, Toolbar.ToolbarSection.ACTION);
 
         this.hourlyTradesCard.withHourlyInterval(Axis.X, 3);
@@ -85,11 +103,20 @@ public class DashboardView extends AbstractDashboardView {
         dashboardPanels.addComponent(tradesCard);
         dashboardPanels.addComponent(hourlyTradesCard);
         dashboardPanels.addComponent(tradersCountCard);
+
         return dashboardPanels;
     }
 
     @Override
     public void enter(final ViewChangeEvent event) {
+    }
+
+    @SuppressWarnings("unused")
+    private void onViewNotifications(final Button.ClickEvent event) {
+
+        this.notificationsModel
+                .stream()
+                .forEach(notificationModel -> publisher.publishEvent(notificationModel));
     }
 
     public static class Statistics implements Serializable {

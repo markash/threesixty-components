@@ -15801,3 +15801,11 @@ div.v-layout.v-horizontal.v-widget {
 .threesixty .toolbar-gutter {
 	margin-bottom: 4px;
 }
+
+.threesixty .notification_button_show {
+	color: black;
+}
+
+.threesixty .notification_button_hide {
+	color: silver;
+}

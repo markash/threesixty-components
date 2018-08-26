@@ -16,6 +16,7 @@
 package com.github.markash.ui.component.menu;
 
 import com.github.markash.ui.component.logo.Logo;
+import com.github.markash.ui.component.notification.NotificationModel;
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.server.ThemeResource;
 import com.vaadin.ui.Button;
@@ -26,6 +27,7 @@ import kaesdingeling.hybridmenu.components.*;
 import kaesdingeling.hybridmenu.data.MenuConfig;
 import kaesdingeling.hybridmenu.data.interfaces.MenuComponent;
 import kaesdingeling.hybridmenu.design.DesignItem;
+import org.springframework.context.event.EventListener;
 
 import java.util.Collection;
 import java.util.Optional;
@@ -128,6 +130,27 @@ public class ThreeSixtyHybridMenu extends AbstractMenu {
                     .withIcon(VaadinIcons.ABACUS)
                     ;
         }
+    }
+
+    @EventListener
+    public void addNotification(
+            final NotificationModel model) {
+
+        Notification notification = new Notification()
+                .withAutoRemove()
+                .withCloseable()
+                .withContent(model.getMessage())
+                .withTitle(model.getTitle())
+                .withIcon(model.getIcon())
+                .withDisplayTime(model.getCreated());
+
+        if (model.isRead()) {
+            notification.makeAsReaded();
+        }
+
+        this.hybridMenu
+                .getNotificationCenter()
+                .add(notification);
     }
 
     public class HybridItemComponentFactory implements ComponentFactory<MenuItemDescriptor, MenuComponent<HMButton>> {
