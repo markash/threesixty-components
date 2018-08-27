@@ -50,6 +50,11 @@ public class NotificationModel implements Serializable {
         return this;
     }
 
+    public NotificationModel withRead(final boolean read) {
+        this.read = read;
+        return this;
+    }
+
     public NotificationModel markRead() {
         this.read = true;
         return this;
