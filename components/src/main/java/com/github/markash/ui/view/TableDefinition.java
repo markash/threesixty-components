@@ -14,6 +14,8 @@ import java.util.stream.Stream;
  * @param <T> The type of the entity class of the table
  */
 public class TableDefinition<T> {
+    public static final String URL_PREFIX_CLASSIC = "#!";
+    public static final String URL_PREFIX_PUSH = "";
     private static String DEFAULT_LINK_PROPERTY_ID = "id";
     private static String DEFAULT_LINK_PROPERTY_TEXT = "Id";
 
@@ -21,6 +23,7 @@ public class TableDefinition<T> {
     private String linkPropertyText = DEFAULT_LINK_PROPERTY_TEXT;
     private String entityViewName;
     private List<ColumnDefinition<T, ?>> columns = new ArrayList<>();
+    private String linkPrefix = URL_PREFIX_CLASSIC;
 
     public TableDefinition(final String entityViewName) {
         this.entityViewName = entityViewName;
@@ -51,6 +54,18 @@ public class TableDefinition<T> {
     @SafeVarargs
     public final TableDefinition<T> withColumns(final ColumnDefinition<T, ?>...columnDefinition) {
         this.columns.addAll(Arrays.asList(columnDefinition));
+        return this;
+    }
+
+    @SuppressWarnings("unused")
+    public final TableDefinition<T> withClassicUrls() {
+        this.linkPrefix = URL_PREFIX_CLASSIC;
+        return this;
+    }
+
+    @SuppressWarnings("unused")
+    public final TableDefinition<T> withPushUrls() {
+        this.linkPrefix = URL_PREFIX_PUSH;
         return this;
     }
 
@@ -86,7 +101,10 @@ public class TableDefinition<T> {
                 .stream()
                 .filter(ColumnDefinition::isSearchable);
     }
-	/**
+    public String getLinkPrefix() {
+        return linkPrefix;
+    }
+    /**
 	 * The array of object properties that should be included in the filter
 	 * @return The array of properties
 	 */

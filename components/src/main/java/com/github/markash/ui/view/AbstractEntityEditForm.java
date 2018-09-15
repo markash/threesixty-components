@@ -160,7 +160,7 @@ public abstract class AbstractEntityEditForm<T extends Persistable<Serializable>
         idField.setEnabled(getValue().isNew());
     }
 
-    protected void layout() {
+    public void layout() {
         if (!layoutCompleted) {
             internalLayout();
             layoutCompleted = true;

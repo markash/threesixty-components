@@ -146,7 +146,8 @@ public abstract class AbstractEntityEditView<T extends Persistable<Serializable>
      * @param event The click event
      */
     @SuppressWarnings("unused")
-	private void onSave(final ClickEvent event) {
+	private void onSave(
+			final ClickEvent event) {
 
         try {
             //Validate the field group
@@ -160,7 +161,7 @@ public abstract class AbstractEntityEditView<T extends Persistable<Serializable>
                 //Notify the user of the outcome
                 NotificationBuilder.showNotification(
                         "Update",
-                        result.getId() + " updated successfully.",
+                        successfulPersistNotification(result),
                         2000);
                 //Notify the system of the outcome
                 publishOnEventBus(EntityPersistEvent.build(this, result));
@@ -180,7 +181,18 @@ public abstract class AbstractEntityEditView<T extends Persistable<Serializable>
             Notification.show("Validation error count: " + e.getValidationErrors().size());
         }
 	}
-	
+
+	/**
+	 * Provide the notification for the entity that was successfully persisted
+	 * @param entity The entity that was persisted
+	 * @return The notification message
+	 */
+	protected String successfulPersistNotification(
+			final T entity) {
+
+    	return entity.getId() + " updated successfully";
+	}
+
 	protected void add(
 	        final ClickEvent event) {
 
