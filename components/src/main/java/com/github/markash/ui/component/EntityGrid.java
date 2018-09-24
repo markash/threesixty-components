@@ -1,15 +1,13 @@
 package com.github.markash.ui.component;
 
+import com.github.markash.ui.view.ColumnDefinition;
+import com.github.markash.ui.view.TableDefinition;
 import com.vaadin.data.Binder;
 import com.vaadin.data.provider.DataProvider;
 import com.vaadin.ui.renderers.HtmlRenderer;
-import com.github.markash.ui.view.ColumnDefinition;
-import com.github.markash.ui.view.TableDefinition;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.BeanUtils;
 import org.vaadin.viritin.grid.MGrid;
 
-import java.beans.PropertyDescriptor;
 import java.util.List;
 import java.util.Optional;
 
@@ -27,6 +25,7 @@ public class EntityGrid<T> extends MGrid<T> {
         return this;
     }
 
+    @SuppressWarnings("unchecked")
     public EntityGrid<T> withDefinition(final TableDefinition<T> definition) {
         Column<T, ?> column;
         Binder<T> binder = getEditor().getBinder();
@@ -35,15 +34,21 @@ public class EntityGrid<T> extends MGrid<T> {
         removeAllColumns();
 
         /* Redefine the columns based upon the definition */
-        for(ColumnDefinition<T, ?> c : definition.getColumns()) {
+        for(ColumnDefinition<T> c : definition.getColumns()) {
             if (c.isId()) {
                 column = addColumn(row -> buildNavigationLink(row, c, definition.getEntityViewName().orElse("error"), definition.getLinkPrefix()), new HtmlRenderer());
                 column.setCaption(c.getHeading());
+
+                /* Add a hidden column for the display */
+                if (c.getDisplay() != null) {
+                    column = addColumn(c.getDisplay().getProvider());
+                    column.setHidden(true);
+                }
             } else {
-                column = addColumn(c.getProperty());
+                column = addColumn(c.getProperty().getProvider());
                 column.setCaption(c.getHeading());
 
-                Optional<Binder.Binding<T, ?>> binding = Optional.ofNullable(c.bind(binder));
+                Optional<Binder.Binding<T, ?>> binding = Optional.ofNullable(c.getProperty().bind(binder));
                 if (binding.isPresent()) {
                     column.setEditorBinding(binding.get());
                     getEditor().setEnabled(true);
@@ -69,24 +74,23 @@ public class EntityGrid<T> extends MGrid<T> {
     }
     /**
      * Builds the navigation link for the table column that is used to drill down into a single instance of the row
-     * @param value The row object to read the property link value from
+     * @param bean The row object to read the property link value from
      * @param columnDefinition The definition of the column
      * @param entityViewName The name of the view of the entity
      * @param linkPrefix The link prefix to use which differs when using Vaadin Push or Vaadin Classic URLS
      * @return The navigation link
      */
     private String buildNavigationLink(
-            final Object value,
-            final ColumnDefinition columnDefinition,
+            final T bean,
+            final ColumnDefinition<T> columnDefinition,
             final String entityViewName,
             final String linkPrefix) {
 
-        String displayValue = null;
-        if (StringUtils.isNotBlank(columnDefinition.getDisplayProperty())) {
-            displayValue = getPropertyValue(value, columnDefinition.getDisplayProperty());
-        }
-        final String linkValue = getPropertyValue(value, columnDefinition.getProperty());
-        return "<a href='" + linkPrefix + buildNavigationState(entityViewName, linkValue) + "' target='_top'>" + Optional.ofNullable(displayValue).orElse(linkValue) + "</a>";
+        return "<a href='" +
+                linkPrefix +
+                buildNavigationState(entityViewName, columnDefinition.renderProperty(bean)) +
+                "' target='_top'>" +
+                columnDefinition.renderDisplay(bean) + "</a>";
     }
 //    /**
 //     * Builds the navigation link for the table column that is used to drill down into a single instance of the row
@@ -112,17 +116,29 @@ public class EntityGrid<T> extends MGrid<T> {
 
         return entityViewName + (id != null && StringUtils.isBlank(id) ? "" : "/" + id);
     }
-    /**
-     * Returns the property (i.e. column) value that should be used for the link of getLinkPropertyId()
-     * @param value The object to read the link value from
-     * @return The link value from the object or `Unavailable exception` if an IllegalArgumentException || IllegalAccessException is thrown
-     */
-    private String getPropertyValue(final Object value, final String property) {
-        PropertyDescriptor descriptor = BeanUtils.getPropertyDescriptor(getBeanType(), property);
-        try {
-            return Optional.ofNullable(descriptor.getReadMethod().invoke(value)).orElse("").toString();
-        } catch (Exception e) {
-            return "Unavailable exception";
-        }
-    }
+//    /**
+//     * Returns the property (i.e. column) value that should be used for the link of getLinkPropertyId()
+//     * @param value The object to read the link value from
+//     * @return The link value from the object or `Unavailable exception` if an IllegalArgumentException || IllegalAccessException is thrown
+//     */
+//    @SuppressWarnings({"rawtypes", "unchecked"})
+//    private String getPropertyValue(
+//            final Object value,
+//            final ColumnDefinition columnDefinition) {
+//
+//        return columnDefinition.hasDisplaySetting() ? columnDefinition.getProperty().render(value) : null;
+//    }
+//    /**
+//     * Returns the property (i.e. column) value that should be used for the link of getLinkPropertyId()
+//     * @param value The object to read the link value from
+//     * @return The link value from the object or `Unavailable exception` if an IllegalArgumentException || IllegalAccessException is thrown
+//     */
+//    private String getPropertyValue(final Object value, final String property) {
+//        PropertyDescriptor descriptor = BeanUtils.getPropertyDescriptor(getBeanType(), property);
+//        try {
+//            return Optional.ofNullable(descriptor.getReadMethod().invoke(value)).orElse("").toString();
+//        } catch (Exception e) {
+//            return "Unavailable exception";
+//        }
+//    }
 }
