@@ -32,7 +32,7 @@ import java.lang.annotation.Target;
 public @interface VaadinFontIcon {
 
     /**
-     * The item icon.
+     * @return the item icon.
      */
     VaadinIcons value();
 }

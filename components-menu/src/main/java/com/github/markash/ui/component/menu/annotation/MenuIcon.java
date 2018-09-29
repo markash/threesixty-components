@@ -22,7 +22,8 @@ import java.lang.annotation.Target;
 import com.github.markash.ui.component.menu.MenuIconProvider;
 
 /**
- * Meta annotation designed to be placed on icon annotations that are used to specify an icon of a {@link org.vaadin.spring.sidebar.annotation.SideBarItem}.
+ * Meta annotation designed to be placed on icon annotations that are used to specify an icon
+ * of a {@link MenuItem}.
  *
  * @author Petter Holmström (petter@vaadin.com)
  */
@@ -34,6 +35,7 @@ public @interface MenuIcon {
      * The class of the {@link MenuIconProvider} that knows how to provide
      * the actual icon {@link com.vaadin.server.Resource}s. An instance of this class will be looked up from the
      * Spring application context, so make sure your icon provider is Spring managed.
+     * @return the menu icon provider
      */
     @SuppressWarnings("rawtypes")
     Class<? extends MenuIconProvider> value();

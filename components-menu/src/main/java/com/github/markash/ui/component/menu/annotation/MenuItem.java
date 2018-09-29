@@ -21,20 +21,17 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * This annotation is used to declare a {@link AccordionSideBar} item that a user can click on.
+ * This annotation is used to declare a {@link MenuItem} item that a user can click on.
  * It can be placed on two types of beans:
  * <ol>
  * <li>{@link java.lang.Runnable}s - when the item is clicked, the runnable is executed</li>
- * <li>{@link com.vaadin.navigator.View Views}s that are also annotated with {@link VaadinView VaadinView} - when the item is clicked, the {@link com.vaadin.navigator.Navigator navigator} navigates to the view.
+ * <li>{@link com.vaadin.navigator.View Views}s that are also annotated with
+ * {@link com.vaadin.spring.annotation.SpringView VaadinView} - when the item is clicked,
+ * the {@link com.vaadin.navigator.Navigator navigator} navigates to the view.
  * </ol>
  * Please note that the annotated class must be a Spring-managed bean - only adding this annotation is not enough.
  *
  * @author Petter Holmström (petter@vaadin.com)
- * @see AccordionSideBar
- * @see SideBarSection
- * @see FontAwesomeIcon
- * @see ThemeIcon
- * @see LocalizedThemeIcon
  */
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
@@ -44,6 +41,7 @@ public @interface MenuItem {
      * The ID of the side bar section that this item belongs to.
      *
      * @see MenuSection#id()
+     * @return the section id
      */
     String sectionId();
 
@@ -51,6 +49,7 @@ public @interface MenuItem {
      * The caption of this item.
      *
      * @see #captionCode()
+     * @return the caption
      */
     String caption() default "";
 
@@ -59,16 +58,19 @@ public @interface MenuItem {
      * If this is an empty string, {@link #caption()} is used instead.
      *
      * @see com.github.markash.ui.component.i18n.I18N#get(String, Object...)
+     * @return the caption code
      */
     String captionCode() default "";
 
     /**
      * The order of this item within its section. Items with a lower order are placed higher up in the list.
+     * @return the order
      */
     int order() default Integer.MAX_VALUE;
 
     /**
      * Whether this item should be shown in the top menu or just the side menu
+     * @return whether the menu is on the top of the page
      */
     boolean topMenu() default false;
 }

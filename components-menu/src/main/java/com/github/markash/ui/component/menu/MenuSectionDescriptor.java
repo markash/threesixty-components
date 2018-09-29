@@ -64,7 +64,7 @@ public class MenuSectionDescriptor implements Comparable<MenuSectionDescriptor> 
     }
 
     /**
-     * Returns the order of the side bar section within the side bar.
+     * @return the order of the side bar section within the side bar.
      */
     public int getOrder() {
         return section.order();

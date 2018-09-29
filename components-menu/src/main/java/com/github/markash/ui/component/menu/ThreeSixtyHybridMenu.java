@@ -58,6 +58,9 @@ public class ThreeSixtyHybridMenu extends AbstractMenu {
     /**
      * You should not need to create instances of this component directly. Instead, just inject the side bar into
      * your UI.
+     * @param utils the menu utils
+     * @param logo the logo of the menu
+     * @param navigationContent the navigation content container
      */
     public ThreeSixtyHybridMenu(
             final MenuUtils utils,

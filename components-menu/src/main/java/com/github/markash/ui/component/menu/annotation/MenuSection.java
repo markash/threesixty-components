@@ -37,12 +37,12 @@ import java.lang.annotation.Target;
 public @interface MenuSection {
 
     /**
-     * The ID of the side bar section. Must be unique within the application.
+     * @return the ID of the side bar section. Must be unique within the application.
      */
     String id();
 
     /**
-     * The caption of this section.
+     * @return the caption of this section.
      */
     String caption() default "";
 
@@ -50,6 +50,7 @@ public @interface MenuSection {
      * The code to pass to the {@link com.github.markash.ui.component.i18n.I18N} instance to get the section caption.
      * If this is an empty string, {@link #caption()} is used instead.
      *
+     * @return the caption code
      * @see com.github.markash.ui.component.i18n.I18N#get(String, Object...)
      */
     String captionCode() default "";
@@ -57,11 +58,13 @@ public @interface MenuSection {
     /**
      * The {@link com.vaadin.ui.UI} subclasses that this section is available for. If no classes are specified,
      * the section will be available for all UI subclasses within the application.
+     * @return the ui class
      */
     Class<? extends UI>[] ui() default {};
 
     /**
      * The order of this section within the side bar. Sections with a lower order are placed higher up in the list.
+     * @return the order pf the menu section
      */
     int order() default Integer.MAX_VALUE;
 }

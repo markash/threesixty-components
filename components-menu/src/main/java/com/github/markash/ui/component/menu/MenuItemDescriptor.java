@@ -62,7 +62,7 @@ public abstract class MenuItemDescriptor implements Comparable<MenuItemDescripto
 
     /**
      * Attempts to find and return an annotation of the specified type declared on this side bar item.
-     *
+     * @param <A> The annotation type
      * @param annotationType the type of the annotation to look for.
      * @return the annotation, or {@code null} if not found.
      */
@@ -109,9 +109,8 @@ public abstract class MenuItemDescriptor implements Comparable<MenuItemDescripto
     }
 
     /**
-     * TODO Document me
      *
-     * @return
+     * @return The bean name
      */
     protected String getBeanName() {
         return beanName;
@@ -147,21 +146,21 @@ public abstract class MenuItemDescriptor implements Comparable<MenuItemDescripto
     /**
      * Returns the generated item id. Can f.e. be used to reference the ItemButton in selenium tests.
      *
-     * @return
+     * @return The item id
      */
     public String getItemId() {
         return ITEM_ID_PREFIX + beanName.toLowerCase();
     }
 
     /**
-     * Returns the order of this side bar item within the section.
+     * @return the order of this side bar item within the section.
      */
     public int getOrder() {
         return item.order();
     }
 
     /**
-     * Returns whether this item should be shown in the top menu as well as the left menu
+     * @return whether this item should be shown in the top menu as well as the left menu
      */
     public boolean isTopMenu() {
         return item.topMenu();
