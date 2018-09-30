@@ -59,8 +59,8 @@
         <module>components-spring-boot</module>
         <module>components-theme</module>
         <module>statistics-card</module>
-        <!--<module>statistics-card-example</module>-->
-        <!--<module>security-example</module>-->
+        <module>statistics-card-example</module>
+        <module>security-example</module>
         <module>components-menu</module>
         <module>components-i18n</module>
     </modules>
@@ -137,9 +137,10 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-gpg-plugin</artifactId>
-                <version>1.5</version>
+                <version>1.6</version>
                 <configuration>
-                    <skip>true</skip>
+                    <keyname>${gpg.keyname}</keyname>
+                    <passphraseServerId>${gpg.keyname}</passphraseServerId>
                 </configuration>
                 <executions>
                     <execution>
