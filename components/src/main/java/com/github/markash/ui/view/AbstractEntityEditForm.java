@@ -21,12 +21,37 @@ public abstract class AbstractEntityEditForm<T extends Persistable<Serializable>
     private boolean requiredIndicatorVisible;
     private EventRouter eventRouter;
 
-    public AbstractEntityEditForm(Class<T> beanType) {
+    /**
+     * Constructs the entity edit form for the data entity and sets that the id is not editable
+     * @param beanType The class of the data entity
+     */
+    @SuppressWarnings("unused")
+    public AbstractEntityEditForm(
+            final Class<T> beanType) {
+        this(beanType, false);
+    }
+
+    /**
+     * onstructs the entity edit form for the data entity
+     * @param beanType The class of the data entity
+     * @param idIsEditable Whether the id is editable
+     */
+    public AbstractEntityEditForm(
+            final Class<T> beanType,
+            final boolean idIsEditable) {
 
         this.binder = new Binder<>(beanType);
-        this.binder.forField(idField)
-                //.withConverter(new StringToLongConverter("Unable to convert id"))
-                .bind("id");
+
+        if (idIsEditable) {
+            this.binder.forField(idField)
+                    //.withConverter(new StringToLongConverter("Unable to convert id"))
+                    .asRequired("The id field is required.")
+                    .bind("id");
+        } else {
+            this.binder.forField(idField)
+                    //.withConverter(new StringToLongConverter("Unable to convert id"))
+                    .bind("id");
+        }
         this.binder.addStatusChangeListener(this::onBinderStatusChange);
 
         setSpacing(true);
@@ -34,7 +59,7 @@ public abstract class AbstractEntityEditForm<T extends Persistable<Serializable>
         setSizeFull();
         Responsive.makeResponsive(this);
 
-        idField.setReadOnly(true);
+        idField.setReadOnly(!idIsEditable);
         idField.setWidth(100.0f, Unit.PERCENTAGE);
     }
 
