@@ -1095,7 +1095,7 @@
  */
 
 .v-vaadin-version:after {
-	content: "8.4.5";
+	content: "8.5.2";
 }
 
 .v-widget {
@@ -5342,6 +5342,8 @@ div.v-layout.v-horizontal.v-widget {
 	-webkit-box-shadow: 1px 0 2px rgba(0, 0, 0, 0.1);
 	box-shadow: 1px 0 2px rgba(0, 0, 0, 0.1);
 	border-right: 1px solid #d4d4d4;
+	position: relative;
+	z-index: 11;
 }
 
 .threesixty .v-grid-cell.frozen  + th, .threesixty .v-grid-cell.frozen  + td {
@@ -9954,6 +9956,8 @@ div.v-layout.v-horizontal.v-widget {
 	-webkit-box-shadow: 1px 0 2px rgba(0, 0, 0, 0.1);
 	box-shadow: 1px 0 2px rgba(0, 0, 0, 0.1);
 	border-right: 1px solid #d4d4d4;
+	position: relative;
+	z-index: 11;
 }
 
 .threesixty .v-tree8-cell.frozen  + th, .threesixty .v-tree8-cell.frozen  + td {
@@ -11030,6 +11034,8 @@ div.v-layout.v-horizontal.v-widget {
 	-webkit-box-shadow: 1px 0 2px rgba(0, 0, 0, 0.1);
 	box-shadow: 1px 0 2px rgba(0, 0, 0, 0.1);
 	border-right: 1px solid #d4d4d4;
+	position: relative;
+	z-index: 11;
 }
 
 .threesixty .v-treegrid-cell.frozen  + th, .threesixty .v-treegrid-cell.frozen  + td {
@@ -15755,6 +15761,104 @@ div.v-layout.v-horizontal.v-widget {
 	display: inline-block;
 	width: 13px;
 	overflow: hidden;
+}
+
+.threesixty .loginview {
+	background-color: #fafafa;
+	background-image: -webkit-radial-gradient(50% 50%, circle, #f5f5f5, #e1e1e1);
+	background-image: radial-gradient(  circle at 50% 50%, #f5f5f5, #e1e1e1);
+	padding-top: 0 !important;
+	-webkit-animation: valo-animate-in-fade 300ms 10ms backwards;
+	-moz-animation: valo-animate-in-fade 300ms 10ms backwards;
+	animation: valo-animate-in-fade 300ms 10ms backwards;
+}
+
+.threesixty .loginview  > .v-loading-indicator {
+	display: none !important;
+}
+
+.threesixty .login-panel {
+	background: white;
+	color: #474747;
+	border-radius: 0px;
+	border: 1px solid #d5d5d5;
+	
+	
+	padding: 17px 17px;
+	min-width: 182px;
+	max-width: 90%;
+	-webkit-animation: valo-animate-in-slide-up 800ms 10ms backwards, valo-animate-in-fade 600ms 100ms backwards;
+	-moz-animation: valo-animate-in-slide-up 800ms 10ms backwards, valo-animate-in-fade 600ms 100ms backwards;
+	animation: valo-animate-in-slide-up 800ms 10ms backwards, valo-animate-in-fade 600ms 100ms backwards;
+}
+
+.threesixty .login-panel  > .v-spacing {
+	height: 13px;
+}
+
+.threesixty .login-panel .labels {
+	display: block;
+}
+
+.threesixty .login-panel .labels .h4 {
+	margin: 0;
+	vertical-align: baseline;
+}
+
+.threesixty .login-panel .labels .h3 {
+	margin: 0;
+	float: right;
+}
+
+.threesixty .login-panel .fields .v-icon {
+	opacity: 0.3;
+}
+
+.threesixty .login-panel[width-range~="0-364px"] .labels .h3 {
+	float: none;
+	display: block;
+	margin-top: 0.2em;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+.threesixty .login-panel[width-range~="0-364px"] .fields {
+	display: block;
+}
+
+.threesixty .login-panel[width-range~="0-364px"] .fields .v-slot {
+	display: block;
+}
+
+.threesixty .login-panel[width-range~="0-364px"] .fields .v-slot .v-widget {
+	width: 100%;
+}
+
+.threesixty .v-ui[width-range~="0-800px"] .login-panel {
+	-webkit-animation: animate-in-scale-up 500ms 10ms backwards, valo-animate-in-fade 300ms 100ms backwards;
+	-moz-animation: animate-in-scale-up 500ms 10ms backwards, valo-animate-in-fade 300ms 100ms backwards;
+	animation: animate-in-scale-up 500ms 10ms backwards, valo-animate-in-fade 300ms 100ms backwards;
+}
+
+.threesixty .login-help {
+	margin: 0 7px !important;
+}
+
+.threesixty .login-help.v-Notification-animate-in {
+	-webkit-animation: valo-animate-in-fade 500ms 1500ms backwards;
+	-moz-animation: valo-animate-in-fade 500ms 1500ms backwards;
+	animation: valo-animate-in-fade 500ms 1500ms backwards;
+}
+
+.threesixty .login-help p span {
+	display: block;
+	margin-top: 0.5em;
+}
+
+.threesixty .login-help p span a {
+	color: #fff;
+	text-decoration: none;
+	border-bottom: 1px solid #888;
 }
 
 .threesixty .active-filters-text {

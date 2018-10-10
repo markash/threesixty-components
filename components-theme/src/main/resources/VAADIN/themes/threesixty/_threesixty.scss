@@ -14,6 +14,7 @@
 
 @mixin threesixty {
     @include valo;
+    @include login;
     @include filter;
     @include toolbar;
     @include notification;
