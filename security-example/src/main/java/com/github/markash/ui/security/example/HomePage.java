@@ -11,11 +11,13 @@ import com.vaadin.ui.VerticalLayout;
 
 @MenuItem(sectionId = Sections.DEFAULT, caption = HomePage.TITLE, order = 2)
 @VaadinFontIcon(VaadinIcons.HOME)
-@SpringView(name = DashboardView.VIEW_NAME)
+@SpringView(name = HomePage.VIEW_NAME)
 public class HomePage extends VerticalLayout implements View {
     private static final long serialVersionUID = 1L;
 
-    public static final String TITLE = "Operations";
+    static final String TITLE = "Operations";
+    static final String VIEW_NAME = "operations";
+
     @Override
     public void enter(ViewChangeListener.ViewChangeEvent event) {
         Label title = new Label();

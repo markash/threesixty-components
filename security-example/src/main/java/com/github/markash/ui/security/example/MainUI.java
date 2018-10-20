@@ -10,13 +10,10 @@ import com.vaadin.icons.VaadinIcons;
 import com.vaadin.navigator.PushStateNavigation;
 import com.vaadin.server.ClientConnector;
 import com.vaadin.server.DefaultErrorHandler;
-import com.vaadin.server.ErrorEvent;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.spring.annotation.SpringUI;
 import com.vaadin.spring.navigator.SpringNavigator;
 import com.vaadin.ui.UI;
-import kaesdingeling.hybridmenu.components.Notification;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationEventPublisher;
@@ -25,8 +22,6 @@ import org.springframework.util.StringUtils;
 import org.vaadin.spring.security.VaadinSecurity;
 import org.vaadin.spring.security.util.SecurityExceptionUtils;
 import org.vaadin.spring.security.util.SuccessfulLoginEvent;
-
-import java.util.Date;
 
 @SuppressWarnings("serial")
 @Theme("security")
@@ -93,14 +88,15 @@ public class MainUI extends UI implements ClientConnector.DetachListener, Applic
     public void onApplicationEvent(
             final SuccessfulLoginEvent event) {
 
-//        if (event.getSource().equals(this)) {
-//            access(this::showMainScreen);
-//        } else {
+        if (event.getSource().equals(this)) {
+            access(this::showMainScreen);
+            getPage().reload();
+        } else {
             // We cannot inject the Main Screen if the event was fired from another UI, since that UI's scope would be active
             // and the main screen for that UI would be injected. Instead, we just reload the page and let the init(...) method
             // do the work for us.
             getPage().reload();
-//        }
+        }
     }
 
     @Override

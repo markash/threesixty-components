@@ -3,7 +3,9 @@ package com.github.markash.ui.security.example;
 import com.github.markash.ui.component.card.*;
 import com.github.markash.ui.component.chart.options.Axis;
 import com.github.markash.ui.component.chart.options.DataPoint;
+import com.github.markash.ui.component.field.HeaderToolbar;
 import com.github.markash.ui.component.field.Toolbar;
+import com.github.markash.ui.component.menu.ThreeSixtyHybridMenu;
 import com.github.markash.ui.component.menu.annotation.MenuItem;
 import com.github.markash.ui.component.menu.annotation.VaadinFontIcon;
 import com.github.markash.ui.component.notification.NotificationModel;
@@ -57,14 +59,19 @@ public class DashboardView extends AbstractDashboardView {
 
     private NotificationsModel notificationsModel;
     private ApplicationEventPublisher publisher;
+    private final ThreeSixtyHybridMenu menu;
 
     @Autowired
     public DashboardView(
+            final Toolbar toolbar,
+            final ThreeSixtyHybridMenu menu,
             final ApplicationEventPublisher publisher) {
 
-        super(TITLE);
+        super(TITLE, toolbar);
 
+        this.setShowToolbar(false);
         this.publisher = publisher;
+        this.menu = menu;
     }
 
     protected Component buildContent() {
@@ -84,8 +91,11 @@ public class DashboardView extends AbstractDashboardView {
             this.hourlyTradesCard.refresh();
         });
 
+        /* Set the toolbar caption to the view caption */
+        getToolbar().setCaption(getTitle());
+        getToolbar().removeAll();
         getToolbar().add(NotificationsButton.BELL(notificationsModel, this::onViewNotifications), Toolbar.ToolbarSection.ACTION);
-        getToolbar().add(refreshButton, Toolbar.ToolbarSection.ACTION);
+        getToolbar().add(refreshButton, HeaderToolbar.ToolbarSection.ACTION);
 
         this.hourlyTradesCard.withHourlyInterval(Axis.X, 3);
         this.binder.bind(usersCard, Statistics::getUsers, Statistics::setUsers);
@@ -109,6 +119,18 @@ public class DashboardView extends AbstractDashboardView {
 
     @Override
     public void enter(final ViewChangeEvent event) {
+
+//        /* Add the toolbar to the bread crumbs */
+//        BreadCrumbs breadCrumbs = this.menu.getBreadCrumbs();
+//        if (breadCrumbs != null) {
+//
+//            Component component = breadCrumbs.getComponentCount() > 0 ? breadCrumbs.getComponent(0) : null;
+//            if (component instanceof Toolbar) {
+//                breadCrumbs.replaceComponent(component, this.getToolbar());
+//            } else {
+//                breadCrumbs.addComponent(getToolbar(), 0);
+//            }
+//        }
     }
 
     @SuppressWarnings("unused")

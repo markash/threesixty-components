@@ -22,15 +22,12 @@ import com.github.markash.ui.component.menu.annotation.MenuSections;
 import com.vaadin.navigator.View;
 import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.ui.UI;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -62,6 +59,26 @@ public class MenuUtils {
         Collections.sort(sections);
         scanForItems();
         Collections.sort(items);
+    }
+
+    public <T> Optional<T> scanForToolbar(
+            final Class<T> beanType) {
+
+        logger.debug("Scanning for toolbar of type {}", beanType);
+
+        Optional<T> toolbar = Optional.empty();
+        try {
+            toolbar = Optional.ofNullable(applicationContext.getBean(beanType));
+            if (toolbar.isPresent()) {
+                logger.debug("Bean[{}] found for beanType {}", toolbar.get(), beanType);
+            } else {
+                logger.debug("No bean found that implements {}", beanType);
+            }
+        } catch (BeansException exception) {
+            logger.warn("Unable to locate bean instance for toolbar", exception);
+        }
+
+        return toolbar;
     }
 
     private void scanForSections() {

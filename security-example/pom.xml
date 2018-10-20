@@ -5,7 +5,7 @@
     <parent>
         <artifactId>components-parent</artifactId>
         <groupId>com.github.markash</groupId>
-        <version>0.3.1</version>
+        <version>0.3.3-SNAPSHOT</version>
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
@@ -36,6 +36,11 @@
         <dependency>
             <groupId>com.github.markash</groupId>
             <artifactId>statistics-card</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.github.markash</groupId>
+            <artifactId>components-toolbar</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>

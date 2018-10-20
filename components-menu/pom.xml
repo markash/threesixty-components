@@ -5,7 +5,7 @@
     <parent>
         <artifactId>components-parent</artifactId>
         <groupId>com.github.markash</groupId>
-        <version>0.3.1</version>
+        <version>0.3.3-SNAPSHOT</version>
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
@@ -13,7 +13,7 @@
     <name>Components Menu</name>
 
     <properties>
-        <hybridmenu.version>3.0.9</hybridmenu.version>
+        <hybridmenu.version>3.0.10</hybridmenu.version>
 
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>

@@ -15,21 +15,25 @@
  */
 package com.github.markash.ui.component.menu;
 
+import com.github.markash.ui.component.field.Toolbar;
 import com.github.markash.ui.component.logo.Logo;
 import com.github.markash.ui.component.notification.NotificationModel;
 import com.vaadin.icons.VaadinIcons;
+import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.server.ThemeResource;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.Layout;
 import kaesdingeling.hybridmenu.HybridMenu;
 import kaesdingeling.hybridmenu.components.*;
+import kaesdingeling.hybridmenu.data.DefaultViewChangeManager;
 import kaesdingeling.hybridmenu.data.MenuConfig;
 import kaesdingeling.hybridmenu.data.interfaces.MenuComponent;
 import kaesdingeling.hybridmenu.design.DesignItem;
 import org.springframework.context.event.EventListener;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -54,6 +58,7 @@ public class ThreeSixtyHybridMenu extends AbstractMenu {
     private ComponentFactory<MenuItemDescriptor, MenuComponent<HMButton>> itemComponentFactory;
     private HybridTopMenuFactory topMenuFactory;
     private HybridSideMenuFactory sideMenuFactory;
+    private HybridToolbarFactory toolbarFactory;
 
     /**
      * You should not need to create instances of this component directly. Instead, just inject the side bar into
@@ -69,12 +74,14 @@ public class ThreeSixtyHybridMenu extends AbstractMenu {
 
         super(utils);
 
-        this.sectionComponentFactory = new HybridSectionComponentFactory();
-        this.itemComponentFactory = new HybridItemComponentFactory();
         this.hybridMenu = HybridMenu.get()
                 .withInitNavigator(false)
                 .withNaviContent(navigationContent)
                 .withConfig(MenuConfig.get().withDesignItem(DesignItem.getWhiteDesign()));
+
+        this.sectionComponentFactory = new HybridSectionComponentFactory();
+        this.itemComponentFactory = new HybridItemComponentFactory();
+        this.toolbarFactory = new HybridToolbarFactory(this.hybridMenu, utils);
 
         this.setCompositionRoot(this.hybridMenu);
         this.setWidth(100, Unit.PERCENTAGE);
@@ -95,8 +102,12 @@ public class ThreeSixtyHybridMenu extends AbstractMenu {
 
     @Override
     public void attach() {
+        /* Overwrite the ViewChangeManager so that it does not register buttons on the breadcrumb */
+        this.hybridMenu.setViewChangeManager(new ThreeSixtyMenuViewChangeManager(getUtils()));
+
         /* Delay the build of the menu until UI is available */
         this.hybridMenu.build();
+
         /* Build the menu items */
         super.attach();
     }
@@ -111,6 +122,11 @@ public class ThreeSixtyHybridMenu extends AbstractMenu {
     protected Optional<SideMenuFactory> getSideMenuFactory() {
 
         return Optional.of(this.sideMenuFactory);
+    }
+
+    @Override
+    protected Optional<ToolbarFactory> getToolbarFactory() {
+        return Optional.of(this.toolbarFactory);
     }
 
     private ComponentFactory<MenuSectionDescriptor, HMSubMenu> getSectionComponentFactory() {
@@ -276,6 +292,85 @@ public class ThreeSixtyHybridMenu extends AbstractMenu {
             }
 
             return leftMenu;
+        }
+    }
+
+    public class HybridToolbarFactory implements ToolbarFactory {
+
+        private final MenuUtils menuUtils;
+        private final HybridMenu hybridMenu;
+
+        HybridToolbarFactory(
+                final HybridMenu hybridMenu,
+                final MenuUtils menuUtils) {
+
+            this.hybridMenu = hybridMenu;
+            this.menuUtils = menuUtils;
+        }
+
+        @Override
+        public void createToolbar() {
+
+            if (hybridMenu != null && hybridMenu.getBreadCrumbs() != null) {
+
+                Optional<Toolbar> toolbar = menuUtils.scanForToolbar(Toolbar.class);
+                final Optional<BreadCrumbs> breadCrumbs = Optional.ofNullable(this.hybridMenu.getBreadCrumbs());
+
+                if (breadCrumbs.isPresent() && toolbar.isPresent()) {
+
+                    /* Configure the toolbar */
+                    Optional<Component> c = breadCrumbs.map(b -> b.getComponentCount() > 0 ? b.getComponent(0) : null);
+                    if (c.isPresent() && c.get() instanceof Toolbar) {
+                        breadCrumbs.get().replaceComponent(c.get(), toolbar.get());
+                    } else {
+                        breadCrumbs.get().addComponent(toolbar.get(), 0);
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * Override the default view manager to not setup the bread crumbs in the finish() method
+     * but to instead setup the toolbar.
+     */
+    public class ThreeSixtyMenuViewChangeManager extends DefaultViewChangeManager {
+
+        private String viewName;
+        private final MenuUtils menuUtils;
+
+        ThreeSixtyMenuViewChangeManager(final MenuUtils menuUtils) {
+
+            this.menuUtils = menuUtils;
+        }
+
+        @Override
+        public boolean manage(
+                final HybridMenu hybridMenu,
+                final MenuComponent<?> menuComponent,
+                final ViewChangeListener.ViewChangeEvent event,
+                final List<MenuComponent<?>> menuContentList) {
+
+            this.viewName = event.getViewName();
+            return super.manage(hybridMenu, menuComponent, event, menuContentList);
+        }
+
+        @Override
+        public void finish(
+            final HybridMenu hybridMenu,
+            final List<MenuComponent<?>> menuContentList) {
+
+            String caption = viewName;
+
+            int size = menuContentList.size();
+            if (size > 0) {
+                caption = menuContentList.get(size - 1).getCaption();
+            }
+
+            Optional<Toolbar> toolbar = menuUtils.scanForToolbar(Toolbar.class);
+            if (toolbar.isPresent()) {
+                toolbar.get().setCaption(caption);
+            }
         }
     }
 }

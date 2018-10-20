@@ -3,17 +3,22 @@ package com.github.markash.ui.security.example;
 import com.github.markash.ui.component.card.*;
 import com.github.markash.ui.component.chart.options.Axis;
 import com.github.markash.ui.component.chart.options.DataPoint;
+import com.github.markash.ui.component.field.HeaderToolbar;
 import com.github.markash.ui.component.field.Toolbar;
+import com.github.markash.ui.component.menu.annotation.MenuItem;
+import com.github.markash.ui.component.menu.annotation.VaadinFontIcon;
 import com.github.markash.ui.view.AbstractDashboardView;
 import com.jarektoro.responsivelayout.ResponsiveLayout;
 import com.jarektoro.responsivelayout.ResponsiveRow;
 import com.vaadin.data.Binder;
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
+import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.ui.Component;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.vaadin.viritin.button.MButton;
 
+import javax.tools.Tool;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -29,6 +34,9 @@ import java.util.stream.Collectors;
 import java.util.stream.DoubleStream;
 import java.util.stream.IntStream;
 
+@MenuItem(sectionId = Sections.DEFAULT, caption = ResponsiveView.TITLE, order = 3, topMenu = true)
+@VaadinFontIcon(VaadinIcons.TIMER)
+@SpringView(name = ResponsiveView.VIEW_NAME)
 public class ResponsiveView extends AbstractDashboardView {
 	private static final long serialVersionUID = 1L;
 
@@ -44,8 +52,12 @@ public class ResponsiveView extends AbstractDashboardView {
     private Statistics statistics = new Statistics();
 
     @Autowired
-    public ResponsiveView() {
-        super(TITLE);
+    public ResponsiveView(
+            final Toolbar toolbar) {
+
+        super(TITLE, toolbar);
+
+        setShowToolbar(false);
     }
 
     protected Component buildContent() {
@@ -56,7 +68,9 @@ public class ResponsiveView extends AbstractDashboardView {
             this.hourlyTradesCard.refresh();
         });
 
-        getToolbar().add(refreshButton, Toolbar.ToolbarSection.ACTION);
+        getToolbar().setCaption(getTitle());
+        getToolbar().removeAll();
+        getToolbar().add(refreshButton, HeaderToolbar.ToolbarSection.ACTION);
 
         this.hourlyTradesCard.withHourlyInterval(Axis.X, 3);
         this.binder.bind(usersCard, Statistics::getUsers, Statistics::setUsers);

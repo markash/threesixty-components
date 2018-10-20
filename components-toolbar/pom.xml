@@ -1,20 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <groupId>com.github.markash</groupId>
         <artifactId>components-parent</artifactId>
+        <groupId>com.github.markash</groupId>
         <version>0.3.3-SNAPSHOT</version>
     </parent>
-
     <modelVersion>4.0.0</modelVersion>
-    <artifactId>components-spring-boot</artifactId>
-    <name>Components Spring Boot</name>
+
+    <artifactId>components-toolbar</artifactId>
+    <name>Components Toolbar</name>
 
     <properties>
+        <hybridmenu.version>3.0.10</hybridmenu.version>
+        <vaadin-sass-compiler.version>0.9.13</vaadin-sass-compiler.version>
+
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
-
-        <jackson.version>2.6.3</jackson.version>
 
         <!-- ZIP Manifest fields -->
         <Implementation-Version>${project.version}</Implementation-Version>
@@ -23,18 +26,37 @@
         <Implementation-Vendor>${project.organization.name}</Implementation-Vendor>
         <Vaadin-License-Title>Apache License 2.0</Vaadin-License-Title>
         <Vaadin-Addon>${project.artifactId}-${project.version}.jar</Vaadin-Addon>
+        <Export-Package>com.github.markash.ui.component.toolbar.*</Export-Package>
     </properties>
 
     <dependencies>
+        <!-- **************************************************************
+		                      User Interface
+		*************************************************************** -->
+        <dependency>
+            <groupId>org.vaadin</groupId>
+            <artifactId>viritin</artifactId>
+        </dependency>
         <dependency>
             <groupId>com.github.markash</groupId>
-            <artifactId>components</artifactId>
+            <artifactId>components-i18n</artifactId>
             <version>${project.version}</version>
+        </dependency>
+        <!-- **************************************************************
+		                      Vaadin
+		*************************************************************** -->
+        <dependency>
+            <groupId>com.vaadin</groupId>
+            <artifactId>vaadin-spring-boot-starter</artifactId>
         </dependency>
         <dependency>
             <groupId>com.vaadin</groupId>
-            <artifactId>vaadin-spring-boot</artifactId>
-            <version>${vaadin-springboot.version}</version>
+            <artifactId>vaadin-themes</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.vaadin</groupId>
+            <artifactId>vaadin-sass-compiler</artifactId>
+            <version>${vaadin-sass-compiler.version}</version>
         </dependency>
     </dependencies>
 
@@ -66,7 +88,7 @@
                 <extensions>true</extensions>
                 <configuration>
                     <instructions>
-                        <Export-Package>com.github.markash.ui.component.card.*</Export-Package>
+                        <Export-Package>com.github.markash.ui.component.toolbar.*</Export-Package>
                     </instructions>
                 </configuration>
                 <executions>
@@ -94,7 +116,7 @@
                             <!-- Package format version - do not change -->
                             <Vaadin-Package-Version>1</Vaadin-Package-Version>
                             <Vaadin-License-Title>${Vaadin-License-Title}</Vaadin-License-Title>
-                            <Vaadin-Stylesheets>VAADIN/addons/statistics/statistics.scss</Vaadin-Stylesheets>
+                            <Vaadin-Stylesheets>VAADIN/addons/toolbar/toolbar.scss</Vaadin-Stylesheets>
                         </manifestEntries>
                     </archive>
                 </configuration>
@@ -102,7 +124,6 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
-                <version>2.9</version>
                 <executions>
                     <execution>
                         <id>attach-javadoc</id>
@@ -115,7 +136,6 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-source-plugin</artifactId>
-                <version>2.2.1</version>
                 <executions>
                     <execution>
                         <id>attach-sources</id>

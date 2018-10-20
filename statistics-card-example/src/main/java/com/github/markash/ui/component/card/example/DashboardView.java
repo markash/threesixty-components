@@ -1,7 +1,7 @@
 package com.github.markash.ui.component.card.example;
 
 import com.github.markash.ui.component.card.*;
-import com.github.markash.ui.component.field.Toolbar;
+import com.github.markash.ui.component.field.HeaderToolbar;
 import com.vaadin.data.Binder;
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
@@ -66,7 +66,7 @@ public class DashboardView extends AbstractDashboardView {
             this.hourlyTradesCard.refresh();
         });
 
-        getToolbar().add(refreshButton, Toolbar.ToolbarSection.ACTION);
+        getToolbar().add(refreshButton, HeaderToolbar.ToolbarSection.ACTION);
 
         this.hourlyTradesCard.withHourlyInterval(Axis.X, 3);
         this.binder.bind(usersCard, Statistics::getUsers, Statistics::setUsers);

@@ -1,9 +1,11 @@
 package com.github.markash.ui.component;
 
+import com.github.markash.ui.component.field.FilterField;
 import com.github.markash.ui.view.ColumnDefinition;
 import com.github.markash.ui.view.TableDefinition;
 import com.vaadin.data.Binder;
 import com.vaadin.data.provider.DataProvider;
+import com.vaadin.data.provider.ListDataProvider;
 import com.vaadin.ui.renderers.HtmlRenderer;
 import org.apache.commons.lang3.StringUtils;
 import org.vaadin.viritin.grid.MGrid;

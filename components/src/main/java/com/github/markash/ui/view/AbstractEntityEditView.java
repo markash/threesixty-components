@@ -11,7 +11,7 @@ import com.github.markash.ui.component.BlankSupplier;
 import com.github.markash.ui.component.EntityPersistFunction;
 import com.github.markash.ui.component.EntitySupplier;
 import com.github.markash.ui.component.button.ButtonBuilder;
-import com.github.markash.ui.component.field.Toolbar;
+import com.github.markash.ui.component.field.HeaderToolbar;
 import com.github.markash.ui.component.notification.NotificationBuilder;
 import com.github.markash.ui.event.EnterEntityEditViewEvent;
 import com.github.markash.ui.event.EntityPersistEvent;
@@ -74,13 +74,13 @@ public abstract class AbstractEntityEditView<T extends Persistable<Serializable>
         });
 
 
-        getToolbar().add(saveButton, Toolbar.ToolbarSection.ACTION);
-        getToolbar().add(resetButton, Toolbar.ToolbarSection.ACTION);
-        getToolbar().add(createButton, Toolbar.ToolbarSection.ACTION);
+        getToolbar().add(saveButton, HeaderToolbar.ToolbarSection.ACTION);
+        getToolbar().add(resetButton, HeaderToolbar.ToolbarSection.ACTION);
+        getToolbar().add(createButton, HeaderToolbar.ToolbarSection.ACTION);
         getToolbar().add(
                 new MLabel("The fields marked with <span class='v-required-field-indicator'>*</span> are required")
                         .withContentMode(ContentMode.HTML),
-                Toolbar.ToolbarSection.GUTTER);
+                HeaderToolbar.ToolbarSection.GUTTER);
 	}
 
 	@Override

@@ -1,5 +1,7 @@
 package com.github.markash.ui.component.field;
 
+import com.github.markash.ui.view.ColumnDefinition;
+import com.github.markash.ui.view.TableDefinition;
 import com.vaadin.data.provider.ListDataProvider;
 import com.vaadin.event.EventRouter;
 import com.vaadin.event.ShortcutListener;
@@ -9,8 +11,6 @@ import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.CustomField;
 import com.vaadin.ui.TextField;
-import com.github.markash.ui.view.ColumnDefinition;
-import com.github.markash.ui.view.TableDefinition;
 import org.apache.commons.beanutils.BeanUtils;
 import org.springframework.util.StringUtils;
 import org.vaadin.viritin.layouts.MHorizontalLayout;
@@ -27,7 +27,7 @@ import java.util.Optional;
 public class FilterField<T> extends CustomField<TableDefinition<T>> {
 	private static final long serialVersionUID = 1L;
 
-	private final ListDataProvider<T> dataProvider;
+	private ListDataProvider<T> dataProvider;
     private TableDefinition<T> tableDefinition;
     private FilterModel currentFilterDefinition = null;
     private List<FilterModel> filterDefinitions = new ArrayList<>();
@@ -45,6 +45,10 @@ public class FilterField<T> extends CustomField<TableDefinition<T>> {
     private ListDataProvider<String> optionsDataProvider = new ListDataProvider<>(options);
     private ComboBox<String> optionsField = new ComboBox<>();
 
+    public FilterField() {
+        super();
+    }
+
 	public FilterField(
 	        final ListDataProvider<T> dataProvider,
             final TableDefinition<T> tableDefinition) {
@@ -53,9 +57,13 @@ public class FilterField<T> extends CustomField<TableDefinition<T>> {
 
 		this.dataProvider = dataProvider;
 		this.tableDefinition = tableDefinition;
+	}
 
-		this.attributeField.setStyleName("filter-attribute");
-		this.attributeField.addValueChangeListener(this::onAttributeChange);
+    @Override
+    protected Component initContent() {
+
+        this.attributeField.setStyleName("filter-attribute");
+        this.attributeField.addValueChangeListener(this::onAttributeChange);
         this.attributeField.setDataProvider(new ListDataProvider<>(filterDefinitions));
         this.attributeField.setTextInputAllowed(false);
 
@@ -73,14 +81,18 @@ public class FilterField<T> extends CustomField<TableDefinition<T>> {
         this.optionsField.addShortcutListener(new ClearFilterShortcutListener<>(this));
         this.textField.addShortcutListener(new FilterShortcutListener<>(this));
         this.textField.addShortcutListener(new ClearFilterShortcutListener<>(this));
-	}
-
-    @Override
-    protected Component initContent() {
 
         return new MHorizontalLayout()
                 .withMargin(false)
                 .with(attributeField, textField, optionsField);
+    }
+
+    public ListDataProvider<T> getDataProvider() {
+        return dataProvider;
+    }
+
+    public void setDataProvider(ListDataProvider<T> dataProvider) {
+        this.dataProvider = dataProvider;
     }
 
     @Override
@@ -94,6 +106,16 @@ public class FilterField<T> extends CustomField<TableDefinition<T>> {
     public TableDefinition<T> getValue() {
 
         return this.tableDefinition;
+    }
+
+    public FilterField<T> withDataProvider(ListDataProvider<T> dataProvider) {
+        this.dataProvider = dataProvider;
+        return this;
+    }
+
+    public FilterField<T> withDefinition(final TableDefinition<T> definition) {
+        this.tableDefinition = definition;
+        return this;
     }
 
     public boolean hasFilterDefinitions() {

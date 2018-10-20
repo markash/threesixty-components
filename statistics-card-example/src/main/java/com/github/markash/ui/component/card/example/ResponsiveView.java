@@ -3,7 +3,7 @@ package com.github.markash.ui.component.card.example;
 import com.github.markash.ui.component.card.*;
 import com.github.markash.ui.component.chart.options.Axis;
 import com.github.markash.ui.component.chart.options.DataPoint;
-import com.github.markash.ui.component.field.Toolbar;
+import com.github.markash.ui.component.field.HeaderToolbar;
 import com.github.markash.ui.view.AbstractDashboardView;
 import com.jarektoro.responsivelayout.ResponsiveLayout;
 import com.jarektoro.responsivelayout.ResponsiveRow;
@@ -62,7 +62,7 @@ public class ResponsiveView extends AbstractDashboardView {
             this.hourlyTradesCard.refresh();
         });
 
-        getToolbar().add(refreshButton, Toolbar.ToolbarSection.ACTION);
+        getToolbar().add(refreshButton, HeaderToolbar.ToolbarSection.ACTION);
 
         this.hourlyTradesCard.withHourlyInterval(Axis.X, 3);
         this.binder.bind(usersCard, Statistics::getUsers, Statistics::setUsers);
