@@ -59,6 +59,7 @@ public class ThreeSixtyHybridMenu extends AbstractMenu {
     private HybridTopMenuFactory topMenuFactory;
     private HybridSideMenuFactory sideMenuFactory;
     private HybridToolbarFactory toolbarFactory;
+    private MenuUtils menuUtils;
 
     /**
      * You should not need to create instances of this component directly. Instead, just inject the side bar into
@@ -73,6 +74,8 @@ public class ThreeSixtyHybridMenu extends AbstractMenu {
             final Layout navigationContent) {
 
         super(utils);
+
+        this.menuUtils = utils;
 
         this.hybridMenu = HybridMenu.get()
                 .withInitNavigator(false)
@@ -105,6 +108,9 @@ public class ThreeSixtyHybridMenu extends AbstractMenu {
         /* Overwrite the ViewChangeManager so that it does not register buttons on the breadcrumb */
         this.hybridMenu.setViewChangeManager(new ThreeSixtyMenuViewChangeManager(getUtils()));
 
+        /* Configure the bread crumbs from the menu annotation */
+        configureBreadCrumbs(menuUtils);
+
         /* Delay the build of the menu until UI is available */
         this.hybridMenu.build();
 
@@ -135,6 +141,14 @@ public class ThreeSixtyHybridMenu extends AbstractMenu {
 
     private ComponentFactory<MenuItemDescriptor, MenuComponent<HMButton>> getItemComponentFactory() {
         return this.itemComponentFactory;
+    }
+
+    private void configureBreadCrumbs(
+            final MenuUtils menuUtils) {
+
+        this.hybridMenu
+                .getConfig()
+                .withBreadcrumbs(menuUtils.scanForAnnotationValue());
     }
 
     public class HybridSectionComponentFactory implements ComponentFactory<MenuSectionDescriptor, HMSubMenu> {

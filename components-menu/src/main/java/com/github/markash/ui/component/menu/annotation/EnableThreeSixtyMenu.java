@@ -32,4 +32,9 @@ import java.lang.annotation.*;
 @Documented
 @Import(MenuConfig.class)
 public @interface EnableThreeSixtyMenu {
+    /**
+     * Whether the Bread Crumbs are shown in the header
+     * @return True whether shown else false
+     */
+    boolean showBreadCrumbs() default true;
 }

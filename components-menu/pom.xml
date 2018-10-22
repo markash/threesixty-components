@@ -34,17 +34,22 @@
             <artifactId>components</artifactId>
             <version>${project.version}</version>
         </dependency>
-
         <dependency>
             <groupId>com.github.markash</groupId>
             <artifactId>components-i18n</artifactId>
             <version>${project.version}</version>
         </dependency>
-
         <dependency>
             <groupId>org.vaadin.addons</groupId>
             <artifactId>hybridmenu</artifactId>
             <version>${hybridmenu.version}</version>
+        </dependency>
+        <!-- **************************************************************
+		                      Security
+		*************************************************************** -->
+        <dependency>
+            <groupId>org.vaadin.spring.extensions</groupId>
+            <artifactId>vaadin-spring-ext-security</artifactId>
         </dependency>
     </dependencies>
 

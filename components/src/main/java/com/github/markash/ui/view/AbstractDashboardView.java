@@ -19,9 +19,9 @@ import java.util.Optional;
 public abstract class AbstractDashboardView extends Panel implements View {
     private final VerticalLayout root;
     private final String viewCaption;
-    private final Toolbar toolbar;
-    private transient ApplicationEventPublisher eventPublisher;
+    private Toolbar toolbar;
 	private boolean showToolbar = true;
+	private transient ApplicationEventPublisher eventPublisher;
 
     protected static final String STYLE_DASHBOARD_VIEW = "dashboard-view";
     
@@ -113,6 +113,16 @@ public abstract class AbstractDashboardView extends Panel implements View {
     public Toolbar getToolbar() {
 
 		return this.toolbar;
+	}
+
+	/**
+	 * Set the toolbar used by the dashboard view
+	 * @param toolbar The toolbar
+	 */
+	public void setToolbar(
+			final Toolbar toolbar) {
+
+    	this.toolbar = toolbar;
 	}
 
     @Override

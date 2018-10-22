@@ -16,6 +16,7 @@
 package com.github.markash.ui.component.menu;
 
 import com.github.markash.ui.component.i18n.I18N;
+import com.github.markash.ui.component.menu.annotation.EnableThreeSixtyMenu;
 import com.github.markash.ui.component.menu.annotation.MenuItem;
 import com.github.markash.ui.component.menu.annotation.MenuSection;
 import com.github.markash.ui.component.menu.annotation.MenuSections;
@@ -79,6 +80,23 @@ public class MenuUtils {
         }
 
         return toolbar;
+    }
+
+    boolean scanForAnnotationValue() {
+
+        logger.debug("Scanning for annotation {}", EnableThreeSixtyMenu.class);
+
+        try {
+            String[] beanNames = applicationContext.getBeanNamesForAnnotation(EnableThreeSixtyMenu.class);
+            return Arrays.stream(beanNames)
+                    .map(beanName -> applicationContext.findAnnotationOnBean(beanName, EnableThreeSixtyMenu.class).showBreadCrumbs())
+                    .findFirst()
+                    .orElse(true);
+
+        } catch (BeansException exception) {
+            logger.warn("Unable to locate bean instance for toolbar", exception);
+        }
+        return true;
     }
 
     private void scanForSections() {
