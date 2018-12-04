@@ -1,10 +1,13 @@
 package com.github.markash.ui.view;
 
 import com.github.markash.ui.component.field.FilterModel;
+import com.vaadin.ui.renderers.DateRenderer;
+import com.vaadin.ui.renderers.NumberRenderer;
+import com.vaadin.ui.renderers.Renderer;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 /**
  * @param <BEAN> The type of the bean
@@ -20,7 +23,8 @@ public class ColumnDefinition<BEAN> {
     private String heading;
     /* Filtering */
     private List<String> filterOptions;
-
+    /* Rendering */
+    private Renderer<?> renderer;
 
     /* Property */
 //    private String property;
@@ -47,8 +51,8 @@ public class ColumnDefinition<BEAN> {
     public ValueDefinition<BEAN, ?> getProperty() { return property; }
     public ValueDefinition<BEAN, ?> getDisplay() { return display; }
     boolean isSearchable() { return searchable; }
-
-//    public Optional<Renderer<?>> getRenderer() { return Optional.ofNullable(this.renderer); }
+    @SuppressWarnings("unused")
+    public Optional<Renderer<?>> getRenderer() { return Optional.ofNullable(this.renderer); }
 
 //    public void setProperty(final String property) { this.property = property; }
 //    public void setHeading(final String heading) { this.heading = heading; }
@@ -114,6 +118,56 @@ public class ColumnDefinition<BEAN> {
         return this;
     }
     /**
+     * Specify the renderer to be used for rendering column value
+     * @param renderer The renderer
+     * @return The column definition
+     */
+    @SuppressWarnings("unused")
+    public ColumnDefinition<BEAN> withRenderer(
+            final Renderer<?> renderer) {
+
+        this.renderer = renderer;
+        return this;
+    }
+    /**
+     * Specify the date renderer to be used for rendering column value
+     * @param pattern The date format string
+     * @return The column definition
+     */
+    @SuppressWarnings("unused")
+    public ColumnDefinition<BEAN> withDateRenderer(
+            final String pattern) {
+
+        this.renderer = new DateRenderer(new SimpleDateFormat(pattern));
+        return this;
+    }
+    /**
+     * Specify the date renderer to be used for rendering column value
+     * @param pattern The date format string
+     * @param  locale The locale
+     * @return The column definition
+     */
+    @SuppressWarnings("unused")
+    public ColumnDefinition<BEAN> withDateRenderer(
+            final String pattern,
+            final Locale locale) {
+
+        this.renderer = new DateRenderer(new SimpleDateFormat(pattern, locale));
+        return this;
+    }
+    /**
+     * Specify the decimal renderer to be used for rendering column value
+     * @param pattern The number format string
+     * @return The column definition
+     */
+    @SuppressWarnings("unused")
+    public ColumnDefinition<BEAN> withNumberRenderer(
+            final String pattern) {
+
+        this.renderer = new NumberRenderer(new DecimalFormat(pattern));
+        return this;
+    }
+    /**
      * The value definition of the column
      * @param builder The value definition builder
      * @return The column definition
@@ -134,6 +188,7 @@ public class ColumnDefinition<BEAN> {
      * @param builder The value definition builder
      * @return The column definition
      */
+    @SuppressWarnings("unused")
     public ColumnDefinition<BEAN> withDisplay(
             final ValueBuilder<?> builder) {
 

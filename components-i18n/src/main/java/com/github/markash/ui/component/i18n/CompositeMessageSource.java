@@ -49,7 +49,9 @@ public class CompositeMessageSource extends AbstractMessageSource implements Mes
      * @param applicationContext the application context to use when looking up
      *        {@link MessageProvider}s, must not be {@code null}.
      */
-    public CompositeMessageSource(ApplicationContext applicationContext) {
+    public CompositeMessageSource(
+            final ApplicationContext applicationContext) {
+
         LOGGER.info("Looking up MessageProviders");
         messageProviders = applicationContext.getBeansOfType(MessageProvider.class).values();
         if (LOGGER.isDebugEnabled()) {
@@ -58,8 +60,13 @@ public class CompositeMessageSource extends AbstractMessageSource implements Mes
             }
         }
         LOGGER.info("Found {} MessageProvider(s)", messageProviders.size());
-        setMessageFormatCacheEnabled(applicationContext.getEnvironment()
-                .getProperty(ENV_PROP_MESSAGE_FORMAT_CACHE_ENABLED, Boolean.class, true));
+        setMessageFormatCacheEnabled(
+                applicationContext
+                        .getEnvironment()
+                        .getProperty(
+                                ENV_PROP_MESSAGE_FORMAT_CACHE_ENABLED,
+                                Boolean.class,
+                                true));
     }
 
     /**

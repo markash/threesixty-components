@@ -1,8 +1,10 @@
 package com.github.markash.ui.view;
 
+import com.github.markash.ui.component.EntityFilter;
 import com.github.markash.ui.component.EntityGrid;
 import com.github.markash.ui.component.field.FilterField;
 import com.vaadin.data.Binder;
+import com.vaadin.data.provider.DataProvider;
 import com.vaadin.data.provider.ListDataProvider;
 import com.vaadin.server.Responsive;
 import com.vaadin.ui.Component;
@@ -23,6 +25,7 @@ public abstract class AbstractTableSearchView<T extends Serializable, I extends 
 
     private EntityGrid<T> grid;
 	private FilterField<T> filterField;
+	private final Class<T> beanType;
 	/**
 	 * Constructs a search view for a class that is provided by an EntityProvider and that
 	 * can be filtered on by an array of properties.
@@ -35,6 +38,7 @@ public abstract class AbstractTableSearchView<T extends Serializable, I extends 
 			final String viewCaption) {
 		super(viewCaption);
 
+		this.beanType = beanType;
 		this.grid = new EntityGrid<>(beanType);
 		this.filterField = new FilterField<>();
 
@@ -58,6 +62,7 @@ public abstract class AbstractTableSearchView<T extends Serializable, I extends 
 		
 		super(viewCaption);
 
+		this.beanType = beanType;
 		this.grid = new EntityGrid<>(beanType).withDataProvider(dataProvider).withDefinition(definition);
 		this.filterField = new FilterField<>();
 
@@ -100,11 +105,34 @@ public abstract class AbstractTableSearchView<T extends Serializable, I extends 
 
 	protected Grid<T> getGrid() { return this.grid; }
 
+	/**
+	 * Get the data provider for the underlying grid
+	 * @return The data provider
+	 */
+	protected DataProvider<T, ?> getDataProvider() {
+
+		return this.grid.getDataProvider();
+	}
+
+	/**
+	 * Return the class type of the domain bean that the grid will be displaying
+	 * @return The class of the domain entity bean
+	 */
+	protected Class<T> getBeanType() { return this.beanType; }
+
 	public AbstractTableSearchView<T, I> withDataProvider(
 			final ListDataProvider<T> dataProvider) {
 
 		this.grid.withDataProvider(dataProvider);
 		this.filterField.withDataProvider(dataProvider);
+		return this;
+	}
+
+	public AbstractTableSearchView<T, I> withDataProvider(
+			final DataProvider<T, ? extends EntityFilter<T>> dataProvider) {
+
+		this.grid.withDataProvider(dataProvider);
+		//this.filterField.withDataProvider(dataProvider);
 		return this;
 	}
 

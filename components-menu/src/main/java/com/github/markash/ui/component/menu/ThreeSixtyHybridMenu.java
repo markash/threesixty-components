@@ -54,6 +54,8 @@ import java.util.Optional;
 public class ThreeSixtyHybridMenu extends AbstractMenu {
 
     private HybridMenu hybridMenu;
+    private LeftMenu leftMenu;
+    private TopMenu topMenu;
     private ComponentFactory<MenuSectionDescriptor, HMSubMenu> sectionComponentFactory;
     private ComponentFactory<MenuItemDescriptor, MenuComponent<HMButton>> itemComponentFactory;
     private HybridTopMenuFactory topMenuFactory;
@@ -82,6 +84,17 @@ public class ThreeSixtyHybridMenu extends AbstractMenu {
                 .withNaviContent(navigationContent)
                 .withConfig(MenuConfig.get().withDesignItem(DesignItem.getWhiteDesign()));
 
+        this.leftMenu = hybridMenu.getLeftMenu();
+        this.topMenu = hybridMenu.getTopMenu();
+
+        HMButton toggleSizeButton = HMButton.get()
+                .withIcon(VaadinIcons.COMPRESS_SQUARE)
+                .withDescription("Minimize Menu")
+                .withClickListener(clickEvent -> this.leftMenu.toggleSize());
+
+        topMenu.add(HMTextField.get(VaadinIcons.SEARCH, "Search ..."));
+        topMenu.add(toggleSizeButton);
+
         this.sectionComponentFactory = new HybridSectionComponentFactory();
         this.itemComponentFactory = new HybridItemComponentFactory();
         this.toolbarFactory = new HybridToolbarFactory(this.hybridMenu, utils);
@@ -91,12 +104,12 @@ public class ThreeSixtyHybridMenu extends AbstractMenu {
         this.setHeight(100, Unit.PERCENTAGE);
 
         this.topMenuFactory = new HybridTopMenuFactory(
-                hybridMenu,
+                topMenu,
                 getItemComponentFactory()
         );
 
         this.sideMenuFactory = new HybridSideMenuFactory(
-                hybridMenu,
+                leftMenu,
                 logo,
                 utils,
                 getSectionComponentFactory(),
@@ -222,24 +235,20 @@ public class ThreeSixtyHybridMenu extends AbstractMenu {
 
     public class HybridTopMenuFactory implements TopMenuFactory {
 
-        private final HybridMenu hybridMenu;
+        private final TopMenu topMenu;
         private final ComponentFactory<MenuItemDescriptor, MenuComponent<HMButton>> itemComponentFactory;
 
         HybridTopMenuFactory(
-                final HybridMenu hybridMenu,
+                final TopMenu topMenu,
                 final ComponentFactory<MenuItemDescriptor, MenuComponent<HMButton>> itemComponentFactory) {
 
-            this.hybridMenu = hybridMenu;
+            this.topMenu = topMenu;
             this.itemComponentFactory = itemComponentFactory;
         }
 
         @Override
         public Component createTopMenu(
                 final Collection<MenuItemDescriptor> descriptors) {
-
-            TopMenu topMenu = hybridMenu.getTopMenu();
-
-            topMenu.add(HMTextField.get(VaadinIcons.SEARCH, "Search ..."));
 
             descriptors
                     .stream()
@@ -258,13 +267,13 @@ public class ThreeSixtyHybridMenu extends AbstractMenu {
     public class HybridSideMenuFactory implements SideMenuFactory {
 
         private final Logo logo;
-        private final HybridMenu hybridMenu;
+        private final LeftMenu leftMenu;
         private final MenuUtils menuUtils;
         private final ComponentFactory<MenuSectionDescriptor, HMSubMenu> sectionComponentFactory;
         private final ComponentFactory<MenuItemDescriptor, MenuComponent<HMButton>> itemComponentFactory;
 
         HybridSideMenuFactory(
-                final HybridMenu hybridMenu,
+                final LeftMenu leftMenu,
                 final Logo logo,
                 final MenuUtils menuUtils,
                 final ComponentFactory<MenuSectionDescriptor, HMSubMenu> sectionComponentFactory,
@@ -272,7 +281,7 @@ public class ThreeSixtyHybridMenu extends AbstractMenu {
 
             this.logo = logo;
             this.menuUtils = menuUtils;
-            this.hybridMenu = hybridMenu;
+            this.leftMenu = leftMenu;
             this.sectionComponentFactory = sectionComponentFactory;
             this.itemComponentFactory = itemComponentFactory;
         }
@@ -281,7 +290,6 @@ public class ThreeSixtyHybridMenu extends AbstractMenu {
         public Component createSideMenu(
                 final Collection<MenuSectionDescriptor> descriptors) {
 
-            LeftMenu leftMenu = hybridMenu.getLeftMenu();
             leftMenu.add(HMLabel.get()
                     .withCaption(logo.getTitle())
                     .withIcon(new ThemeResource("images/logo.png")));

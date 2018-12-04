@@ -86,7 +86,7 @@ public class I18N {
      * @param arguments Array of arguments that will be filled in for params within the message (params look like "{0}",
      *        "{1,date}", "{2,time}"), or {@code null} if none.
      * @return the resolved message, or the message code prepended with an exclamation mark if the lookup fails.
-     * @see org.springframework.context.ApplicationContext#getMessage(String, Object[], java.util.Locale)
+     * @see ApplicationContext#getMessage(String, Object[], java.util.Locale)
      * @see #getLocale()
      */
     public String get(String code, Object... arguments) {
