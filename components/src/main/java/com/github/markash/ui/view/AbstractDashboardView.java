@@ -7,7 +7,6 @@ import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.server.Responsive;
 import com.vaadin.ui.Component;
-import com.vaadin.ui.Panel;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.ValoTheme;
 import org.springframework.context.ApplicationEventPublisher;
@@ -16,14 +15,14 @@ import javax.annotation.PostConstruct;
 import java.util.Optional;
 
 @SuppressWarnings("serial")
-public abstract class AbstractDashboardView extends Panel implements View {
-    private final VerticalLayout root;
+public abstract class AbstractDashboardView extends VerticalLayout implements View {
+    //private final VerticalLayout root;
     private final String viewCaption;
     private Toolbar toolbar;
 	private boolean showToolbar = true;
 	private transient ApplicationEventPublisher eventPublisher;
 
-    protected static final String STYLE_DASHBOARD_VIEW = "dashboard-view";
+    private static final String STYLE_DASHBOARD_VIEW = "dashboard-view";
     
     public AbstractDashboardView(
     		final String viewCaption) {
@@ -37,7 +36,7 @@ public abstract class AbstractDashboardView extends Panel implements View {
 
 		this.viewCaption = viewCaption;
 		this.toolbar = toolbar;
-		this.root = new VerticalLayout();
+		//this.root = new VerticalLayout();
 		this.eventPublisher = null;
 	}
 
@@ -48,7 +47,7 @@ public abstract class AbstractDashboardView extends Panel implements View {
 
 		this.viewCaption = viewCaption;
         this.toolbar = new HeaderToolbar(viewCaption);
-		this.root = new VerticalLayout();
+		//this.root = new VerticalLayout();
     	this.eventPublisher = eventPublisher;
     }
 
@@ -57,7 +56,7 @@ public abstract class AbstractDashboardView extends Panel implements View {
 	protected String getTitle() { return this.viewCaption; }
 	
 	protected boolean isBuilt() {
-		return root.getStyleName().contains(STYLE_DASHBOARD_VIEW);
+		return getStyleName().contains(STYLE_DASHBOARD_VIEW);
 	}
 	
 	@PostConstruct
@@ -66,21 +65,20 @@ public abstract class AbstractDashboardView extends Panel implements View {
 		if (!isBuilt()) {
 			addStyleName(ValoTheme.PANEL_BORDERLESS);
 	        setSizeFull();
-	        
-	        root.setSizeFull();
-	        root.setMargin(true);
-	        root.addStyleName(STYLE_DASHBOARD_VIEW);
-	        setContent(root);
-	        Responsive.makeResponsive(root);
+
+	        setMargin(true);
+	        addStyleName(STYLE_DASHBOARD_VIEW);
+	        //setContent(root);
+	        Responsive.makeResponsive(this);
 
 	        if (this.toolbar != null && this.showToolbar) {
-				root.addComponent(this.toolbar/*buildHeader()*/);
+				addComponent(this.toolbar/*buildHeader()*/);
 			}
 
 	        Component content = buildContent();
-	        root.addComponent(content);
-	        root.setExpandRatio(content, 1);
-	        root.addLayoutClickListener(event -> Optional.ofNullable(eventPublisher).ifPresent(ep -> ep.publishEvent(new CloseOpenWindowsEvent(event))));
+	        addComponent(content);
+	        setExpandRatio(content, 1);
+	        addLayoutClickListener(event -> Optional.ofNullable(eventPublisher).ifPresent(ep -> ep.publishEvent(new CloseOpenWindowsEvent(event))));
 		}
 	}
 

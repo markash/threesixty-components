@@ -1,12 +1,5 @@
 package com.github.markash.ui.view;
 
-import com.vaadin.data.BinderValidationStatus;
-import com.vaadin.data.ValidationException;
-import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
-import com.vaadin.server.Responsive;
-import com.vaadin.shared.ui.ContentMode;
-import com.vaadin.ui.*;
-import com.vaadin.ui.Button.ClickEvent;
 import com.github.markash.ui.component.BlankSupplier;
 import com.github.markash.ui.component.EntityPersistFunction;
 import com.github.markash.ui.component.EntitySupplier;
@@ -14,8 +7,16 @@ import com.github.markash.ui.component.button.ButtonBuilder;
 import com.github.markash.ui.component.field.HeaderToolbar;
 import com.github.markash.ui.component.notification.NotificationBuilder;
 import com.github.markash.ui.event.EnterEntityEditViewEvent;
-import com.github.markash.ui.event.EntityPersistEvent;
+import com.vaadin.data.BinderValidationStatus;
+import com.vaadin.data.ValidationException;
+import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
+import com.vaadin.server.Responsive;
+import com.vaadin.shared.ui.ContentMode;
+import com.vaadin.ui.*;
+import com.vaadin.ui.Button.ClickEvent;
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationEvent;
 import org.springframework.data.domain.Persistable;
 import org.vaadin.dialogs.ConfirmDialog;
@@ -24,8 +25,12 @@ import org.vaadin.viritin.label.MLabel;
 import java.io.Serializable;
 import java.util.Optional;
 
+import static com.github.markash.ui.event.EntityPersistEvent.build;
+
 @SuppressWarnings("unused")
-public abstract class AbstractEntityEditView<T extends Persistable<Serializable>> extends AbstractDashboardView {
+public abstract class AbstractEntityEditView<ID extends Serializable, T extends Persistable<ID>> extends AbstractDashboardView {
+	private final Logger logger = LoggerFactory.getLogger(getClass());
+
 	private static final long serialVersionUID = 1L;
 	private static final String NEW_ENTITY_ID = "new-entity";
 
@@ -33,7 +38,7 @@ public abstract class AbstractEntityEditView<T extends Persistable<Serializable>
 	private Button resetButton = ButtonBuilder.RESET(this::onReset);
 	private Button createButton = ButtonBuilder.NEW(this::onCreate);	
 
-    private final AbstractEntityEditForm<T> form;
+    private final AbstractEntityEditForm<ID, T> form;
     private transient EntityPersistFunction<T> entityPersistFunction;
     private transient EntitySupplier<T, Serializable> entitySupplier;
     private transient BlankSupplier<T> blankSupplier;
@@ -44,7 +49,14 @@ public abstract class AbstractEntityEditView<T extends Persistable<Serializable>
 
     public AbstractEntityEditView(
     		final String viewCaption,
-    		final AbstractEntityEditForm<T> form,
+			final AbstractEntityEditForm<ID, T> form) {
+
+    	this(viewCaption, form, false, null, null, null);
+	}
+
+    public AbstractEntityEditView(
+    		final String viewCaption,
+    		final AbstractEntityEditForm<ID, T> form,
     		final EntitySupplier<T, Serializable> entitySupplier,
     		final BlankSupplier<T> blankSupplier,
     		final EntityPersistFunction<T> entityPersistFunction) {
@@ -54,7 +66,7 @@ public abstract class AbstractEntityEditView<T extends Persistable<Serializable>
     
     public AbstractEntityEditView( 
     		final String viewCaption,
-    		final AbstractEntityEditForm<T> form,
+    		final AbstractEntityEditForm<ID, T> form,
     		final boolean enableCreation,
     		final EntitySupplier<T, Serializable> entitySupplier,
     		final BlankSupplier<T> blankSupplier,
@@ -96,6 +108,44 @@ public abstract class AbstractEntityEditView<T extends Persistable<Serializable>
 		return root;
 	}
 
+	/**
+	 * Set the entity supplier function
+	 * @param supplier The function to supply the entity
+	 */
+	public void setEntitySupplier(
+			final EntitySupplier<T, Serializable> supplier) {
+
+		this.entitySupplier = supplier;
+	}
+
+	/**
+	 * Set the blank entity supplier function
+	 * @param supplier The function to supply the blank entity
+	 */
+	public void setBlankSupplier(
+			final BlankSupplier<T> supplier) {
+
+		this.blankSupplier = supplier;
+	}
+
+	/**
+	 * Get the entity supplier function
+	 * @return The function to supply the entity
+	 */
+	public Optional<EntitySupplier<T, Serializable>> getEntitySupplier() {
+
+		return Optional.ofNullable(this.entitySupplier);
+	}
+
+	/**
+	 * Get the entity supplier function
+	 * @return The function to supply the entity
+	 */
+	public Optional<BlankSupplier<T>> getBlankSupplier() {
+
+		return Optional.ofNullable(this.blankSupplier);
+	}
+
 	@Override
     public void enter(
             final ViewChangeEvent event) {
@@ -117,9 +167,21 @@ public abstract class AbstractEntityEditView<T extends Persistable<Serializable>
 
         T entity;
         if (NEW_ENTITY_ID.equals(this.entityId)) {
-            entity = blankSupplier.blank();
+
+			if (getBlankSupplier().isPresent()) {
+				entity = getBlankSupplier().get().blank();
+			} else {
+				logger.info("No blank entity supplier found for view {}", this.viewName);
+				entity = null;
+			}
         } else {
-            entity = entitySupplier.get(this.entityId).orElse(blankSupplier.blank());
+
+        	if (getEntitySupplier().isPresent()) {
+				entity = entitySupplier.get(this.entityId).orElse(blankSupplier.blank());
+			} else {
+				logger.info("No entity supplier found for view {}", this.viewName);
+        		entity = null;
+			}
         }
 
 		form.setValue(entity);
@@ -164,7 +226,7 @@ public abstract class AbstractEntityEditView<T extends Persistable<Serializable>
                         successfulPersistNotification(result),
                         2000);
                 //Notify the system of the outcome
-                publishOnEventBus(EntityPersistEvent.build(this, result));
+                publishOnEventBus(build(this, result));
             } else {
                 StringBuilder errors = new StringBuilder();
                 status.getFieldValidationErrors()
@@ -269,7 +331,7 @@ public abstract class AbstractEntityEditView<T extends Persistable<Serializable>
 
     }
 
-	protected AbstractEntityEditForm<T> getForm() {
+	protected AbstractEntityEditForm<ID, T> getForm() {
 		return this.form;
 	}
 	

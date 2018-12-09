@@ -1,6 +1,7 @@
 package com.github.markash.ui.view;
 
 import com.vaadin.data.*;
+import com.vaadin.data.converter.StringToLongConverter;
 import com.vaadin.event.EventRouter;
 import com.vaadin.server.Responsive;
 import com.vaadin.shared.Registration;
@@ -10,8 +11,10 @@ import org.vaadin.viritin.layouts.MVerticalLayout;
 
 import java.io.Serializable;
 
-public abstract class AbstractEntityEditForm<T extends Persistable<Serializable>> extends HorizontalLayout implements HasValue<T> {
+public abstract class AbstractEntityEditForm<ID extends Serializable, T extends Persistable<ID>> extends HorizontalLayout implements HasValue<T> {
 
+    private final Class<ID> idType;
+    private final Class<T> beanType;
     private TextField idField = new TextField("Id");
     private Binder<T> binder;
     //	private Map<HasValue, Registration> changeListeners = new HashMap<>();
@@ -27,31 +30,38 @@ public abstract class AbstractEntityEditForm<T extends Persistable<Serializable>
      */
     @SuppressWarnings("unused")
     public AbstractEntityEditForm(
-            final Class<T> beanType) {
-        this(beanType, false);
+            final Class<T> beanType,
+            final Class<ID> idType) {
+        this(beanType, false, idType);
     }
 
     /**
-     * onstructs the entity edit form for the data entity
+     * Constructs the entity edit form for the data entity
      * @param beanType The class of the data entity
      * @param idIsEditable Whether the id is editable
      */
     public AbstractEntityEditForm(
             final Class<T> beanType,
-            final boolean idIsEditable) {
+            final boolean idIsEditable,
+            final Class<ID> idType) {
 
+        this.beanType = beanType;
+        this.idType = idType;
         this.binder = new Binder<>(beanType);
 
-        if (idIsEditable) {
-            this.binder.forField(idField)
-                    //.withConverter(new StringToLongConverter("Unable to convert id"))
-                    .asRequired("The id field is required.")
-                    .bind("id");
-        } else {
-            this.binder.forField(idField)
-                    //.withConverter(new StringToLongConverter("Unable to convert id"))
-                    .bind("id");
+        Binder.BindingBuilder<T, String> builder = this.binder.forField(idField);
+
+        if (idType.isAssignableFrom(Long.class)) {
+            builder.withConverter(new StringToLongConverter("Unable to convert id"));
         }
+
+        if (idIsEditable) {
+            builder.asRequired("The id field is required.");
+        }
+
+        builder.bind("id");
+
+
         this.binder.addStatusChangeListener(this::onBinderStatusChange);
 
         setSpacing(true);
@@ -86,6 +96,12 @@ public abstract class AbstractEntityEditForm<T extends Persistable<Serializable>
         updateFieldConstraints();
         //registerDirtyListener();
     }
+
+    /**
+     * Return the class type of the domain bean that the grid will be displaying
+     * @return The class of the domain entity bean
+     */
+    protected Class<T> getBeanType() { return this.beanType; }
 
     /**
      * Validates the form and returns the status

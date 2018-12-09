@@ -1095,7 +1095,7 @@
  */
 
 .v-vaadin-version:after {
-	content: "8.5.2";
+	content: "8.6.2";
 }
 
 .v-widget {
@@ -5165,6 +5165,10 @@ div.v-layout.v-horizontal.v-widget {
 	position: absolute;
 	top: 0;
 	left: 0;
+}
+
+.threesixty .v-grid-body .v-grid-header > .v-grid-row {
+	position: relative;
 }
 
 .threesixty .v-grid-row {
@@ -9781,6 +9785,10 @@ div.v-layout.v-horizontal.v-widget {
 	left: 0;
 }
 
+.threesixty .v-tree8-body .v-tree8-header > .v-tree8-row {
+	position: relative;
+}
+
 .threesixty .v-tree8-row {
 	display: block;
 }
@@ -10857,6 +10865,10 @@ div.v-layout.v-horizontal.v-widget {
 	position: absolute;
 	top: 0;
 	left: 0;
+}
+
+.threesixty .v-treegrid-body .v-treegrid-header > .v-treegrid-row {
+	position: relative;
 }
 
 .threesixty .v-treegrid-row {
@@ -13229,6 +13241,14 @@ div.v-layout.v-horizontal.v-widget {
 
 .threesixty .v-tabsheet-right-aligned-tabs  > .v-tabsheet-tabcontainer {
 	text-align: right;
+}
+
+.threesixty .v-tabsheet-right-aligned-tabs .v-tabsheet-spacertd {
+	display: inline-block !important;
+}
+
+.threesixty .v-tabsheet-right-aligned-tabs .v-tabsheet-scroller {
+	padding-left: 9px;
 }
 
 .threesixty .v-tabsheet-padded-tabbar  > .v-tabsheet-tabcontainer .v-tabsheet-tabs {
@@ -15912,4 +15932,8 @@ div.v-layout.v-horizontal.v-widget {
 
 .threesixty .notification_button_hide {
 	color: silver;
+}
+
+.threesixty .dashboard-view {
+	height: auto;
 }

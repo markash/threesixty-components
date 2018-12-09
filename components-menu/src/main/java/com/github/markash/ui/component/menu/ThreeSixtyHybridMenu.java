@@ -86,14 +86,7 @@ public class ThreeSixtyHybridMenu extends AbstractMenu {
 
         this.leftMenu = hybridMenu.getLeftMenu();
         this.topMenu = hybridMenu.getTopMenu();
-
-        HMButton toggleSizeButton = HMButton.get()
-                .withIcon(VaadinIcons.COMPRESS_SQUARE)
-                .withDescription("Minimize Menu")
-                .withClickListener(clickEvent -> this.leftMenu.toggleSize());
-
-        topMenu.add(HMTextField.get(VaadinIcons.SEARCH, "Search ..."));
-        topMenu.add(toggleSizeButton);
+        this.topMenu.add(HMTextField.get(VaadinIcons.SEARCH, "Search ..."));
 
         this.sectionComponentFactory = new HybridSectionComponentFactory();
         this.itemComponentFactory = new HybridItemComponentFactory();
@@ -129,6 +122,14 @@ public class ThreeSixtyHybridMenu extends AbstractMenu {
 
         /* Build the menu items */
         super.attach();
+    }
+
+    /**
+     * The hybrid menu instance
+     * @return The menu
+     */
+    public HybridMenu getHybridMenu() {
+        return this.hybridMenu;
     }
 
     @Override

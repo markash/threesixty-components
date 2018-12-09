@@ -6,10 +6,8 @@ import com.github.markash.ui.component.field.FilterField;
 import com.vaadin.data.Binder;
 import com.vaadin.data.provider.DataProvider;
 import com.vaadin.data.provider.ListDataProvider;
-import com.vaadin.server.Responsive;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.Grid;
-import com.vaadin.ui.VerticalLayout;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.Serializable;
@@ -88,15 +86,18 @@ public abstract class AbstractTableSearchView<T extends Serializable, I extends 
 	}
 
 	protected Component buildContent() {
-		VerticalLayout root = new VerticalLayout();
-        root.setSpacing(true);
-        root.setMargin(false);
-        Responsive.makeResponsive(root);
+		//VerticalLayout root = new VerticalLayout();
+        //root.setSpacing(true);
+        //root.setMargin(false);
+        //Responsive.makeResponsive(root);
         
-        this.grid.setWidth(100f, Unit.PERCENTAGE);
-        root.addComponent(this.grid);
-        
-        return root;
+        //this.grid.setWidth(100f, Unit.PERCENTAGE);
+        //root.addComponent(this.grid);
+
+		this.grid.setWidth(100, Unit.PERCENTAGE);
+		//addComponent(this.grid);
+
+        return grid;
     }
 
     protected Binder<T> getTableBinder() {

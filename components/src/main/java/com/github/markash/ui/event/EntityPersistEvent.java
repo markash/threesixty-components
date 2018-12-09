@@ -5,7 +5,7 @@ import org.springframework.data.domain.Persistable;
 
 import java.io.Serializable;
 
-public class EntityPersistEvent<T extends Persistable<Serializable>> extends ApplicationEvent {
+public class EntityPersistEvent<ID extends Serializable, T extends Persistable<ID>> extends ApplicationEvent {
     private static final long serialVersionUID = -4449190175823864555L;
 
     private final T entity;
@@ -17,7 +17,7 @@ public class EntityPersistEvent<T extends Persistable<Serializable>> extends App
 
     public T getEntity() { return entity; }
 
-    public static <T extends Persistable<Serializable>> EntityPersistEvent build(final Object source, final T entity) {
+    public static <ID extends Serializable, T extends Persistable<ID>> EntityPersistEvent build(final Object source, final T entity) {
         return new EntityPersistEvent<>(source, entity);
     }
 }

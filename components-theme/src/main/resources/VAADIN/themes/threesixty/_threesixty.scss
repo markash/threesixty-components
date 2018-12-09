@@ -11,6 +11,7 @@
 @import "../../addons/filter/filter.scss";
 @import "../../addons/toolbar/toolbar.scss";
 @import "../../addons/notification/notification.scss";
+@import "../../addons/dashboard/dashboard.scss";
 
 @mixin threesixty {
     @include valo;
@@ -18,4 +19,5 @@
     @include filter;
     @include toolbar;
     @include notification;
+    @include dashboard;
 }

@@ -1105,7 +1105,7 @@
  */
 
 .v-vaadin-version:after {
-	content: "8.5.2";
+	content: "8.6.2";
 }
 
 .v-widget {
@@ -5175,6 +5175,10 @@ div.v-layout.v-horizontal.v-widget {
 	position: absolute;
 	top: 0;
 	left: 0;
+}
+
+.dashboard .v-grid-body .v-grid-header > .v-grid-row {
+	position: relative;
 }
 
 .dashboard .v-grid-row {
@@ -9791,6 +9795,10 @@ div.v-layout.v-horizontal.v-widget {
 	left: 0;
 }
 
+.dashboard .v-tree8-body .v-tree8-header > .v-tree8-row {
+	position: relative;
+}
+
 .dashboard .v-tree8-row {
 	display: block;
 }
@@ -10867,6 +10875,10 @@ div.v-layout.v-horizontal.v-widget {
 	position: absolute;
 	top: 0;
 	left: 0;
+}
+
+.dashboard .v-treegrid-body .v-treegrid-header > .v-treegrid-row {
+	position: relative;
 }
 
 .dashboard .v-treegrid-row {
@@ -13239,6 +13251,14 @@ div.v-layout.v-horizontal.v-widget {
 
 .dashboard .v-tabsheet-right-aligned-tabs  > .v-tabsheet-tabcontainer {
 	text-align: right;
+}
+
+.dashboard .v-tabsheet-right-aligned-tabs .v-tabsheet-spacertd {
+	display: inline-block !important;
+}
+
+.dashboard .v-tabsheet-right-aligned-tabs .v-tabsheet-scroller {
+	padding-left: 9px;
 }
 
 .dashboard .v-tabsheet-padded-tabbar  > .v-tabsheet-tabcontainer .v-tabsheet-tabs {
@@ -15922,6 +15942,10 @@ div.v-layout.v-horizontal.v-widget {
 
 .dashboard .notification_button_hide {
 	color: silver;
+}
+
+.dashboard .dashboard-view {
+	height: auto;
 }
 
 .dashboard .stats-panel {
