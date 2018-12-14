@@ -18,6 +18,24 @@ public interface Toolbar extends HasComponents {
             final String value);
 
     /**
+     * Get the caption of the toolbar
+     * @return The value of the caption
+     */
+    String getCaption();
+
+    /**
+     * Gets whether the caption is rendered as HTML.
+     * @return Render as HTML
+     */
+    boolean isCaptionAsHtml();
+
+    /**
+     * Sets whether the caption is rendered as HTML.
+     * @param captionAsHtml Render as HTML
+     */
+    void setCaptionAsHtml(boolean captionAsHtml);
+
+    /**
      * Set the filter component used by the toolbar
      * @param filter The filter field component
      */

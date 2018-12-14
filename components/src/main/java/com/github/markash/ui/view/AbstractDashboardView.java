@@ -54,7 +54,33 @@ public abstract class AbstractDashboardView extends VerticalLayout implements Vi
 	protected abstract Component buildContent();
 	
 	protected String getTitle() { return this.viewCaption; }
-	
+
+	@Override
+	public String getCaption() {
+
+		return this.toolbar.getCaption();
+	}
+
+	@Override
+	public void setCaption(
+			final String caption) {
+
+		this.toolbar.setCaption(caption);
+	}
+
+	@Override
+	public void setCaptionAsHtml(
+			final boolean captionAsHtml) {
+
+		this.toolbar.setCaptionAsHtml(captionAsHtml);
+	}
+
+	@Override
+	public boolean isCaptionAsHtml() {
+
+		return this.toolbar.isCaptionAsHtml();
+	}
+
 	protected boolean isBuilt() {
 		return getStyleName().contains(STYLE_DASHBOARD_VIEW);
 	}

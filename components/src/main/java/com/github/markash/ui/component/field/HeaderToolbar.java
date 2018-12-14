@@ -103,6 +103,29 @@ public class HeaderToolbar extends CustomComponent implements Toolbar {
     }
 
     /**
+     * Get the caption of the toolbar
+     * @return The caption
+     */
+    @Override
+    public String getCaption() {
+
+        return this.caption.getValue();
+    }
+
+    @Override
+    public void setCaptionAsHtml(
+            final boolean captionAsHtml) {
+
+        this.caption.setCaptionAsHtml(captionAsHtml);
+    }
+
+    @Override
+    public boolean isCaptionAsHtml() {
+
+        return this.caption.isCaptionAsHtml();
+    }
+
+    /**
      * Add a button to the action section of the toolbar
      * @param button The button to add
      */
