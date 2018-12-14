@@ -12,6 +12,7 @@
 @import "../../addons/toolbar/toolbar.scss";
 @import "../../addons/notification/notification.scss";
 @import "../../addons/dashboard/dashboard.scss";
+@import "../../addons/entitygrid/entitygrid.scss";
 
 @mixin threesixty {
     @include valo;
@@ -20,4 +21,5 @@
     @include toolbar;
     @include notification;
     @include dashboard;
+    @include entitygrid;
 }

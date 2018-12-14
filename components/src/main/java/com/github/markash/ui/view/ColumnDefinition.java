@@ -1,9 +1,7 @@
 package com.github.markash.ui.view;
 
 import com.github.markash.ui.component.field.FilterModel;
-import com.vaadin.ui.renderers.DateRenderer;
-import com.vaadin.ui.renderers.NumberRenderer;
-import com.vaadin.ui.renderers.Renderer;
+import com.vaadin.ui.renderers.*;
 
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
@@ -165,6 +163,23 @@ public class ColumnDefinition<BEAN> {
             final String pattern) {
 
         this.renderer = new NumberRenderer(new DecimalFormat(pattern));
+        return this;
+    }
+    @SuppressWarnings("unused")
+    public ColumnDefinition<BEAN> withButtonRenderer(
+            final ClickableRenderer.RendererClickListener<BEAN> listener) {
+
+        return withButtonRenderer(listener, "");
+    }
+
+    public ColumnDefinition<BEAN> withButtonRenderer(
+            final ClickableRenderer.RendererClickListener<BEAN> listener,
+            final String nullRepresentation) {
+
+        ButtonRenderer<BEAN> buttonRenderer = new ButtonRenderer<>(listener, nullRepresentation);
+        buttonRenderer.setHtmlContentAllowed(true);
+
+        this.renderer = buttonRenderer;
         return this;
     }
     /**

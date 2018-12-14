@@ -4,6 +4,7 @@ import com.github.markash.ui.view.ColumnDefinition;
 import com.github.markash.ui.view.TableDefinition;
 import com.vaadin.data.Binder;
 import com.vaadin.data.provider.DataProvider;
+import com.vaadin.ui.renderers.ButtonRenderer;
 import com.vaadin.ui.renderers.HtmlRenderer;
 import com.vaadin.ui.renderers.Renderer;
 import org.apache.commons.lang3.StringUtils;
