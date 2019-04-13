@@ -13,8 +13,6 @@
     <name>Components Menu</name>
 
     <properties>
-        <hybridmenu.version>3.0.10</hybridmenu.version>
-
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
 

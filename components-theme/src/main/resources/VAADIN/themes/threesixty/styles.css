@@ -1095,7 +1095,7 @@
  */
 
 .v-vaadin-version:after {
-	content: "8.6.2";
+	content: "8.8.0.beta1";
 }
 
 .v-widget {
@@ -10682,6 +10682,70 @@ div.v-layout.v-horizontal.v-widget {
 	padding-left: 15em;
 }
 
+.threesixty .v-tree8-node.depth-16 {
+	padding-left: 16em;
+}
+
+.threesixty .v-tree8-node.depth-17 {
+	padding-left: 17em;
+}
+
+.threesixty .v-tree8-node.depth-18 {
+	padding-left: 18em;
+}
+
+.threesixty .v-tree8-node.depth-19 {
+	padding-left: 19em;
+}
+
+.threesixty .v-tree8-node.depth-20 {
+	padding-left: 20em;
+}
+
+.threesixty .v-tree8-node.depth-21 {
+	padding-left: 21em;
+}
+
+.threesixty .v-tree8-node.depth-22 {
+	padding-left: 22em;
+}
+
+.threesixty .v-tree8-node.depth-23 {
+	padding-left: 23em;
+}
+
+.threesixty .v-tree8-node.depth-24 {
+	padding-left: 24em;
+}
+
+.threesixty .v-tree8-node.depth-25 {
+	padding-left: 25em;
+}
+
+.threesixty .v-tree8-node.depth-26 {
+	padding-left: 26em;
+}
+
+.threesixty .v-tree8-node.depth-27 {
+	padding-left: 27em;
+}
+
+.threesixty .v-tree8-node.depth-28 {
+	padding-left: 28em;
+}
+
+.threesixty .v-tree8-node.depth-29 {
+	padding-left: 29em;
+}
+
+.threesixty .v-tree8-node.depth-30 {
+	padding-left: 30em;
+}
+
+.threesixty .v-tree8-node.depth-31 {
+	padding-left: 31em;
+}
+
 .threesixty .v-tree8-cell-content {
 	display: inline-block;
 	vertical-align: middle;
@@ -11762,6 +11826,70 @@ div.v-layout.v-horizontal.v-widget {
 
 .threesixty .v-treegrid-node.depth-15 {
 	padding-left: 15em;
+}
+
+.threesixty .v-treegrid-node.depth-16 {
+	padding-left: 16em;
+}
+
+.threesixty .v-treegrid-node.depth-17 {
+	padding-left: 17em;
+}
+
+.threesixty .v-treegrid-node.depth-18 {
+	padding-left: 18em;
+}
+
+.threesixty .v-treegrid-node.depth-19 {
+	padding-left: 19em;
+}
+
+.threesixty .v-treegrid-node.depth-20 {
+	padding-left: 20em;
+}
+
+.threesixty .v-treegrid-node.depth-21 {
+	padding-left: 21em;
+}
+
+.threesixty .v-treegrid-node.depth-22 {
+	padding-left: 22em;
+}
+
+.threesixty .v-treegrid-node.depth-23 {
+	padding-left: 23em;
+}
+
+.threesixty .v-treegrid-node.depth-24 {
+	padding-left: 24em;
+}
+
+.threesixty .v-treegrid-node.depth-25 {
+	padding-left: 25em;
+}
+
+.threesixty .v-treegrid-node.depth-26 {
+	padding-left: 26em;
+}
+
+.threesixty .v-treegrid-node.depth-27 {
+	padding-left: 27em;
+}
+
+.threesixty .v-treegrid-node.depth-28 {
+	padding-left: 28em;
+}
+
+.threesixty .v-treegrid-node.depth-29 {
+	padding-left: 29em;
+}
+
+.threesixty .v-treegrid-node.depth-30 {
+	padding-left: 30em;
+}
+
+.threesixty .v-treegrid-node.depth-31 {
+	padding-left: 31em;
 }
 
 .threesixty .v-treegrid-cell-content {

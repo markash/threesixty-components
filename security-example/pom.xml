@@ -13,9 +13,6 @@
     <name>Security Example</name>
 
     <properties>
-        <hybridmenu.version>3.0.9</hybridmenu.version>
-        <responsive-layout.version>2.1.1</responsive-layout.version>
-        <vaadin-sass-compiler.version>0.9.13</vaadin-sass-compiler.version>
         <vaadin4spring.version>2.0.0.RELEASE</vaadin4spring.version>
 
         <maven.compiler.source>1.8</maven.compiler.source>

@@ -103,7 +103,7 @@ public abstract class AbstractEntityEditView<ID extends Serializable, T extends 
         root.setMargin(false);
         Responsive.makeResponsive(root);
         
-        form.layout();
+        //form.layout();
         root.addComponent(form); 
 		return root;
 	}
@@ -126,6 +126,16 @@ public abstract class AbstractEntityEditView<ID extends Serializable, T extends 
 			final BlankSupplier<T> supplier) {
 
 		this.blankSupplier = supplier;
+	}
+
+	/**
+	 * Sets the entity persist function
+	 * @param entityPersistFunction The function to persist the entity
+	 */
+	public void setEntityPersistFunction(
+			final EntityPersistFunction<T> entityPersistFunction) {
+
+		this.entityPersistFunction = entityPersistFunction;
 	}
 
 	/**

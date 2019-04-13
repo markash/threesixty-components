@@ -18,7 +18,7 @@ public abstract class AbstractEntityEditForm<ID extends Serializable, T extends 
     private TextField idField = new TextField("Id");
     private Binder<T> binder;
     //	private Map<HasValue, Registration> changeListeners = new HashMap<>();
-    private boolean layoutCompleted = false;
+//    private boolean layoutCompleted = false;
     private T value;
     private boolean readOnly;
     private boolean requiredIndicatorVisible;
@@ -201,22 +201,25 @@ public abstract class AbstractEntityEditForm<ID extends Serializable, T extends 
         idField.setEnabled(getValue().isNew());
     }
 
-    public void layout() {
-        if (!layoutCompleted) {
-            internalLayout();
-            layoutCompleted = true;
-        }
-    }
+//    The internalLayout always needs to be overridden by implementing classes because the layout does not follow
+//    the regular columnar-layout; therefore remove this and allow the implementation to decide the layout.
 
-    protected void internalLayout() {
-
-        addComponent(new MVerticalLayout()
-                        .withSpacing(true)
-                        .withMargin(false)
-                        .withWidth(100.0f, Unit.PERCENTAGE)
-                        .with(idField));
-        addComponent(new Label(""));
-    }
+//    public void layout() {
+//        if (!layoutCompleted) {
+//            internalLayout();
+//            layoutCompleted = true;
+//        }
+//    }
+//
+//    protected void internalLayout() {
+//
+//        addComponent(new MVerticalLayout()
+//                        .withSpacing(true)
+//                        .withMargin(false)
+//                        .withWidth(100.0f, Unit.PERCENTAGE)
+//                        .with(idField));
+//        addComponent(new Label(""));
+//    }
 
     private void onBinderStatusChange(final StatusChangeEvent event) {
         getEventRouter().fireEvent(event);

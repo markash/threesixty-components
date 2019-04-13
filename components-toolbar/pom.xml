@@ -13,9 +13,6 @@
     <name>Components Toolbar</name>
 
     <properties>
-        <hybridmenu.version>3.0.10</hybridmenu.version>
-        <vaadin-sass-compiler.version>0.9.13</vaadin-sass-compiler.version>
-
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
 
